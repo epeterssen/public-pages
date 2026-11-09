@@ -11,6 +11,7 @@
   --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1; --accent:#7a1f3d;
   --display:"Gloock", Georgia, "Times New Roman", serif;
   --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --panel:260px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}}
@@ -18,26 +19,84 @@
   --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
 .wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+header{display:flex;align-items:center;gap:12px}
 h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0}
 .sub{color:var(--muted);margin:2px 0 0;font-size:.9rem}
 .link{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;color:var(--fg);text-decoration:none}
 .link:hover,.link:focus-visible{border-color:var(--accent)}
 .link b{font-family:var(--display);font-weight:400;font-size:1.3rem;display:block;color:var(--accent)}
+
+/* Side panel */
+.toggle{flex:none;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font-size:1.2rem;cursor:pointer}
+.toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{position:fixed;inset:0 auto 0 0;width:var(--panel);max-width:85vw;background:var(--surface);border-right:1px solid var(--line);padding:20px 16px;padding-left:max(16px,env(safe-area-inset-left,0px));box-sizing:border-box;overflow-y:auto;transform:translateX(-100%);transition:transform .2s;z-index:20}
+body.open .panel{transform:none}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.panel h2{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:0}
+.panel h3{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:16px 0 6px}
+.panel ul{list-style:none;margin:0;padding:0}
+.panel a{display:block;padding:8px 10px;border-radius:8px;color:var(--fg);text-decoration:none}
+.panel a:hover,.panel a:focus-visible{background:var(--bg);color:var(--accent)}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+body.open .scrim{opacity:1;pointer-events:auto}
+@media (min-width:1000px){
+  body.open .scrim{opacity:0;pointer-events:none}
+  body.open .wrap{margin-left:calc(var(--panel) + max(24px, (100vw - var(--panel) - 640px) / 2))}
+}
 </style>
 </head>
 <body>
+<nav class="panel" id="panel" aria-label="Resources">
+  <div class="panel-head">
+    <h2>Resources</h2>
+    <button class="toggle" type="button" data-toggle aria-label="Close panel">×</button>
+  </div>
+  <h3>Maps</h3>
+  <ul>
+    <li><a href="https://www.theglobalwinemap.com/index.html" target="_blank" rel="noopener">Global Wine</a></li>
+    <li><a href="https://www.guildsomm.com/resources/maps/m/topographic" target="_blank" rel="noopener">GuildSomm</a></li>
+  </ul>
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="https://winelexicon.com/" target="_blank" rel="noopener">Wine Lexicon</a></li>
+    <li><a href="wset2-sat-and-lexicon.html">WSET2 SAT &amp; Lexicon</a></li>
+  </ul>
+</nav>
+<div class="scrim" data-toggle></div>
 <main class="wrap">
   <header>
+    <button class="toggle" type="button" data-toggle aria-controls="panel" aria-expanded="false" aria-label="Open resources panel">☰</button>
     <h1>WSET2 Study</h1>
   </header>
   <a class="link" href="wset2-book-text-question-bank.html">
     <b>Question Bank</b>
     <span class="sub">All 25 chapters, from the book.</span>
   </a>
+  <a class="link" href="wset2-fine-vintage-question-bank.html">
+    <b>Fine Vintage Question Bank</b>
+    <span class="sub">165 practice questions, 2025.</span>
+  </a>
   <a class="link" href="wset-level-2-derek-drills.html">
     <b>Derek's Drills</b>
     <span class="sub">WSET Level 2 Drills, from Derek.</span>
   </a>
+  <!-- Keep Reference as the last link -->
+  <a class="link" href="reference.html">
+    <b>Reference</b>
+    <span class="sub">Study reference.</span>
+  </a>
 </main>
+<script>
+const opener=document.querySelector('header [data-toggle]');
+function setOpen(o){
+  document.body.classList.toggle('open',o);
+  opener.setAttribute('aria-expanded',o);
+  try{localStorage.setItem('panelOpen',o?'1':'0')}catch(e){}
+}
+document.querySelectorAll('[data-toggle]').forEach(b=>b.addEventListener('click',()=>setOpen(!document.body.classList.contains('open'))));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
+let saved=null;try{saved=localStorage.getItem('panelOpen')}catch(e){}
+if(saved==='1'&&matchMedia('(min-width:1000px)').matches)setOpen(true);
+</script>
 </body>
 </html>

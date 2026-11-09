@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WSET2 Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1; --accent:#7a1f3d;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.back{color:var(--accent);text-decoration:none;font-size:.9rem}
+h1{font-family:var(--display);font-weight:400;font-size:1.8rem;line-height:1.2;margin:12px 0 4px}
+h2{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:24px 0 8px;color:var(--accent)}
+a{color:var(--accent)}
+summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:1.1rem;line-height:1;color:var(--accent);transition:transform .15s;margin-top:16px}
+details[open]>summary::before{transform:rotate(90deg)}
+summary h2{display:inline}
+h3{font-size:1rem;margin:20px 0 8px}
+.note{color:var(--muted);font-size:.9rem;font-style:italic;margin:8px 0}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);font-size:.95rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+tr:last-child th,tr:last-child td{border-bottom:0}
+td:nth-last-child(-n+2),thead th:nth-last-child(-n+2){white-space:nowrap;width:1%}
+.serving td:nth-child(3){width:7.5em}
+.serving th:first-child{width:8em}
+@media (max-width:480px){table{font-size:.85rem}th,td{padding:7px 6px}}
+thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="wrap">
+<a class="back" href="index.html">← WSET2 Study</a>
+
+<h1>Reference</h1>
+
+<details open>
+<summary><h2>Temperatures</h2></summary>
+
+<h3>Recommended Serving Temperatures</h3>
+<table class="serving">
+<thead><tr><th>Style</th><th>E.g.</th><th>Service</th><th>°C</th><th>°F</th></tr></thead>
+<tr><th>Sweet wines</th><td>Sauternes</td><td>Well chilled</td><td>6–8</td><td>43–46</td></tr>
+<tr><th>Sparkling wines</th><td>Champagne</td><td>Well chilled</td><td>6–10</td><td>43–50</td></tr>
+<tr><th>Light-, medium-bodied white and rosé</th><td>Pinot Grigio</td><td>Chilled</td><td>7–10</td><td>45–50</td></tr>
+<tr><th>Full-bodied white</th><td>Oaked Chardonnay</td><td>Lightly chilled</td><td>10–13</td><td>50–55</td></tr>
+<tr><th>Light-bodied red</th><td>Beaujolais</td><td>Room temp or lightly chilled</td><td>13–18</td><td>55–64</td></tr>
+<tr><th>Medium-, full-bodied red</th><td>Shiraz</td><td>Room temperature</td><td>15–18</td><td>59–64</td></tr>
+</table>
+<p class="note">Chapter 3.</p>
+
+<h3>Fermentation Temperatures</h3>
+<table>
+<thead><tr><th>Wine</th><th>°C</th><th>°F</th></tr></thead>
+<tr><th>White</th><td>12–22</td><td>54–72</td></tr>
+<tr><th>Rosé</th><td>12–22</td><td>54–72</td></tr>
+<tr><th>Red</th><td>20–32</td><td>68–90</td></tr>
+</table>
+<p class="note">Rosé made by short maceration is fermented at white-wine temperatures once drained off the skins. Chapter 5.</p>
+
+<h3>Environmental Temperatures</h3>
+<table>
+<thead><tr><th>Climate</th><th>°C</th><th>°F</th></tr></thead>
+<tr><th>Cool</th><td>≤ 16.5</td><td>≤ 62</td></tr>
+<tr><th>Moderate</th><td>16.5–18.5</td><td>62–65</td></tr>
+<tr><th>Warm</th><td>18.5–21.0</td><td>65–70</td></tr>
+</table>
+<p class="note">Average growing season temperature. Chapter 4.</p>
+</details>
+
+</main>
+<script>
+// Alt-click any section heading to expand/collapse all sections
+document.querySelectorAll('details>summary').forEach(s=>s.addEventListener('click',e=>{
+  if(!e.altKey)return;
+  e.preventDefault();
+  const open=!s.parentElement.open;
+  document.querySelectorAll('details').forEach(d=>d.open=open);
+}));
+</script>
+</body>
+</html>

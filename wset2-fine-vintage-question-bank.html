@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WSET2 Fine Vintage Question Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: single centered study column; chapter chips, one question card, answer stack, score bar */
+:root{
+  --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1;
+  --accent:#7a1f3d; --accent-soft:#f1e3e8;
+  --star:#b7791f; --good:#1f7a45; --good-bg:#e2f3e8; --bad:#b3261e; --bad-bg:#fbe4e2;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0;text-wrap:balance}
+.back{color:var(--accent);text-decoration:none;font-size:.9rem;align-self:flex-start}
+.sub{color:var(--muted);margin:2px 0 0;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:500 .85rem var(--body);cursor:pointer}
+.chip:disabled{opacity:.45;cursor:default}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar b{color:var(--fg)}
+.track{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .25s}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.q{font-family:var(--display);font-size:1.3rem;line-height:1.3;margin:0;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:12px 14px;font:400 1rem var(--body);cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt .k{font-weight:600;color:var(--muted);min-width:1.1em}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.right .k{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .k{color:var(--bad)}
+.opt.dim{opacity:.5}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.verdict{font-weight:600;font-size:.95rem}
+.verdict.g{color:var(--good)} .verdict.b{color:var(--bad)}
+.btn{border:none;background:var(--accent);color:var(--surface);border-radius:10px;padding:11px 18px;font:600 .95rem var(--body);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.end{text-align:center;gap:10px;align-items:center}
+.status{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.chip.miss{border-color:var(--star);color:var(--star)}
+.chip.miss[aria-pressed="true"]{background:var(--star);border-color:var(--star);color:var(--surface)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.star{border:none;background:transparent;color:var(--muted);font-size:1.5rem;line-height:1;padding:4px 6px;cursor:pointer;border-radius:8px}
+.star[aria-pressed="true"]{color:var(--star)}
+.star:hover{color:var(--star)}
+.star:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.big{font-family:var(--display);font-size:3rem;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+@media (prefers-reduced-motion: reduce){.fill{transition:none}}
+</style>
+<style>*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="index.html">← WSET2 Study</a>
+  <header>
+    <h1>WSET2 Fine Vintage Question Bank</h1>
+    <p class="sub">165 practice questions from Fine Vintage, 2025. Tap chapters to combine them. Tap an answer to reveal.</p>
+    <p class="status" id="status">Loading starred questions…</p>
+  </header>
+  <div class="chips" id="chips" role="group" aria-label="Chapter"></div>
+  <div>
+    <div class="bar"><span id="pos">Question 1 of 0</span><span>Score <b id="score">0/0</b></span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+  <section class="card" id="card"></section>
+</div>
+
+<script>
+const CH={1:"Tasting & Evaluating",2:"Food & Wine Pairing",3:"Storage & Service",4:"Grape-growing",5:"Winemaking",6:"Pinot Noir",7:"Zinfandel/Primitivo",8:"Riesling",9:"Chenin, Semillon, Furmint",10:"Chardonnay",11:"Sauvignon Blanc",12:"Pinot Grigio/Gris",13:"Gewurz, Viognier, Albariño",14:"Merlot",15:"Cabernet Sauvignon",16:"Syrah/Shiraz",17:"Gamay",18:"Grenache/Garnacha",19:"Tempranillo",20:"Carmenère, Malbec, Pinotage",21:"Cortese, Garganega, Verdicchio, Fiano",22:"Nebbiolo, Barbera, Corvina",23:"Sangiovese, Montepulciano",24:"Sparkling Wines",25:"Fortified Wines"};
+// [chapter, question, correct, wrong, wrong, wrong]
+const Q=[
+[1,"Which of the following is the most common colour for red wines?","Ruby","Purple","Garnet","Tawny"],
+[1,"Which of the following is the most common colour for white wines?","Lemon","Gold","Amber","Brown"],
+[1,"Which of the following colours typically best describes a red wine with some age?","Garnet","Ruby","Purple","Gold"],
+[1,"Oak and malolactic conversion aromas are considered:","Secondary Aromas","Primary Aromas","Tertiary Aromas","Faulted Aromas"],
+[1,"A wine that has been affected by cork taint will smell of","Damp cardboard","Wet stones","Petrol","Green bell pepper"],
+[1,"The balance of a wine is best described as:","The combination of flavour compounds, sweetness, tannins and acidity.","The combination of sweetness and body only.","The combination of acidity and tannins only.","The body of the wine only."],
+[2,"Which of the following is true about Sweetness in food when pairing with wine?","All of the above","It makes a wine seem more acidic","It makes a wine seem more bitter","It makes the wine seem less fruity"],
+[2,"Which of the following is true about Umami in food when pairing with wine?","It makes a wine seem more bitter","It makes a wine seem less acidic","It makes a wine seem sweeter","None of the above"],
+[2,"Salty foods can make a wine taste","More fruity","More bitter","More acidic","More light bodied"],
+[2,"Acidity in food can make a wine seem:","More fruity","Drier","More acidic","More bitter"],
+[2,"Which statement is true about flavour intensity in food and wine pairing?","The food and wine should have equal flavour intensities","The flavour intensity of the food should be higher than the flavour intensity of the wine","The flavour intensity of the wine should be higher than the flavour intensity of the food","None of the above"],
+[2,"The effect of chili heat is greatest in which wine style?","Wines with higher alcohol","Wines with lower alcohol","Wines with residual sugar","Wines with intense fruity characters"],
+[3,"Which statement is most appropriate for storing wine?","Poor storage can create faulted wines","Wines mature well in extremes of temperature","Wines sealed with a screwcap should be stored on its side","Bright light helps a wine retain its freshness"],
+[3,"Which degree is generally accepted as “room temperature”?","18°C / 64°F","6°C / 46°F","12°C / 50°F","24°C / 75°F"],
+[3,"Which type of wine is best served in a flute?","Sparkling wine","Dry red wine","Dry white wine","Fortified sweet wine"],
+[3,"The ideal set of conditions for long term storage for wine are","Cool and away from bright light","Cool with bright light","Warm with bright light","Warm and away from bright light"],
+[3,"Which of the following wines should be served well chilled 6-8°C (43-46°F)?","Sauternes","Beaujolais","Pinot Grigio","Shiraz"],
+[3,"Which wine should be decanted?","Vintage Port","Sancerre","Sauternes","Champagne"],
+[3,"When opening a bottle of sparkling wine, one should always:","All of the above","Hold the cork secure while loosening the cage","Hold the bottle at an angle","Turn the bottle, not the cork"],
+[3,"A full-bodied Californian Chardonnay should be served:","Lightly chilled","Chilled","Well chilled","Warm"],
+[3,"A blanket system:","Adds a layer of gas to protect remaining wine from oxidation","Chills a wine to proper serving temperature","Is a decanting method that efficiently allows a wine to breathe","None of the above"],
+[4,"Which of the following pairs are found in the pulp of a grape?","Sugars and acids","Tannin","Colour and tannin","Seeds and stems"],
+[4,"Fungal diseases can: (1) Damage vine leaves; (2) Increase the yield of the vine; (3) Spoil the quality of the grapes","1 and 3 only","1 only","2 only","2 and 3 only"],
+[4,"Which is the correct order for grape formation and ripening?","Flowering, Fruit Set, Véraison, Ripening","Ripening, Véraison, Fruit Set, Flowering","Fruit Set, Flowering, Ripening, Véraison","Véraison, Ripening, Flowering, Fruit Set"],
+[4,"Which of the following occurs during Véraison?","Grapes change colour from dark green to golden or reddish-purple","Flowers are pollinated and turn into newly formed grapes","Grapes swell with water and sugars","Grapes develop tannins and flavours"],
+[4,"An example of a grape that performs better in a warm climate but not in a cool climate is:","Grenache","Chardonnay","Pinot Noir","Sauvignon Blanc"],
+[4,"Most of the world’s vineyards are found between which degrees of latitude?","30 to 50° North and South of the Equator","10 to 30° North and South of the Equator","20 to 40° North and South of the Equator","40 to 60° North and South of the Equator"],
+[4,"Which weather-related issue can result in wines that are too high in acidity?","Cooler than usual vintages","Drought","Hail","High levels of rain"],
+[4,"Machine harvesting can be used for:","Wines of any quality","Premium quality wines only","Bulk inexpensive wines only","Sparkling wines only"],
+[4,"How long can a vine live for?","Over 60 years - in some cases much older","1 year - they are an annual plant","5-10 years","10-20 years"],
+[4,"Grapes harvested later in the ripening process will have:","Higher sugars, lower acidity","Higher acidity, lower sugars","Higher sugars and acidity","Lower acidity and sugars"],
+[4,"Vendanges tardives indicates a wine made from:","Grapes that have been picked later in the harvest season","Grapes that have been affected by botrytis","Grapes that have been left to freeze on the vine","Grapes that have been harvested from old vines"],
+[5,"Fermentation temperature of white wine is:","Between 12-22ºC","Between 20-32 ºC","Around 25 ºC","Around 10 ºC"],
+[5,"Which is the correct typical order for red winemaking?","Fermentation, Draining, Pressing, Maturation","Pressing, Draining, Fermentation, Maturation","Draining, Maturation, Pressing, Fermentation","Maturation, Fermentation, Draining, Pressing"],
+[5,"Which is the correct order for dry white winemaking?","Crushing, Pressing, Fermentation, Maturation","Fermentation, Maturation, Crushing, Pressing","Maturation, Crushing, Pressing, Fermentation","Pressing, Fermentation, Crushing, Maturation"],
+[5,"Extraction of colours in red wines can be done by:","Pumping over or punching down skins","Pumping over only","Punching down skins only","This process occurs naturally"],
+[5,"Fermentation temperature of red wine is:","Between 20-32 ºC","Around 25 ºC","Between 12-22ºC","Around 10 ºC"],
+[5,"Oak barrels can give a wine aromas and flavours of","Vanilla and toast","Honey","Green Bell Pepper","Petrol"],
+[5,"Lees ageing will give the wine flavours of:","Biscuit and bread","Tobacco and forest floor","Leather and earth","Grass and asparagus"],
+[6,"Which of the following statements about Pinot Noir is true?","Pinot Noir can be enjoyed when it is young","Pinot Noir is widely planted as it adapts easily to a variety of climatic conditions","Pinot Noir produces full-body wines with strong tannins","Pinot Noir can withstand intense flavours from new oak"],
+[6,"If a climate or vintage is too warm, the flavours of Pinot Noir will:","Show unattractive flavours of cooked fruit","Be well-suited for several years aging in bottle","Show subtle flavours of clove and smoke","Struggle to ripen"],
+[6,"A wine labelled Grand Cru in Burgundy","Must come from a single vineyard","Can only be made from Pinot Noir","Can only be made from Chardonnay","Can be made from grapes grown anywhere in the region"],
+[6,"Which of the following are famous Pinot Noir producing appellations in Burgundy? (1) Gevrey-Chambertin; (2) Sauternes; (3) Sancerre; (4) Nuits-Saint-Georges","1 and 4 only","1 only","1, 2 and 4 only","All of the above"],
+[6,"A cool region of Australia that produces quality Pinot Noir is:","Yarra Valley","Barossa Valley","Hunter Valley","Clare Valley"],
+[6,"Which region of New Zealand is not famous for Pinot Noir?","Hawke’s Bay","Central Otago","Marlborough","Martinborough"],
+[6,"Which Chilean region produces very good Pinot Noir?","Casablanca Valley","Central Valley","Colchagua","Maipo"],
+[6,"Which region is well known for producing high quality Pinot Noir in South Africa?","Walker Bay","Mornington Peninsula","Oregon","Stellenbosch"],
+[7,"What type of climate is best suited for Zinfandel/Primitivo?","Warm Climate","Cool Climate","Moderate Climate","All of the above"],
+[7,"Which statements about White Zinfandel are true? (1) It is a white wine; (2) It is medium-sweet; (3) It is high alcohol; (4) It is typically aged in oak","2 only","2 & 4","1, 2, & 4","All of the above"],
+[7,"Premium quality Californian Zinfandel has aromas and flavours of:","Blackberry, prune and vanilla","Ginger, blossom and green fruit","Raspberry, cherry and almond","Pineapple, melon and rose"],
+[7,"Which Italian region is the source of wines made from Primitivo?","Puglia","Piemonte","Tuscany","Veneto"],
+[8,"Just-ripe Riesling produces flavours of:","Apple, lime, and lemon","Apricot, mango, and raisins","Asparagus, green bell pepper, and gooseberry","Vanilla, coconut, and hazelnut"],
+[8,"What is the determining factor for each of the German Prädikatswein levels?","Sugar levels at harvest","Vineyard site","Vintage","Price"],
+[8,"In order of least ripe to most ripe, which of the following is correct?","Kabinett, Spätlese, Auslese, Beerenauslese","Beerenauslese, Auslese, Spätlese, Kabinett","Auslese, Beerenauslese, Spätlese, Kabinett","Spätlese, Kabinett, Auslese, Beerenauslese"],
+[8,"Which region typically has lighter-bodied Rieslings that have medium-sweetness?","Mosel","Rheingau","Pfalz","Eden Valley"],
+[8,"Which pair of regions produces Australia’s signature Rieslings?","Clare Valley and Eden Valley","Barossa Valley and McLaren Vale","Yarra Valley and Hunter Valley","Mornington Peninsula and Margaret River"],
+[8,"Describe a Riesling labelled as Vendanges Tardives in Alsace.","Sweet with honey and dried fruit aroma.","Dry with citrus and stone-fruit character.","Medium with peach and banana aromas.","Dry with petrol, lime and blossom."],
+[9,"The grape variety used to make a Vouvray AOC is:","Chenin Blanc","Furmint","Sémillon","All of the above"],
+[9,"In Pessac Léognan (Bordeaux) Sauvignon Blanc is typically blended with:","Sémillon","Chenin Blanc","Furmint","Pinot Gris"],
+[9,"A wine labelled Tokaji Aszu is","Sweet","Dry","Fortified","Sparkling"],
+[9,"South Africa’s most widely planted white grape variety is:","Chenin Blanc","Furmint","Semillon","None of the above"],
+[9,"Sauternes wines are based on which variety?","Sémillon","Chenin Blanc","Furmint","Riesling"],
+[10,"Which of the following statements about Chardonnay is false?","Chardonnay is always oaked","Chardonnay is the grape of Chablis","Chardonnay is grown in a range of climates","Chardonnay can show a range of primary fruit characters"],
+[10,"Chablis typically has aromas and flavours of","Lemon, apple and wet stones","Pineapple and banana","Grass, asparagus and passion fruit","Rose, honey and dried apricot"],
+[10,"Which winemaking technique is used to give Chardonnay extra body with bread and biscuit flavours?","Lees stirring","Pumping over","Punch downs","Flor ageing"],
+[10,"Quality Australian Chardonnay is produced in which of the following regions?","Adelaide Hills, Yarra Valley, Margaret River","Yarra Valley, Adelaide Hill, Carneros","Walker Bay, Casablanca, Yarra Valley","Walker Bay, Carneros, Casablanca"],
+[10,"A full-bodied Chardonnay with tropical fruit and oak flavours describes a wine made from","Pouilly-Fuissé AOC","Pomerol AOC","Pouilly-Fumé AOC","Pommard AOC"],
+[11,"A typical Sauvignon Blanc has aromas of:","Grass and citrus","Strawberry and licorice","Leather and tobacco","Petrol and lychee"],
+[11,"Which of the following is not an AOC for Sauvignon Blanc in the Loire Valley?","Pouilly-Fuissé AOC","Sancerre AOC","Touraine AOC","Pouilly-Fumé AOC"],
+[11,"The classic home for Sauvignon Blanc in New Zealand is found in:","Marlborough","Hawke’s Bay","Central Otago","Walker Bay"],
+[11,"Premium quality Chilean Sauvignon Blanc is produced in which one of the following regions?","Casablanca","Carneros","Condrieu","Coonawarra"],
+[11,"Which pair of regions are known for Sauvignon Blanc in Australia?","Adelaide Hills and Margaret River","Hunter Valley and Barossa Valley","Eden Valley and Clare Valley","Yarra Valley and Mornington Peninsula"],
+[11,"What pair of regions in South Africa are famous for Sauvignon Blanc?","Constantia and Elgin","Casablanca Valley and Central Valley","Napa Valley and Sonoma","Walker Bay and Western Cape"],
+[12,"Pinot Grigio labelled delle Venezie DOC are typically:","Simple and inexpensive","Complex and ageworthy","Full bodied and oaked","Medium sweet and expensive"],
+[12,"Which most contributes to the stylistic differences between a Pinot Grigio and a Pinot Gris?","Grape-growing and harvesting choices","Fermentation choices","Maturation choices","Packaging choices"],
+[12,"Compared to Italian Pinot Grigio, Pinot Gris from Alsace is typically:","Lower in acidity with a fuller body","Higher in acidity with a fuller body","Lower in acidity with a lighter body","Higher in acidity with a lighter body"],
+[12,"Typical aromas and flavours for Pinot Gris in Alsace are:","Peach, mango, and ginger","Lemon, apple, and honey","Rose, clove and banana","Strawberry, clove and mushroom"],
+[12,"What vessel is Pinot Grigio usually fermented in?","Stainless steel tanks","New oak barriques","Large old oak vessels","Amphorae"],
+[12,"Bottle ageing an Alsace Pinot Gris would typically develop flavours of:","Ginger and honey","Vanilla and toast","Mushroom and earth","Rose and leather"],
+[12,"Vendanges Tardives Pinot Gris wines are what level of sweetness?","Medium to Sweet","Dry only","Off Dry only","Dry to Off Dry"],
+[13,"The key aroma characteristics of Gewurztraminer are","Rose and lychee","Grass and asparagus","Vanilla and toast","Lime and green apple"],
+[13,"Which of the following best describes a Gewurztraminer from the Alsace region?","Low acidity, full bodied, high in alcohol","High acidity, light bodied and low in alcohol","High acidity, full bodied and low in alcohol","Low acidity, light bodied and high in alcohol"],
+[13,"Albariño is the white grape of which region?","Rías Baixas DO","Priorat DOCa","Ribera del Duero DO","Rioja DOCa"],
+[13,"Albariño typically has aromas and flavours of","Lemon and peach","Grass and passion fruit","Apricot and pineapple","Raspberry and red cherry"],
+[13,"Which AOC is home to the finest examples of Viognier?","Condrieu AOC","Côte-Rôtie AOC","Graves AOC","Touraine AOC"],
+[14,"Riper Merlot from a warmer climate will show primary flavours of:","Blackberry and black plum","Blackcurrant and green bell pepper","Green apple and lemon","Strawberry and black pepper"],
+[14,"Which of the following Bordeaux communes is on the Right Bank?","Pomerol","Pessac-Léognan","Pauillac","Margaux"],
+[14,"Which of the following AOCs would be mostly Merlot?","St.-Émilion Grand Cru AOC","Haut-Médoc AOC","Graves AOC","Pessac-Léognan AOC"],
+[14,"Which Chilean region typically produces soft medium-bodied Merlots from high yields?","Central Valley","Casablanca Valley","Colchagua","Maipo"],
+[14,"In which Australian region does Merlot play an important role in blends with Cabernet Sauvignon?","Margaret River","Barossa Valley","Coonawarra","Mornington Peninsula"],
+[15,"Which of the following statements best describes a Cabernet Sauvignon?","High tannin, pronounced aromatics, high acidity","Medium tannin, medium aromatics, full body","Soft tannin, medium aromatics, light body","High tannins, high aromatics, medium acidity"],
+[15,"Which flavour profile best describes a Cabernet Sauvignon?","Black currants, bell pepper, and mint","Strawberry, mushroom, and barnyard","Plum, dark cherry, and coffee","Blackberry, black pepper, and liquorice"],
+[15,"Which of the following statements about Cabernet Sauvignon is true?","Its high acidity and high tannins enable it to age for a long time","It ripens easily so can be grown in either a cool or warm climate","It has its classic home on the Right Bank of Bordeaux","All of the above"],
+[15,"Premium South African Cabernet Sauvignon is produced in?","Stellenbosch","Casablanca Valley","Margaret River","Pomerol"],
+[15,"Which region has established itself as a source of premium quality Cabernet Sauvignon in Australia that shows a distinctive minty character?","Coonawarra","Barossa Valley","Hawke’s Bay","Oakville"],
+[15,"Which of the following statements about Napa Valley Cabernet Sauvignon is false?","It is difficult to ripen in the California climate","It is a full bodied wine with high, ripe tannins","It has pronounced flavours of black fruits and oak","It is sometimes blended with small amounts of other grape varieties"],
+[15,"Which Chilean region is not a major source of Cabernet Sauvignon?","Casablanca","Central Valley","Colchagua","Maipo"],
+[15,"If Cru Bourgeois is written on a bottle of Bordeaux what does it mean?","A good quality wine from the Medoc that is not within the Grand Cru Classé system","A St Emilion Bordeaux of the highest classification","A sweet uncategorised wine from Sauternes","A white blend from the Graves region"],
+[16,"Which flavour profile best describes a Syrah?","Blackberry, black pepper, and herbal","Strawberry, mushroom, and barnyard","Black currants, green bell pepper, and cedar","Red Plum, dark cherry, and coffee"],
+[16,"Syrah is best suited to which climate types?","Moderate and warm only","Cool only","Cool and moderate only","Cool, moderate and warm"],
+[16,"Syrah is used to blend with Grenache to bring:","More colour and higher tannins","More colour and softer tannins","Lighter colour and higher tannins","Light colour and lower tannins"],
+[16,"The classic region for Syrah is:","The Northern Rhône","The Southern Rhône","The Left Bank","The Right Bank"],
+[16,"The best French appellations for Syrah are:","Côte-Rôtie and Hermitage","Chambertin and Montrachet","Margaux and Pauillac","St.-Émilion and Pomerol"],
+[16,"Why are Syrah grapes hand-harvested in the Rhône Valley?","Vineyards are planted on steep slopes","Grapes are harvested from old vines","Noble rot only affects some of the grapes","Vines are planted in gravel soils"],
+[16,"Which region of Australia is home to some of the country's oldest Syrah vines and produces full bodied wines with ripe tannins and cooked black fruit flavours?","Barossa Valley","Hunter Valley","Margaret River","Eden Valley"],
+[17,"Which best describes a wine made from Gamay?","Acidity: High · Tannins: Low to Medium · Flavours: Red Cherry and Raspberry","Acidity: Low · Tannins: High · Flavours: Strawberry and Mint","Acidity: Medium · Tannins: Medium · Flavours: Dark Plum and Blackberry","Acidity: Medium to High · Tannins: Low · Flavours: Apple and Lemon"],
+[17,"Which region is famous for producing wines made from Gamay?","Beaujolais","Burgundy","Rhône Valley","Rioja"],
+[17,"The order of quality in Beaujolais from low to high is","Beaujolais AOC, Beaujolais Villages AOC, Beaujolais Cru AOC","Beaujolais Villages AOC, Beaujolais AOC, Beaujolais Cru AOC","Beaujolais Cru AOC, Beaujolais Villages AOC, Beaujolais AOC","Beaujolais Cru AOC, Beaujolais AOC, Beaujolais Villages AOC"],
+[17,"Which of these is a cru that produces wines made from Gamay?","Fleurie","Beaune","Hermitage","Minervois"],
+[18,"Which of the following would be a good description of a Grenache grape?","High sugars, thin skins, and low acidity","Low sugars, thin skins, and medium acidity","Low sugars, thick skins, and medium acidity","High sugars, thick skins, and high acidity"],
+[18,"Which flavour profile best describes a Grenache?","Strawberry, raspberry, and white pepper","Black currants, bell pepper, and cedar","Plum, dark cherry, and coffee","Blackberry, black pepper, and liquorice"],
+[18,"Which one of the following red grape varieties needs the most heat to ripen fully?","Grenache","Pinot Noir","Gamay","Tempranillo"],
+[18,"Which pair of grape varieties are commonly blended with Grenache?","Syrah and Tempranillo","Cabernet Sauvignon and Merlot","Gamay and Pinot Noir","Sangiovese and Primitivo"],
+[18,"Grenache is often used to produce rosé wines.","True","False"],
+[18,"Which region would see red wines made mostly from Grenache?","Côtes du Rhône","Côte de Beaune","Côte-Rôtie","Côte de Nuits"],
+[18,"Which of the following is a Grenache-based cru in the Southern Rhône?","Châteauneuf-du-Pape AOC","Condrieu AOC","Hermitage AOC","Minervois AOC"],
+[18,"The most powerful expression of Garnacha in Spain is from:","Priorat DOCa","Catalunya DO","Navarra DO","Rioja DOCa"],
+[18,"Which of the following pairs of regions is home to many old vine Grenache?","Barossa Valley and McLaren Vale","Casablanca Valley and Colchagua","Central Otago and Hawke’s Bay","Stellenbosch and Walker Bay"],
+[19,"Which best describes a wine made from Tempranillo?","Acidity: Medium · Tannins: Medium · Flavours: Red Cherry and Blackberry","Acidity: Low · Tannins: High · Flavours: Blackcurrant and Green Bell Pepper","Acidity: Medium to High · Tannins: Low · Flavours: Peach and Pineapple","Acidity: High · Tannins: Medium to High · Flavours: Dark Plum and Black pepper"],
+[19,"Which region is the most famous for Tempranillo-based wines in Spain?","Rioja DOCa","Catalunya DO","Priorat DOCa","Rías Baixas DO"],
+[19,"In which region is Tempranillo very full-bodied and have dark fruit character?","Ribera del Duero DO","Rías Baixas DO","Rioja DOCa","All of the above"],
+[19,"Which is the correct order for aging minimums in Spain from shortest to longest?","Joven, Crianza, Reserva, Gran Reserva","Crianza, Joven, Gran Reserva, Reserva","Gran Reserva, Reserva, Crianza, Joven","Reserva, Gran Reserva, Joven, Crianza"],
+[19,"With age, good quality Tempranillo can develop tertiary flavours of:","Mushroom and dried fruit","Petrol and honey","Brioche and toast","Caramel and almonds"],
+[20,"What best describes a typical Carmenère?","Full bodied with high acidity and deeply coloured","Medium bodied with low to medium acidity and deeply coloured","Full bodied with medium to high acidity and lightly coloured","Medium bodied with low to medium acidity and lightly coloured"],
+[20,"If harvested when unripe Carmenère's flavours can be:","Pungent green bell pepper and tomato leaf","Lemon, lime and apple","Full dark fruit","Bright Red fruit"],
+[20,"Which variety native to Bordeaux is widely grown in Chile?","Carmenère","Malbec","Pinotage","Sémillon"],
+[20,"What best describes a typical Malbec?","Full bodied with high tannins and flavours of black fruit","Medium bodied with low to medium acidity and flavours of red fruit","Full bodied with medium to high acidity and herbaceous flavours","Medium bodied with low to medium acidity and red and dark fruit"],
+[20,"The most plantings of Malbec are found in:","Mendoza","Casablanca","Chianti","Central Valley"],
+[20,"Pinotage typically has red fruit characteristics","True","False"],
+[20,"Pinotage is sometimes blended with Cabernet Sauvignon and Merlot to create:","Cape Blends","Amarone della Valpolicella","Côtes du Rhône-Villages","Méthode Cap Classique"],
+[21,"The grape of Soave DOC and Soave Classico DOC is:","Garganega","Cortese","Fiano","Verdicchio"],
+[21,"Gavi DOCG is typically","Ready to drink on release","High in tannin","Aged in new oak barrels","Fortified"],
+[21,"The main grape of Gavi DOCG is:","Cortese","Fiano","Garganega","Verdicchio"],
+[21,"Typical aromas and flavours of Fiano include:","Peach, melon, and mango","Blossom, pear, and vanilla","Lemon, fennel, and apple","Strawberry, raspberry, and red cherry"],
+[21,"Most wines labelled Verdicchio are:","Simple, fruity and not intended for ageing","Complex with notes of honey and nuts","Simple with floral aromas and should only be aged for up to 5 years","Complex with floral aromas and not intended for ageing"],
+[22,"Which grape is used to make Barolo and Barbaresco DOCG?","Nebbiolo","Barbera","Corvina","Sangiovese"],
+[22,"Which of the below is not a red wine from Piemonte?","Brunello di Montalcino DOCG","Barolo DOCG","Barbera d’Asti DOCG","Barbaresco DOCG"],
+[22,"High acidity, high tannins, with red-fruit, dried herbs, and floral aromas best describes a:","Nebbiolo","Barbera","Corvina","Montepulciano"],
+[22,"Which is the main grape of a Valpolicella blend?","Corvina","Barbera","Garganega","Nebbiolo"],
+[22,"Which pair of wines are made using the appassimento method?","Recioto della Valpolicella DOCG & Amarone della Valpolicella DOCG","Amarone della Valpolicella DOCG & Valpolicella Classico DOC","Valpolicella DOC & Valpolicella Classico DOC","Valpolicella Classico DOC & Recioto della Valpolicella DOCG"],
+[22,"Barbera produces wines that have:","High acidity and low to medium tannins","Low acidity and low tannin","High acidity and high tannin","Low acidity and medium to high tannin"],
+[23,"Which of the following best describes a wine made from Sangiovese?","Acidity: High · Tannins: High · Aromas: Red Cherry, Dried Herbs","Acidity: Low · Tannins: Low · Aromas: Red Cherry, Red Plum","Acidity: Medium · Tannins: Medium · Aromas: Black Cherry, Black Plum","Acidity: Medium to High · Tannins: Medium · Aromas: Peach, Pineapple"],
+[23,"The term Classico on an Italian label indicates:","The wine comes from a historic centre of a wine region","The wine is made from Sangiovese","The wine has been aged for a minimum set number of months","Both the grape variety and the wine region"],
+[23,"The term riserva on an Italian wine label indicates:","The wine has been aged for a set number of months","The wine is of a lower minimum alcohol","The wine is from the best vineyards","None of the above; it has no legal implications"],
+[23,"Which of these wines is not made with Sangiovese?","Montepulciano d’Abruzzo","Chianti Classico","Brunello di Montalcino","None of the above"],
+[23,"What style of wines is Brunello di Montalcino?","Full bodied ageworthy red wine","Traditional method sparkling wine","Sweet with high alcohol and low tannins","Floral with low alcohol and a light body"],
+[23,"Montepulciano d’Abruzzo DOC is typically","High volume, inexpensive red wine","High volume, inexpensive, white wine","Premium quality white wine","Premium quality red wine"],
+[24,"Non-vintage Champagne","Is a blend of different years","Is made from Chenin Blanc","Is made using the tank method","Can be made anywhere in France"],
+[24,"Which one of the following lists the correct order for making traditional sparkling wine?","Autolysis, riddling, disgorging, dosage","Riddling, autolysis, dosage, disgorging","Disgorging, dosage, riddling, autolysis","Dosage, riddling, autolysis, disgorging"],
+[24,"Autolysis in sparkling wines results in","Bread and biscuit notes","Floral and grape flavors","High alcohol","Low alcohol"],
+[24,"Dosage is part of the production process for","Champagne","Fino sherry","Vintage Port","Sauternes"],
+[24,"Prosecco DOC is a sparkling wine made from","Glera","Chardonnay","Cortese","Pinot Grigio"],
+[24,"Asti DOCG is a sweet fruity sparkling wine made from","Muscat","Furmint","Verdicchio","Garganega"],
+[24,"Methode Cap Classique indicates that a wine has been made using","The traditional method","The Asti method","The tank method","The transfer method"],
+[24,"Which style of sparkling wine is not a tank-method sparkling wine?","Cava","Asti","Prosecco","None of the above"],
+[24,"The term ‘brut’ refers to a sparkling wine that is:","Dry","A blend of different vintages","Lightly-sparkling","Medium-sweet"],
+[25,"The base wine used to make Fino Sherry is","Simple dry white wine","Dry and tannic red wine","Sweet fruity red wine","Sweet white wine"],
+[25,"What gives Fino Sherry its distinctive bready flavor?","Flor","Oxidation","Bottle ageing","Botrytis"],
+[25,"A wine labelled Oloroso is","A sherry that has been aged oxidatively without flor","An oak aged Port","A sparkling wine from Italy","A late harvest wine from Alsace"],
+[25,"In Sherry fortification takes place","After fermentation","After maturation","During fermentation","During maturation"],
+[25,"What is the name of the aging technique responsible for producing Sherry?","Solera System","Gran Reserva","Malolactic Conversion","Traditional Method"],
+[25,"Which one of the following best describes Vintage Port?","Sweet, complex and concentrated","Simple with low tannins","Dry with aromas of dried fruits","Sweet with notes of honey, apricot, and marmalade"],
+[25,"The color of a Vintage Port after extended maturation in bottle changes from","Ruby to garnet","Garnet to ruby","Garnet to gold","Gold to garnet"],
+[25,"Which of the following might have an aged indication on the bottle of 10, 20, 30 or 40 years?","Tawny Port","Ruby Port","Late Bottled Vintage Port","Vintage Port"],
+[25,"The addition of grape spirit in Port production","Stops the fermentation process","Makes the Port drier","Produces a lighter color"]
+];
+
+const $=id=>document.getElementById(id);
+let chap="sel", sel=new Set(Object.keys(CH)), deck=[], i=0, right=0, answered=0, missed=[];
+// Starred ("Remember") questions: one doc per question in "starred"; deleted when unstarred
+function key(q){let h=0;for(const c of q[1])h=(h*31+c.charCodeAt(0))|0;return "q"+(h>>>0).toString(36)}
+const byKey={}; Q.forEach(q=>byKey[key(q)]=q);
+let stars={}, store=null, mode="none", writing=Promise.resolve();
+function setStatus(t){$("status").textContent=t}
+function starDeck(){return Object.keys(stars).filter(k=>byKey[k]).map(k=>byKey[k])}
+function loadLocal(){try{stars=JSON.parse(localStorage.getItem("wset2-fv-starred")||"{}")}catch(e){stars={}}}
+function saveLocal(){try{localStorage.setItem("wset2-fv-starred",JSON.stringify(stars))}catch(e){}}
+function refreshStar(){const s=$("star"); if(!s||!deck[i]) return; const on=!!stars[key(deck[i])]; s.setAttribute("aria-pressed",String(on)); s.textContent=on?"★":"☆"; s.title=on?"Remove from Remember":"Remember this question"}
+async function initStore(){
+  let db=null; try{db=await claude.use("db")}catch(e){}
+  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();return}
+  store=db.collection("starred"); mode="db";
+  let t=setTimeout(()=>setStatus("Can't reach starred questions yet."),10000);
+  store.onSnapshot(snap=>{
+    const m={}; snap.docs.forEach(d=>{if(d.exists)m[d.id]=d.data()}); stars=m;
+    if(!snap.metadata.fromCache){clearTimeout(t);setStatus("Starred questions are saved to your account.")}
+    chips(); refreshStar();
+  },e=>{clearTimeout(t);mode="local";loadLocal();setStatus("Saving stars in this browser only.");chips();refreshStar()});
+}
+function toggleStar(q){
+  const k=key(q), on=!stars[k];
+  if(on) stars[k]={ch:q[0],q:q[1],answer:q[2],starredAt:new Date().toISOString()}; else delete stars[k];
+  chips(); refreshStar();
+  if(mode==="db"){const doc=stars[k]; writing=writing.then(()=>on?store.doc(k).set(doc):store.doc(k).delete()).catch(()=>setStatus("Couldn't save that star. Check your connection."))}
+  else saveLocal();
+}
+function shuffle(a){a=a.slice();for(let j=a.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[a[j],a[k]]=[a[k],a[j]]}return a}
+
+function chips(){
+  const c=$("chips"); c.innerHTML="";
+  const n=starDeck().length, NCH=Object.keys(CH).length;
+  [["all",(chap==="sel"&&sel.size===NCH)?"None":"All"],...Object.keys(CH).map(k=>[k,"Ch "+k]),["starred","★ Remember ("+n+")"]].forEach(([v,l])=>{
+    const b=document.createElement("button"); b.className="chip"+(v==="starred"?" miss":""); b.id="chip-"+v; b.textContent=l;
+    if(v==="starred"&&!n&&chap!=="starred") b.disabled=true;
+    const on=v==="starred"?chap==="starred":v==="all"?false:(chap==="sel"&&sel.has(v));
+    b.setAttribute("aria-pressed",String(on)); b.title=v==="all"?(l==="None"?"Clear all chapters":"Select all chapters"):v==="starred"?"Questions you starred":CH[v];
+    b.onclick=()=>{
+      if(v==="starred"){chap="starred";sel.clear()}
+      else if(v==="all"){const full=chap==="sel"&&sel.size===NCH; chap="sel"; sel=full?new Set():new Set(Object.keys(CH))}
+      else{if(chap!=="sel"){chap="sel";sel.clear()} sel.has(v)?sel.delete(v):sel.add(v)}
+      start()}; c.appendChild(b);
+  });
+}
+function start(list){
+  deck = shuffle(list || (chap==="starred"?starDeck():Q.filter(q=>sel.has(String(q[0])))));
+  i=0; right=0; answered=0; missed=[]; chips(); show();
+}
+function stats(){
+  $("pos").textContent=`Question ${Math.min(i+1,deck.length)} of ${deck.length}`;
+  $("score").textContent=`${right}/${answered}`;
+  $("fill").style.width=(deck.length?answered/deck.length*100:0)+"%";
+}
+function show(){
+  stats();
+  const card=$("card");
+  if(!deck.length){card.className="card end";card.innerHTML=chap==="starred"?`<div class="tag">Nothing starred</div><p class="sub">Tap ☆ on any question to remember it.</p>`:`<div class="tag">No chapters selected</div><p class="sub">Tap one or more chapters, or All.</p>`;return}
+  if(i>=deck.length){return end()}
+  const q=deck[i]; const opts=shuffle(q.slice(2).map((t,n)=>({t,ok:n===0})));
+  card.className="card";
+  card.innerHTML=`<div class="top"><div class="tag">Chapter ${q[0]} · ${CH[q[0]]}</div><button class="star" id="star" aria-pressed="false" aria-label="Remember">☆</button></div><p class="q"></p><div class="opts"></div><div class="foot"><span class="verdict" aria-live="polite"></span><button class="btn" id="next" hidden>Next</button></div>`;
+  card.querySelector(".q").textContent=q[1];
+  $("star").onclick=()=>toggleStar(q); refreshStar();
+  const box=card.querySelector(".opts");
+  opts.forEach((o,n)=>{
+    const b=document.createElement("button"); b.className="opt"; b.id="opt-"+n;
+    b.innerHTML=`<span class="k">${"ABCD"[n]}</span><span></span>`; b.lastChild.textContent=o.t;
+    b.onclick=()=>pick(b,o,opts,box,q); box.appendChild(b);
+  });
+}
+function pick(b,o,opts,box,q){
+  answered++; if(o.ok) right++; else missed.push(q);
+  [...box.children].forEach((el,n)=>{
+    el.disabled=true;
+    if(opts[n].ok) el.classList.add("right");
+    else if(el===b) el.classList.add("wrong");
+    else el.classList.add("dim");
+  });
+  const v=$("card").querySelector(".verdict");
+  v.textContent=o.ok?"Correct":"Incorrect"; v.className="verdict "+(o.ok?"g":"b");
+  const nx=$("next"); nx.hidden=false; nx.textContent=i===deck.length-1?"See results":"Next";
+  nx.onclick=()=>{i++;show()}; nx.focus({preventScroll:true});
+  stats();
+}
+function end(){
+  const pct=deck.length?Math.round(right/deck.length*100):0;
+  const card=$("card"); card.className="card end";
+  card.innerHTML=`<div class="tag">Done</div><p class="big">${right}/${deck.length}</p><p class="sub">${pct}% correct</p><div class="row"></div>`;
+  const row=card.querySelector(".row");
+  if(missed.length){const m=document.createElement("button");m.className="btn";m.id="redo-missed";m.textContent=`Retry ${missed.length} missed`;const list=missed.slice();m.onclick=()=>start(list);row.appendChild(m)}
+  const r=document.createElement("button");r.className="btn ghost";r.id="restart";r.textContent="Start over";r.onclick=()=>start();row.appendChild(r);
+}
+start();
+initStore();
+</script>
+</body>
+</html>
