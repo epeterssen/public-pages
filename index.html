@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WSET2 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1; --accent:#7a1f3d;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0}
+.sub{color:var(--muted);margin:2px 0 0;font-size:.9rem}
+.link{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;color:var(--fg);text-decoration:none}
+.link:hover,.link:focus-visible{border-color:var(--accent)}
+.link b{font-family:var(--display);font-weight:400;font-size:1.3rem;display:block;color:var(--accent)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>WSET2 Study</h1>
+  </header>
+  <a class="link" href="wset2-book-text-question-bank.html">
+    <b>Question Bank</b>
+    <span class="sub">All 25 chapters, from the book.</span>
+  </a>
+</main>
+</body>
+</html>
