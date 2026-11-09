@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WSET2 Book Text Question Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: single centered study column; chapter chips, one question card, answer stack, score bar */
+:root{
+  --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1;
+  --accent:#7a1f3d; --accent-soft:#f1e3e8;
+  --star:#b7791f; --good:#1f7a45; --good-bg:#e2f3e8; --bad:#b3261e; --bad-bg:#fbe4e2;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:2px 0 0;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:500 .85rem var(--body);cursor:pointer}
+.chip:disabled{opacity:.45;cursor:default}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar b{color:var(--fg)}
+.track{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .25s}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.q{font-family:var(--display);font-size:1.3rem;line-height:1.3;margin:0;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:12px 14px;font:400 1rem var(--body);cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt .k{font-weight:600;color:var(--muted);min-width:1.1em}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.right .k{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .k{color:var(--bad)}
+.opt.dim{opacity:.5}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.verdict{font-weight:600;font-size:.95rem}
+.verdict.g{color:var(--good)} .verdict.b{color:var(--bad)}
+.btn{border:none;background:var(--accent);color:var(--surface);border-radius:10px;padding:11px 18px;font:600 .95rem var(--body);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.end{text-align:center;gap:10px;align-items:center}
+.status{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.chip.miss{border-color:var(--star);color:var(--star)}
+.chip.miss[aria-pressed="true"]{background:var(--star);border-color:var(--star);color:var(--surface)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.star{border:none;background:transparent;color:var(--muted);font-size:1.5rem;line-height:1;padding:4px 6px;cursor:pointer;border-radius:8px}
+.star[aria-pressed="true"]{color:var(--star)}
+.star:hover{color:var(--star)}
+.star:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.big{font-family:var(--display);font-size:3rem;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+@media (prefers-reduced-motion: reduce){.fill{transition:none}}
+</style>
+<style>*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>WSET2 Book Text Question Bank</h1>
+    <p class="sub">All 25 chapters, from the book. Tap chapters to combine them. Tap an answer to reveal.</p>
+    <p class="status" id="status">Loading starred questions…</p>
+  </header>
+  <div class="chips" id="chips" role="group" aria-label="Chapter"></div>
+  <div>
+    <div class="bar"><span id="pos">Question 1 of 0</span><span>Score <b id="score">0/0</b></span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+  <section class="card" id="card"></section>
+</div>
+
+<script>
+const CH={1:"Tasting & Evaluating",2:"Food & Wine Pairing",3:"Storage & Service",4:"Grape-growing",5:"Winemaking",6:"Pinot Noir",7:"Zinfandel/Primitivo",8:"Riesling",9:"Chenin, Semillon, Furmint",10:"Chardonnay",11:"Sauvignon Blanc",12:"Pinot Grigio/Gris",13:"Gewurz, Viognier, Albariño",14:"Merlot",15:"Cabernet Sauvignon",16:"Syrah/Shiraz",17:"Gamay",18:"Grenache/Garnacha",19:"Tempranillo",20:"Carmenère, Malbec, Pinotage",21:"Cortese, Garganega, Verdicchio, Fiano",22:"Nebbiolo, Barbera, Corvina",23:"Sangiovese, Montepulciano",24:"Sparkling Wines",25:"Fortified Wines"};
+// [chapter, question, correct, wrong, wrong, wrong]
+const Q=[
+[1,"What are the four criteria for judging quality (BLIC)?","Balance, length, intensity, complexity","Balance, acidity, tannin, colour","Body, length, intensity, clarity","Balance, length, alcohol, complexity"],
+[1,"What sample size is recommended for each tasting glass?","About 5 cL (1.7 US fl oz)","About 10 cL (3.4 US fl oz)","About 2 cL (0.7 US fl oz)","About 15 cL (5 US fl oz)"],
+[1,"Which two features of the ISO tasting glass help assess aromas?","Rounded bowl and inward-sloping walls","Straight walls and a wide rim","Shallow bowl and flared rim","Tall narrow flute and long stem"],
+[1,"What is the most common colour for white wines?","Lemon","Lemon-green","Gold","Amber"],
+[1,"A red showing some orange/brown but still more red than brown is…","Garnet","Tawny","Ruby","Purple"],
+[1,"Aromas of cream and butter come from…","Malolactic conversion (secondary)","Oak (secondary)","Autolysis (secondary)","Bottle ageing (tertiary)"],
+[1,"Ageing protected from oxygen (e.g. long in bottle) gives which tertiary aromas?","Petrol, honey, mushroom","Coffee, caramel","Vanilla, smoke","Toasted bread, biscuit"],
+[1,"Long oxidative ageing (e.g. long in oak) gives which tertiary aromas?","Coffee, caramel","Petrol, honey","Butter, cream","Blossom, lemon"],
+[1,"What is the medium alcohol range for still wines?","11–13.9% abv","12–14.9% abv","10–12.9% abv","11.5–14.5% abv"],
+[1,"What counts as high alcohol for a fortified wine?","18.5% abv and above","17% abv and above","20% abv and above","16.5% abv and above"],
+[1,"What is the most reliable guide to a wine's acidity?","How much and how long your mouth waters","The burning sensation","How dry the mouth feels","How sweet the wine tastes"],
+[1,"Which component is the main contributor to body?","Alcohol","Acidity","Tannin","Sugar"],
+[1,"A wine positive on three of the four quality criteria is…","Very good","Outstanding","Good","Acceptable"],
+[1,"Red-wine tannin mostly comes from…","The skins, during fermentation","The pulp","The yeast","The cork"],
+[1,"How is a finish judged short?","Pleasant flavours fade while structure (e.g. acid) lingers","Bitterness lingers for a long time","Alcohol heat lingers","Fruit lasts as long as the structure"],
+
+[2,"Which two food components make wine taste 'harder'?","Sweetness and umami","Salt and acid","Fat and salt","Acid and umami"],
+[2,"Which two food components make wine taste 'softer'?","Salt and acid","Sweetness and umami","Sweetness and fat","Umami and salt"],
+[2,"What is the general rule for wine with a sweet dish?","Choose a wine sweeter than the dish","Choose a bone-dry wine","Choose a high-tannin red","Choose a high-alcohol wine"],
+[2,"What does salt in food do to a red wine?","Makes it fruitier and softens tannin","Makes it more bitter","Makes it more acidic","Makes it thinner in body"],
+[2,"Chilli heat with a high-alcohol wine…","Increases the burning sensation","Reduces the burning sensation","Has no effect","Makes the wine taste sweeter"],
+[2,"Fatty or oily food makes wine seem…","Less acidic","More acidic","More tannic","Less sweet"],
+[2,"Which foods are examples of umami?","Dried mushrooms, aged cheese, miso","Lemons, vinegar, tomatoes","Sugar, honey, fruit tarts","Chilli, pepper, ginger"],
+[2,"High-acid food with a low-acid wine makes the wine seem…","Less fruity","More fruity","Sweeter","Fuller-bodied"],
+[2,"Which is generally true of food and wine together?","Food affects wine more, usually negatively","Wine affects food more, usually positively","Each affects the other equally","Neither affects the other"],
+[2,"Orange juice tasting acidic after toothpaste illustrates…","Taste buds adapting to what came before","A mouth-coating effect","Umami interaction","Chilli heat"],
+[2,"Highly flavoured food can make a wine seem…","Overwhelmed by the food flavours","Fruitier","Sweeter","Fuller-bodied"],
+
+[3,"Why are cork-sealed bottles stored on their side?","To keep the cork moist","To collect the deposit","To keep the wine cooler","To save space only"],
+[3,"Service temperature for a sweet wine such as Sauternes?","Well chilled, 6–8°C (43–46°F)","Chilled, 7–10°C (45–50°F)","Lightly chilled, 10–13°C (50–55°F)","Room temperature, 15–18°C (59–64°F)"],
+[3,"Service temperature for a full-bodied white like oaked Chardonnay?","Lightly chilled, 10–13°C (50–55°F)","Well chilled, 6–8°C (43–46°F)","Chilled, 7–10°C (45–50°F)","Room temperature, 15–18°C (59–64°F)"],
+[3,"Service temperature for a light-bodied red like Beaujolais?","13–18°C (55–64°F), room temp or lightly chilled","6–10°C (43–50°F), well chilled","15–18°C (59–64°F), room temperature only","10–13°C (50–55°F), lightly chilled only"],
+[3,"Service temperature for sparkling wine such as Champagne?","Well chilled, 6–10°C (43–50°F)","Chilled, 10–13°C (50–55°F)","Lightly chilled, 13–15°C (55–59°F)","Well chilled, 2–4°C (36–39°F)"],
+[3,"What should an ice bucket contain?","Ice and cold water","Ice only","Cold water only","Ice and salt"],
+[3,"Cork taint is caused by…","TCA (trichloroanisole)","Too much oxygen","Heat damage","Malolactic bacteria"],
+[3,"A failed closure letting in oxygen gives a wine that is…","Browner, with honey/caramel/coffee notes","Hazy with damp cardboard aromas","Fizzy and yeasty","Paler with green fruit"],
+[3,"Which gases do inert gas preservation systems use?","Nitrogen and argon","Oxygen and nitrogen","Carbon dioxide and oxygen","Argon and oxygen"],
+[3,"When opening sparkling wine you should…","Turn the bottle, not the cork","Turn the cork, not the bottle","Remove the cage, then step back","Point it straight up"],
+[3,"When decanting, stop pouring when…","The deposit reaches the neck","Half the bottle is poured","The bottle is empty","Bubbles appear"],
+[3,"What feature do the best wine glasses share?","The bowl narrows at the rim","A flared rim","A very thick base","Coloured glass"],
+[3,"Heat damage (storage too warm or in bright light) makes a wine…","Lose freshness and expected fruit","Smell of damp cardboard","Taste sweeter","Develop more tannin"],
+
+[4,"What five things does a vine need?","Warmth, sunlight, CO₂, water, nutrients","Warmth, sunlight, oxygen, water, nitrogen","Sunlight, rain, wind, soil, frost","Warmth, shade, CO₂, water, sugar"],
+[4,"What happens at véraison?","Grapes start ripening and change colour","Flowers are pollinated","Vines become dormant","Grapes are harvested"],
+[4,"What is the correct order of grape development?","Flowering → fruit set → véraison → ripening","Fruit set → flowering → ripening → véraison","Véraison → flowering → fruit set → ripening","Flowering → véraison → fruit set → ripening"],
+[4,"A cool climate has a growing-season average of…","16.5°C (62°F) or below","18.5°C (65°F) or below","14°C (57°F) or below","16.5–18.5°C (62–65°F)"],
+[4,"Which is the most important climatic influence?","Latitude","Altitude","Soil","Fog"],
+[4,"Most vineyards lie between which latitudes?","30° and 50°","20° and 40°","40° and 60°","10° and 30°"],
+[4,"Which conditions favour botrytis/noble rot?","Damp misty mornings, warm dry afternoons","Hot dry days all season","Frost then rain","Constant heavy rain"],
+[4,"The grape pulp is mainly…","Water and sugar","Tannin and colour","Acid and tannin","Flavour and colour"],
+[4,"Which Italian terms indicate a PDO wine?","DOC and DOCG","IGT","Vino de la Tierra","IGP"],
+[4,"What is Spain's PGI term?","Vino de la Tierra","DOCa","DO","Landwein"],
+[4,"Is 'Old Vine' / 'vieilles vignes' legally defined?","No","Yes, over 35 years","Yes, over 50 years","Only in the EU"],
+[4,"Growing season in the Northern Hemisphere?","April–October","October–April","January–July","June–December"],
+[4,"Spring frost is a problem because it…","Kills new growth, so fewer grapes","Causes sunburn","Spreads fungal disease","Swells grapes and dilutes flavour"],
+[4,"Outside the EU, a GI mainly tells you…","Where the grapes were grown","Which grapes are permitted","Which winemaking rules apply","The quality level"],
+
+[5,"Alcoholic fermentation produces…","Alcohol, CO₂ and heat","Alcohol, oxygen and sugar","Alcohol, acid and tannin","Alcohol and lees only"],
+[5,"Correct order for making dry red wine?","Crush → ferment → drain → press","Crush → press → ferment → drain","Press → crush → ferment → drain","Crush → drain → press → ferment"],
+[5,"Punching down and pumping over are used to…","Mix the cap to extract colour and tannin","Remove the lees","Cool the fermentation","Clarify the wine"],
+[5,"What are the two ways to make rosé?","Short maceration and blending","Fortification and blending","Long maceration and filtration","Pressing whites and adding tannin"],
+[5,"Fermentation temperature range for white wine?","12–22°C (54–72°F)","20–32°C (68–90°F)","5–10°C (41–50°F)","25–35°C (77–95°F)"],
+[5,"Fermentation temperature range for red wine?","20–32°C (68–90°F)","12–22°C (54–72°F)","30–40°C (86–104°F)","8–15°C (46–59°F)"],
+[5,"Fortification kills the yeast by raising alcohol to…","15–20% abv","10–12% abv","22–25% abv","13–14% abv"],
+[5,"How is White Zinfandel kept sweet?","Removing the yeast with very fine filters","Fortification","Botrytis grapes","Frozen grapes"],
+[5,"Tokaji Aszú is an example of sweetness from…","Concentrated grape sugars","Fortification","Removing the yeast","Adding sugar to a dry wine"],
+[5,"Malolactic conversion is carried out by…","Bacteria","Yeast","Oak","Oxygen"],
+[5,"Which flavours does new oak give?","Vanilla, coconut, charred wood, spice","Butter, cream","Biscuit, bread","Petrol, honey"],
+[5,"After how many uses does an oak barrel give very little flavour?","2–3","1","5–6","10"],
+[5,"Lees contact and stirring give a white wine…","More body, biscuit/bread flavours","More acidity","More tannin","Paler colour"],
+[5,"As a red ages in bottle, its colour…","Goes ruby → garnet → tawny → brown, getting paler","Gets deeper","Turns purple","Stays the same"],
+[5,"Why does oxygen through oak happen faster in small barrels?","More wine is in contact with wood","The staves are thinner","They are toasted more","They are always new"],
+
+[6,"What climate does Pinot Noir need?","Cool to moderate","Warm to hot","Hot only","Any climate"],
+[6,"Typical Pinot Noir structure?","Pale–medium colour, high acid, low–medium tannin","Deep colour, low acid, high tannin","Pale colour, low acid, high tannin","Deep colour, high acid, high tannin"],
+[6,"Why do producers use older and/or larger barrels for Pinot Noir?","Small new oak can overwhelm it","They add more vanilla","They speed oxidation","They are required by law"],
+[6,"The Côte d'Or is split into…","Côte de Nuits (north) and Côte de Beaune (south)","Côte de Beaune (north) and Côte de Nuits (south)","Chablis and Mâcon","Côte de Nuits and Beaujolais"],
+[6,"Which village is in the Côte de Nuits?","Gevrey-Chambertin","Pommard","Beaune","Bourgogne"],
+[6,"How is a Burgundy Grand Cru labelled?","Vineyard name + Grand Cru AOC","Village name + Grand Cru","Bourgogne Grand Cru","Village + vineyard + Premier Cru"],
+[6,"What cools Los Carneros?","Morning fog from San Pablo Bay","Southern Ocean breezes","Altitude","A ring of mountains"],
+[6,"Which Chilean region is noted for Pinot Noir?","Casablanca Valley","Walker Bay","Yarra Valley","Martinborough"],
+[6,"Which South African region is noted for Pinot Noir?","Walker Bay","Western Cape","Casablanca Valley","Mornington Peninsula"],
+[6,"Which Australian regions are noted for Pinot Noir?","Yarra Valley and Mornington Peninsula","Barossa and Clare Valley","Hunter and Eden Valley","Central Otago and Marlborough"],
+[6,"Why is Central Otago Pinot the ripest in New Zealand?","Mountains block sea breezes and rain","It is closest to the equator","Morning fog","It is irrigated heavily"],
+[6,"Which tertiary aromas develop in aged Pinot Noir?","Forest floor, mushroom","Petrol, honey","Coffee, caramel","Butter, cream"],
+[6,"Oregon is better suited to Pinot than most of California because it is…","Further north and cooler","Higher altitude","Further south","Drier"],
+
+[7,"What climate does Zinfandel/Primitivo need?","Warm","Cool","Cool to moderate","Any"],
+[7,"Uneven ripening in Zinfandel means…","Some grapes raisin before others ripen","Grapes ripen too slowly to harvest","Only half the bunch changes colour","Skins split in rain"],
+[7,"Typical alcohol of White Zinfandel?","8–10% abv","11–12% abv","13–14% abv","15–16% abv"],
+[7,"Typical red Zinfandel profile?","Dry, high alcohol, full body, medium–high tannin","Off-dry, low alcohol, light body","Dry, low alcohol, low tannin","Sweet, fortified"],
+[7,"Where in Italy is Primitivo grown?","Puglia","Tuscany","Piedmont","Sicily"],
+[7,"Oak in red Zinfandel adds…","Vanilla, coffee","Butter, cream","Petrol, honey","Biscuit, bread"],
+[7,"Very old Zinfandel vines can develop which tertiary notes?","Earth, meat","Petrol, honey","Mushroom, forest floor","Caramel, nuts"],
+
+[8,"Why is Riesling usually fermented in inert vessels?","To preserve its floral aromas","To add oak flavour","To soften tannins","To speed fermentation"],
+[8,"Tertiary flavours of aged Riesling?","Honey, petrol","Mushroom, forest floor","Coffee, caramel","Earth, meat"],
+[8,"Typical Mosel Riesling?","Light body, medium sweetness, very high acid","Full body, dry, low acid","Medium body, dry, medium acid","Full body, sweet, low acid"],
+[8,"Compared with Mosel, Rheingau Rieslings are…","Drier, with more body","Sweeter, with less body","Lower in acidity","Always botrytised"],
+[8,"Pfalz is climatically like an extension of…","Alsace","Mosel","Burgundy","Loire"],
+[8,"What is Süssreserve?","Unfermented grape juice added for sweetness","A dry style of Riesling","Botrytised berries","A German PGI"],
+[8,"Which is the lightest Prädikat category?","Kabinett","Spätlese","Auslese","Beerenauslese"],
+[8,"Which two Prädikat categories require the same minimum sugar?","Eiswein and Beerenauslese","Auslese and Spätlese","Kabinett and Spätlese","TBA and Eiswein"],
+[8,"Trockenbeerenauslese is made from…","Individually selected berries dried by botrytis","Grapes frozen on the vine","Selected extra-ripe bunches","Late-harvested bunches"],
+[8,"What role does botrytis play in Eiswein?","None","It is essential","It concentrates acidity","It adds honey notes"],
+[8,"'Halbtrocken' on a German label means…","Some sweetness","Dry","Very sweet","Late harvest"],
+[8,"What protects Alsace from rain-bearing westerly winds?","The Vosges Mountains","The Rhine River","The Alps","Atlantic currents"],
+[8,"Sweeter late-harvest Alsace wines are labelled…","Vendanges tardives","Spätlese","Grand cru","Demi-Sec"],
+[8,"Which Australian regions are known for premium Riesling?","Eden Valley and Clare Valley","Barossa and Hunter Valley","Yarra Valley and Mornington","Margaret River and Coonawarra"],
+[8,"A dry Auslese compared with a dry Kabinett is…","Higher in alcohol","Lower in alcohol","The same alcohol","Sweeter"],
+[8,"Qualitätswein must come from one of how many winegrowing areas?","13","6","10","20"],
+
+[9,"Which is the only permitted grape in Vouvray AOC?","Chenin Blanc","Sémillon","Sauvignon Blanc","Chardonnay"],
+[9,"'Demi-Sec' on a Vouvray label means…","Off-dry/medium","Dry","Sweet","Sparkling"],
+[9,"Why is Chenin Blanc prized in South Africa?","It keeps high acidity in a warm climate","It resists botrytis","It ripens in cool climates only","It is low in alcohol"],
+[9,"Inexpensive South African Chenin is often labelled…","Western Cape","Walker Bay","Stellenbosch Grand Cru","Vouvray"],
+[9,"What does Sémillon add to blends with Sauvignon Blanc in Bordeaux?","Body and ageing potential","Acidity and herbaceous notes","Tannin","Floral aromas"],
+[9,"Why is Semillon the most important grape in Sauternes?","It is especially susceptible to botrytis","It ripens earliest","It has the highest acidity","It is the only permitted grape"],
+[9,"Hunter Valley Semillon is typically…","Light body, low alcohol, ageing to honey and nuts","Full body, oaked, high alcohol","Sweet and botrytised","Off-dry with tropical fruit"],
+[9,"Hunter Valley Semillon has low sugar and high acid because…","The grapes are picked early","The region is cool","It is fermented in oak","Acid is added"],
+[9,"Furmint is grown mostly in…","Hungary","Austria","Germany","Australia"],
+[9,"What shows the sweetness of Tokaji Aszú on the label?","Puttonyos (5 or 6, with 6 sweeter)","Prädikat level","Demi-Sec","Vendanges tardives"],
+[9,"Why is Tokaji Aszú amber in colour?","Long oak ageing","Botrytis","Fortification","Skin contact"],
+[9,"Chenin Blanc flavours from least to most ripe?","Apple/lemon → peach → pineapple/mango","Pineapple → peach → apple","Peach → apple → mango","Lemon → mango → apple"],
+
+[10,"Typical cool-climate Chardonnay?","High acid, light–medium body, apple, pear, lemon, wet stones","Medium acid, full body, peach, pineapple, banana","Medium–high acid, medium–full body, lemon, peach, melon","Low acid, full body, mango, lychee"],
+[10,"Typical warm-climate Chardonnay?","Full body, medium acid, peach, pineapple, banana","Light body, high acid, apple, lemon","Medium body, high acid, lemon, wet stones","Light body, low acid, pear, melon"],
+[10,"Acidification is commonplace for…","Warm-climate Chardonnays","Chablis","Cool-climate Chardonnays","Unoaked Chardonnays only"],
+[10,"Tertiary flavours of aged Chardonnay?","Hazelnut, mushroom","Petrol, honey","Butter, cream","Leather, tobacco"],
+[10,"What is a key concern in Chablis that can limit production?","Frost","Hail","Drought","Botrytis"],
+[10,"Chablis is typically…","Unoaked, fermented in inert vessels","Fermented in new oak","Aged on lees in new barrels","Made with oak chips"],
+[10,"Meursault and Puligny-Montrachet are in the…","Côte de Beaune","Côte de Nuits","Mâconnais","Chablis"],
+[10,"Pouilly-Fuissé AOC is in the…","Mâconnais","Côte de Beaune","Chablis","Loire"],
+[10,"Most Languedoc-Roussillon Chardonnay is labelled…","Pays d'Oc IGP","Bourgogne AOC","Mâcon AOC","Minervois AOC"],
+[10,"Which Australian region's Chardonnay is cooled by altitude?","Adelaide Hills","Yarra Valley","Margaret River","Hunter Valley"],
+[10,"Napa Valley Chardonnay is known for…","Full body, tropical fruit, vanilla and spice from new oak","Light body, high acid, wet stones","Simple, unoaked lemon and apple","Off-dry, floral and low alcohol"],
+[10,"Malolactic conversion in Chardonnay adds…","Butter, cream, and softens harsh acids","Bread, biscuit, and body","Smoke, vanilla, coconut","Hazelnut, mushroom"],
+
+[11,"Sauvignon Blanc's characteristic herbaceous aromas?","Grass, green bell pepper, asparagus","Mint, eucalyptus, dill","Rose, violet, blossom","Black pepper, liquorice"],
+[11,"Typical Sauvignon Blanc structure?","Dry, light–medium body, high acidity","Dry, full body, low acidity","Off-dry, full body, medium acidity","Dry, medium body, low acidity"],
+[11,"Which is the only white grape permitted in Sancerre and Pouilly-Fumé?","Sauvignon Blanc","Chenin Blanc","Chardonnay","Sémillon"],
+[11,"Touraine AOC Sauvignon Blanc is typically…","Fruity and inexpensive","Oak-aged and age-worthy","Sweet and botrytised","Blended with Chardonnay"],
+[11,"Very good Graves and Pessac-Léognan whites are…","Sauvignon Blanc–Sémillon blends, often oaked, ageing to honey and nuts","Single-varietal unoaked Sauvignon Blanc","Sweet botrytised wines","Chardonnay-based blends"],
+[11,"Compared with the Loire, Marlborough Sauvignon Blanc is…","More pronounced in character","More subtle and mineral","Always oak-aged","Lower in acidity and sweeter"],
+[11,"Which is often cited as the coolest wine region in South Africa?","Elgin","Constantia","Stellenbosch","Walker Bay"],
+[11,"What cools Constantia?","Sea breezes from the Southern Ocean","Altitude","Morning fog","A ring of mountains"],
+[11,"Which label term indicates oak was used for Sauvignon Blanc?","Barrel aged","Unwooded","Sur lie","Classico"],
+[11,"Why is Sauvignon Blanc usually drunk young?","It loses fresh aromas within a couple of years and turns vegetal","It gains too much tannin","It oxidises in a few months","It becomes too sweet"],
+[11,"In Languedoc-Roussillon, Sauvignon Blanc does best in areas…","Cooled by altitude","Closest to the sea","On flat plains","With the warmest sites"],
+
+[12,"The most common Pinot Grigio style comes from…","High yields, harvested early","Low yields, harvested late","Botrytised grapes","Old vines"],
+[12,"Typical light Italian Pinot Grigio?","Dry, light body, medium–high acid, pear and lemon","Off-dry, full body, peach and mango","Dry, full body, honey and ginger","Sweet, medium body, tropical fruit"],
+[12,"Veneto Pinot Grigio is usually labelled…","delle Venezie DOC or Veneto IGT","Soave DOC","Friuli DOCG","Valpolicella DOC"],
+[12,"Which Italian region makes a more complex, fuller Pinot Grigio?","Friuli-Venezia Giulia","Veneto","Piemonte","Puglia"],
+[12,"Full-bodied Pinot Gris can develop which notes in bottle?","Ginger and honey","Petrol and honey","Mushroom and leather","Butter and cream"],
+[12,"Typical Alsace Pinot Gris?","Extra-ripe; dry to medium; medium–full body; peach, mango","Early-picked; dry; light body; pear, lemon","Botrytised; always sweet; apricot","Unripe; high acid; green apple"],
+[12,"From which vintage must Alsace labels show sweetness on a standard scale?","2021","2015","2019","2023"],
+[12,"Alsace Grand Cru vineyards are mostly on…","Steep east/south-east foothills of the Vosges","Flat plains by the Rhine","North-facing slopes","Gravel terraces by the river"],
+[12,"Outside Italy and France, 'Pinot Gris' on a label usually signals…","More body and complexity","A lighter, higher-acid style","A sparkling wine","A sweet wine"],
+
+[13,"Typical Gewurztraminer?","Full body, low–medium acid, high alcohol, rose and lychee","Light body, high acid, lemon and grass","Medium body, high acid, apple and wet stones","Light body, low alcohol, pear and blossom"],
+[13,"Why is Gewurztraminer typically unoaked?","To preserve its floral aromas","To keep tannins low","To raise acidity","It is required by law"],
+[13,"Gewurztraminer's most famous region is…","Alsace AOC","Condrieu AOC","Rías Baixas DO","Mosel"],
+[13,"Where are some of the finest Viogniers made?","Condrieu AOC, Northern Rhône","Alsace AOC","Sancerre AOC","Châteauneuf-du-Pape AOC"],
+[13,"What is unusual about Viognier for an aromatic variety?","Some are oak-aged","It is always sweet","It has high tannin","It is grown only in cool climates"],
+[13,"Typical Viognier?","Dry, low–medium acid, high alcohol, blossom, peach, apricot","Dry, high acid, light body, lemon, grass","Sweet, low alcohol, lychee, rose","Dry, high acid, medium body, grapefruit"],
+[13,"Albariño is grown in which Spanish region?","Rías Baixas DO","Rioja DOCa","Priorat DOCa","Catalunya DO"],
+[13,"Rías Baixas suits refreshing whites because it is…","Cooler, wetter and cloudier than much of Spain","Hot and dry","High altitude and sunny","Sheltered by mountains from rain"],
+[13,"Typical Albariño?","Dry, high acid, medium body, lemon, grapefruit, peach","Dry, low acid, full body, rose, lychee","Off-dry, medium acid, pineapple","Dry, high acid, light body, grass, asparagus"],
+
+[14,"Just-ripe Merlot gives…","Light–medium body, strawberry, red plum, green bell pepper","Full body, cooked blackberry, black plum","High tannin, blackcurrant, mint","Light body, banana, candy"],
+[14,"Typical single-varietal Merlot structure?","Dry, medium acidity, medium tannins","Dry, high acidity, high tannins","Dry, low acidity, low tannins","Off-dry, medium acidity, low tannins"],
+[14,"What does Merlot add to blends with Cabernet Sauvignon?","Red fruit and lower tannin, so ready to drink earlier","More tannin and acidity","Black pepper and liquorice","Floral aromas"],
+[14,"Aged Merlot develops…","Dried fruit and tobacco","Petrol and honey","Banana and candy","Mint and eucalyptus"],
+[14,"Which is the most widely planted variety in Bordeaux?","Merlot","Cabernet Sauvignon","Sémillon","Sauvignon Blanc"],
+[14,"Which two rivers meet to form the Gironde?","Garonne and Dordogne","Loire and Rhône","Garonne and Loire","Dordogne and Rhône"],
+[14,"The most famous Merlot-dominated wines come from…","Saint-Émilion and Pomerol","Margaux and Pauillac","Graves and Pessac-Léognan","Médoc and Sauternes"],
+[14,"Bordeaux Supérieur AOC differs from Bordeaux AOC by…","Slightly stricter rules on yields, ageing and minimum alcohol","Coming only from the Right Bank","Being 100% Merlot","Being a Grand Cru"],
+[14,"Which districts are on the Left Bank?","Médoc, Graves, Sauternes","Saint-Émilion, Pomerol","Médoc, Pomerol","Graves, Saint-Émilion"],
+[14,"Most of New Zealand's Merlot comes from…","Hawke's Bay","Marlborough","Central Otago","Martinborough"],
+[14,"Which South African region is known for age-worthy Bordeaux varieties?","Stellenbosch","Walker Bay","Elgin","Constantia"],
+
+[15,"Typical Cabernet Sauvignon?","Deep colour, high acid, high tannin, blackcurrant, mint/green pepper","Pale colour, high acid, low tannin, red cherry","Deep colour, low acid, medium tannin, cooked plum","Medium colour, medium acid, medium tannin, strawberry"],
+[15,"How does gravel help Cabernet Sauvignon on the Left Bank?","Drains quickly and holds heat into the evening","Retains water in drought","Reflects light to cool vines","Adds minerality and tannin"],
+[15,"New oak adds which flavours to Cabernet Sauvignon?","Smoke, vanilla, cloves, cedar","Butter, cream","Bread, biscuit","Banana, candy"],
+[15,"Aged Cabernet Sauvignon develops…","Dried fruit, earth, forest floor","Petrol, honey","Ginger, honey","Banana, candy"],
+[15,"In a poor Bordeaux vintage, the proportion of Merlot may rise because…","Cabernet Sauvignon struggled to ripen","Merlot was frosted","Cabernet is too sweet","Merlot is cheaper"],
+[15,"'Château' on a Bordeaux label means…","The wine is from the producer's own grapes","It comes from a grand building","It is a Grand Cru Classé","It is from the Right Bank"],
+[15,"Cru Bourgeois applies to…","Médoc wines not classified as Grand Cru Classé","Right Bank classified wines","Sweet wines of Sauternes","All Bordeaux Supérieur wines"],
+[15,"Chile's most widely planted variety?","Cabernet Sauvignon","Carmenère","Merlot","País"],
+[15,"Maipo and Colchagua are sub-regions of…","Central Valley","Casablanca Valley","Mendoza","Stellenbosch"],
+[15,"A Cape Blend is…","Cabernet and/or Merlot blended with Pinotage","Chenin Blanc with Viognier","Syrah with Grenache","Cabernet with Carmenère"],
+[15,"Coonawarra Cabernet is known for…","Mint, pronounced blackcurrant, smoke and cedar","Cooked fruit and high alcohol","Red cherry and dried herbs","Green bell pepper and light body"],
+[15,"Which Napa sub-region in the far north is warmest?","Calistoga","Oakville","Rutherford","Los Carneros"],
+
+[16,"Typical moderate-climate Syrah?","Medium body, fresh black fruit, herbal, black pepper","Full body, high alcohol, cooked black fruit, liquorice","Light body, red cherry, banana","Full body, dried fruit, raisin"],
+[16,"Typical warm-climate Shiraz?","Full body, high alcohol, cooked black fruit, liquorice","Medium body, fresh black fruit, black pepper","Light body, red fruit, high acid","Medium body, red plum, dried herbs"],
+[16,"Which is the only black grape permitted in Northern Rhône AOC wines?","Syrah","Grenache","Mourvèdre","Gamay"],
+[16,"What is sometimes co-fermented with Syrah in Côte Rôtie?","A small amount of Viognier","Grenache","Marsanne","Cabernet Sauvignon"],
+[16,"Hermitage AOC is…","One steep, south-facing slope","A large flat area around a hill","A cool northern plateau","A coastal appellation"],
+[16,"Why is Crozes-Hermitage usually cheaper than Hermitage?","Higher yields and easier mechanisation","It is in the Southern Rhône","It uses Grenache","It isn't oak-aged"],
+[16,"Which is Australia's most widely planted grape?","Shiraz","Chardonnay","Cabernet Sauvignon","Grenache"],
+[16,"Hunter Valley Shiraz is typically…","Medium body, fresh black fruit; ages to earth and meat","Full body, cooked fruit, high alcohol","Light body, red fruit, low tannin","Sweet and fortified"],
+[16,"Tertiary flavours of aged Syrah/Shiraz?","Dried fruit, leather, meat, earth","Petrol, honey","Hazelnut, mushroom","Banana, candy"],
+[16,"Syrah is most commonly blended with…","Grenache","Cabernet Sauvignon","Pinot Noir","Tempranillo"],
+
+[17,"Typical Gamay?","High acid, low–medium tannin, raspberry, red cherry, red plum","Low acid, high tannin, blackberry","High acid, high tannin, red cherry, rose","Medium acid, medium tannin, blackcurrant"],
+[17,"Beaujolais winemaking techniques can create aromas of…","Banana and candy","Vanilla and coconut","Butter and cream","Smoke and cloves"],
+[17,"Where is Beaujolais?","Directly south of Burgundy","North of Champagne","In the Southern Rhône","In the Loire Valley"],
+[17,"Beaujolais hierarchy from bottom to top?","Beaujolais AOC → Beaujolais Villages AOC → crus","Beaujolais Villages → Beaujolais AOC → crus","Crus → Beaujolais Villages → Beaujolais AOC","Beaujolais AOC → crus → Beaujolais Villages"],
+[17,"How many Beaujolais crus have their own appellation?","Ten","Five","Twelve","Seven"],
+[17,"Which is a Beaujolais cru?","Fleurie","Pommard","Condrieu","Vouvray"],
+[17,"Beaujolais AOC grapes come mostly from…","Flat, fertile vineyards in the south","Steep slopes in the north","The Côte d'Or","Granite hills of the crus"],
+
+[18,"Ripe Grenache grapes typically have…","High sugar, low acidity, thin skins","Low sugar, high acidity, thick skins","High tannin, deep colour","High acidity, low alcohol"],
+[18,"Grenache rosé is made by…","Short maceration","Blending red and white","Fortification","Appassimento"],
+[18,"Why do Châteauneuf-du-Pape's large stones help Grenache?","They absorb heat by day and release it at night","They retain water","They cool the vines","They add minerality"],
+[18,"Côtes du Rhône AOC grapes come almost entirely from…","The Southern Rhône","The Northern Rhône","Provence","Languedoc"],
+[18,"Spain's most powerful, full-bodied Garnacha wines come from…","Priorat DOCa","Navarra DO","Rioja DOCa","Rías Baixas DO"],
+[18,"Provence is best known for…","Dry, pale rosé","Sweet fortified reds","Sparkling whites","Full-bodied oaked reds"],
+[18,"Which Australian regions have many very old Grenache vines?","Barossa Valley and McLaren Vale","Yarra Valley and Mornington","Clare and Eden Valley","Margaret River and Coonawarra"],
+[18,"Why do some producers prefer old oak for Grenache?","Its red-fruit flavours are delicate","Old oak adds more tannin","It speeds ageing","New oak is not permitted"],
+[18,"Which Rhône appellation is a Southern Rhône cru?","Châteauneuf-du-Pape AOC","Côte Rôtie AOC","Hermitage AOC","Condrieu AOC"],
+
+[19,"Typical Tempranillo?","Medium–full body, medium acid, medium tannin, red and black fruit","Light body, high acid, low tannin, red cherry","Full body, low acid, high tannin, cooked fruit","Light body, low acid, strawberry, banana"],
+[19,"Traditional oak for Tempranillo adds…","Vanilla, smoke, cedar","Butter, cream","Bread, biscuit","Banana, candy"],
+[19,"Spanish ageing terms from shortest to longest?","Joven → Crianza → Reserva → Gran Reserva","Crianza → Joven → Reserva → Gran Reserva","Joven → Reserva → Crianza → Gran Reserva","Reserva → Crianza → Joven → Gran Reserva"],
+[19,"In Rioja, Joven wines are termed…","Genérico","Crianza","Roble","Cosecha"],
+[19,"Crianza, Reserva and Gran Reserva are…","National Spanish terms","Rioja-only terms","EU-wide terms","Ribera del Duero terms"],
+[19,"Ribera del Duero Tempranillo is very full-bodied with fresh black fruit thanks to…","High altitude: warm days, cool nights","Sea breezes","Morning fog","Botrytis"],
+[19,"Aged Tempranillo develops…","Mushroom, leather, dried fruit","Petrol, honey","Banana, candy","Butter, cream"],
+[19,"What is Rioja's climate?","Moderate","Cool","Hot","Continental desert"],
+
+[20,"Carmenère is native to… but now mostly grown in…","Bordeaux; Chile","Spain; Argentina","Rhône; South Africa","Italy; Chile"],
+[20,"Underripe Carmenère shows…","Green bell pepper and tomato leaf","Banana and candy","Petrol and honey","Rose and violet"],
+[20,"Oak maturation adds what to Carmenère?","Coffee, chocolate","Butter, cream","Bread, biscuit","Petrol, honey"],
+[20,"Most Argentine Malbec is planted in…","Mendoza","Salta","Patagonia","Central Valley"],
+[20,"Typical Malbec?","Deep colour, full body, high tannin, blackberry, black plum","Pale colour, light body, red cherry","Medium body, low tannin, strawberry","Deep colour, light body, mint"],
+[20,"Pinotage was developed for…","South Africa","Chile","Argentina","Australia"],
+[20,"Pinotage is closely related to…","Pinot Noir","Cabernet Sauvignon","Syrah","Merlot"],
+[20,"Oak-aged Pinotage can show…","Coffee, chocolate, smoke","Petrol, honey","Butter, cream","Rose, violet"],
+
+[21,"Gavi DOCG is made from…","Cortese","Garganega","Verdicchio","Fiano"],
+[21,"Soave's most important grape is…","Garganega","Cortese","Glera","Trebbiano"],
+[21,"The best Soave Classico can develop…","Honey and almonds","Petrol and honey","Mushroom and leather","Butter and cream"],
+[21,"Verdicchio is widely planted in…","Marche","Campania","Piemonte","Tuscany"],
+[21,"Which herbal note can Verdicchio show?","Fennel","Mint","Eucalyptus","Dill"],
+[21,"Fiano di Avellino DOCG is from…","Campania","Veneto","Marche","Piemonte"],
+[21,"Recioto di Soave DOCG is…","A sweet white from dried grapes (appassimento)","A dry sparkling white","A fortified red","A light dry white"],
+[21,"Typical Fiano?","Medium acid, medium–full body, peach, melon, mango","High acid, light body, lemon, blossom","Low acid, full body, lychee, rose","High acid, medium body, fennel"],
+
+[22,"Typical Nebbiolo?","High acid, high tannin, red cherry, dried herbs, rose/violet","Low acid, low tannin, blackberry","High acid, low tannin, red cherry, pepper","Medium acid, medium tannin, black plum"],
+[22,"Which is the only variety permitted in Barolo DOCG?","Nebbiolo","Barbera","Sangiovese","Corvina"],
+[22,"Barbaresco DOCG is located…","North-east of Barolo","South of Barolo","In the Veneto","In Tuscany"],
+[22,"Typical Barbera?","High acid, low–medium tannin, red cherry, sometimes black pepper","High acid, high tannin, rose, violet","Low acid, high tannin, black plum","Medium acid, high tannin, dried herbs"],
+[22,"Which is considered Barbera's highest-quality wine?","Barbera d'Asti DOCG","Barbera di Soave DOC","Barbaresco DOCG","Montepulciano d'Abruzzo DOC"],
+[22,"Valpolicella's most important grape?","Corvina","Garganega","Nebbiolo","Sangiovese"],
+[22,"What is appassimento?","Drying picked grapes indoors to concentrate them","Leaving grapes to freeze on the vine","Fortifying during fermentation","Ageing under flor"],
+[22,"Amarone della Valpolicella DOCG is…","Dry to off-dry, full body, ~15% abv, cherry and dried fruit","Sweet, light body, low alcohol","Dry, light body, simple red fruit","Sparkling red"],
+[22,"Recioto della Valpolicella DOCG is…","A sweet red from partially dried grapes","A dry red from fresh grapes","A rosé","A fortified wine"],
+[22,"Aged Nebbiolo develops…","Mushroom, tobacco, leather","Petrol, honey","Banana, candy","Butter, cream"],
+
+[23,"Typical Sangiovese?","High tannin, high acid, red cherry, red plum, dried herbs","Low tannin, low acid, blackberry","Medium tannin, medium acid, black plum","High tannin, low acid, blackcurrant"],
+[23,"Chianti Classico DOCG differs from Chianti DOCG by…","Higher altitude and a long ripening season","Being made from Montepulciano","Being sweet","Coming from the coast"],
+[23,"Brunello is the local name for…","Sangiovese in Montalcino","Nebbiolo in Barolo","Montepulciano in Abruzzo","Corvina in Valpolicella"],
+[23,"'Classico' on an Italian label means…","Grapes from the historic centre of the region","Aged a minimum time before release","Made by appassimento","From a single vineyard"],
+[23,"'Riserva' on an Italian label means…","Aged at least a set number of months before release","From the historic centre","Made from old vines","Sweet"],
+[23,"Typical Montepulciano?","Deep colour, medium acid, high tannin, black plum, black cherry","Pale colour, high acid, low tannin, red cherry","Deep colour, high acid, low tannin, strawberry","Pale colour, low acid, medium tannin, raspberry"],
+[23,"Montepulciano d'Abruzzo DOC comes from…","East-central Italy","Southern Tuscany","North-west Italy","Sicily"],
+[23,"Which mountains divide Tuscany from Abruzzo?","The Apennines","The Alps","The Dolomites","The Vosges"],
+[23,"Aged Chianti Classico can develop…","Meat and leather","Petrol and honey","Banana and candy","Butter and cream"],
+
+[24,"A sparkling base wine is typically…","Dry, high acid, low alcohol","Sweet, low acid, high alcohol","Dry, low acid, high alcohol","Off-dry, high acid, high alcohol"],
+[24,"The second fermentation raises alcohol by about…","1.5% abv","0.5% abv","3% abv","5% abv"],
+[24,"Autolysis gives sparkling wine flavours of…","Biscuit, bread","Butter, cream","Vanilla, coconut","Petrol, honey"],
+[24,"What is the purpose of riddling?","To move the lees into the neck of the bottle","To add sugar","To start the second fermentation","To remove the cork"],
+[24,"In disgorgement, the lees are removed by…","Freezing the neck so a plug of ice is expelled","Filtering the wine","Pouring off into a decanter","Centrifuging the bottle"],
+[24,"What does the dosage determine?","The final sweetness","The alcohol level","The amount of bubbles","The vintage"],
+[24,"'Brut' indicates…","A very small amount of sugar, tasting dry","Medium sweetness","No added sugar and very sweet","A single vintage"],
+[24,"Champagne's three main grapes?","Chardonnay, Pinot Noir, Meunier","Chardonnay, Sauvignon Blanc, Pinot Noir","Pinot Gris, Pinot Noir, Riesling","Chardonnay, Chenin Blanc, Pinot Noir"],
+[24,"Minimum lees ageing for the least expensive Champagnes?","12 months","6 months","24 months","36 months"],
+[24,"Non-vintage Champagne is…","A blend of base wines from several vintages","From one exceptional year","Made by the tank method","Sweet"],
+[24,"Most Cava comes from…","Catalunya","Rioja","Priorat","Rías Baixas"],
+[24,"South Africa's term for traditional-method sparkling wine?","Cap Classique","Méthode Cap","Cape Blend","Western Cape Brut"],
+[24,"Why use the tank method?","To avoid autolytic flavours, e.g. with aromatic grapes","To add biscuit and bread flavours","To make the wine age longer","It is required for Champagne"],
+[24,"In the Asti method…","Juice ferments, the tank is sealed partway, then yeast is filtered out","A dry base wine is refermented in bottle","Grapes are dried before fermentation","Alcohol is added to stop fermentation"],
+[24,"Prosecco is made from…","Glera","Moscato","Garganega","Cortese"],
+[24,"Asti DOCG is made from…","Moscato","Glera","Barbera","Chardonnay"],
+[24,"Prosecco rosé gets its colour from…","A small proportion of Pinot Noir","Skin contact with Glera","Adding red wine from Corvina","Oak ageing"],
+[24,"Vintage Champagne gains which notes from bottle age?","Nuts and honey","Banana and candy","Petrol and mushroom","Leather and tobacco"],
+[24,"Which two wines don't have to mention PDO status on the label?","Champagne and Cava","Prosecco and Asti","Champagne and Prosecco","Cava and Asti"],
+
+[25,"Sherry's base grape is…","Palomino","Pedro Ximénez","Moscato","Tempranillo"],
+[25,"Sherry is produced around…","Jerez de la Frontera","Porto","Rioja","Priorat"],
+[25,"What is a solera?","A system of old-oak casks of different ages, continually blended","A layer of yeast on the wine","A single new-oak barrel","A sun-drying method"],
+[25,"Fino is fortified to about…","15% abv","17% abv","19% abv","20% abv"],
+[25,"Oloroso is fortified to about… and ages…","17% abv; oxidatively, without flor","15% abv; under flor","15% abv; oxidatively","20% abv; under flor"],
+[25,"Amontillado is…","Aged under flor, then refortified and aged oxidatively","Aged only under flor","Aged only oxidatively","Made from sun-dried grapes"],
+[25,"Typical Fino?","Pale lemon, apple, almonds, bread dough; serve chilled","Brown, raisin, walnut, caramel","Deep brown, sweet, fig, molasses","Amber, honey, apricot"],
+[25,"'Pale Cream' Sherry is…","A sweetened Fino","A sweetened Oloroso","A PX blend","A dry Amontillado"],
+[25,"PX Sherry is made from…","Sun-dried Pedro Ximénez grapes","Palomino under flor","Botrytised Palomino","Black grapes"],
+[25,"Port grapes come from…","The Upper Douro, Portugal","Jerez, Spain","Madeira","The Minho, Portugal"],
+[25,"How is Port fermentation interrupted?","Adding grape spirit","Filtering the yeast","Chilling the tank","Adding sugar"],
+[25,"Traditional method of extracting colour and tannin for Port?","Foot treading","Pumping over","Punching down","Carbonic maceration"],
+[25,"Late Bottled Vintage Port is…","Like a Reserve Ruby but from a single vintage","An aged Tawny","A Vintage Port bottled early","A white Port"],
+[25,"Vintage Port can mature in bottle for…","At least 20 years","About 5 years","About 2 years","It shouldn't be aged"],
+[25,"Age indications on the best Tawny Ports?","10, 20, 30 or 40 years","5, 10, 15 years","3, 6, 9 years","25, 50, 75 years"],
+[25,"Tawny Port develops which notes?","Walnut, coffee, caramel, dried fruit","Fresh black cherry, blackberry","Bread dough, almond","Petrol, honey"],
+[25,"Ruby-style Ports are aged in…","Large vessels (old-oak casks or steel)","Small new barrels","Under flor","In bottle only"]
+];
+
+const $=id=>document.getElementById(id);
+let chap="sel", sel=new Set(Object.keys(CH)), deck=[], i=0, right=0, answered=0, missed=[];
+// Starred ("Remember") questions: one doc per question in "starred"; deleted when unstarred
+function key(q){let h=0;for(const c of q[1])h=(h*31+c.charCodeAt(0))|0;return "q"+(h>>>0).toString(36)}
+const byKey={}; Q.forEach(q=>byKey[key(q)]=q);
+let stars={}, store=null, mode="none", writing=Promise.resolve();
+function setStatus(t){$("status").textContent=t}
+function starDeck(){return Object.keys(stars).filter(k=>byKey[k]).map(k=>byKey[k])}
+function loadLocal(){try{stars=JSON.parse(localStorage.getItem("wset2-starred")||"{}")}catch(e){stars={}}}
+function saveLocal(){try{localStorage.setItem("wset2-starred",JSON.stringify(stars))}catch(e){}}
+function refreshStar(){const s=$("star"); if(!s||!deck[i]) return; const on=!!stars[key(deck[i])]; s.setAttribute("aria-pressed",String(on)); s.textContent=on?"★":"☆"; s.title=on?"Remove from Remember":"Remember this question"}
+async function initStore(){
+  let db=null; try{db=await claude.use("db")}catch(e){}
+  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();return}
+  store=db.collection("starred"); mode="db";
+  let t=setTimeout(()=>setStatus("Can't reach starred questions yet."),10000);
+  store.onSnapshot(snap=>{
+    const m={}; snap.docs.forEach(d=>{if(d.exists)m[d.id]=d.data()}); stars=m;
+    if(!snap.metadata.fromCache){clearTimeout(t);setStatus("Starred questions are saved to your account.")}
+    chips(); refreshStar();
+  },e=>{clearTimeout(t);mode="local";loadLocal();setStatus("Saving stars in this browser only.");chips();refreshStar()});
+}
+function toggleStar(q){
+  const k=key(q), on=!stars[k];
+  if(on) stars[k]={ch:q[0],q:q[1],answer:q[2],starredAt:new Date().toISOString()}; else delete stars[k];
+  chips(); refreshStar();
+  if(mode==="db"){const doc=stars[k]; writing=writing.then(()=>on?store.doc(k).set(doc):store.doc(k).delete()).catch(()=>setStatus("Couldn't save that star. Check your connection."))}
+  else saveLocal();
+}
+function shuffle(a){a=a.slice();for(let j=a.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[a[j],a[k]]=[a[k],a[j]]}return a}
+
+function chips(){
+  const c=$("chips"); c.innerHTML="";
+  const n=starDeck().length, NCH=Object.keys(CH).length;
+  [["all",(chap==="sel"&&sel.size===NCH)?"None":"All"],...Object.keys(CH).map(k=>[k,"Ch "+k]),["starred","★ Remember ("+n+")"]].forEach(([v,l])=>{
+    const b=document.createElement("button"); b.className="chip"+(v==="starred"?" miss":""); b.id="chip-"+v; b.textContent=l;
+    if(v==="starred"&&!n&&chap!=="starred") b.disabled=true;
+    const on=v==="starred"?chap==="starred":v==="all"?false:(chap==="sel"&&sel.has(v));
+    b.setAttribute("aria-pressed",String(on)); b.title=v==="all"?(l==="None"?"Clear all chapters":"Select all chapters"):v==="starred"?"Questions you starred":CH[v];
+    b.onclick=()=>{
+      if(v==="starred"){chap="starred";sel.clear()}
+      else if(v==="all"){const full=chap==="sel"&&sel.size===NCH; chap="sel"; sel=full?new Set():new Set(Object.keys(CH))}
+      else{if(chap!=="sel"){chap="sel";sel.clear()} sel.has(v)?sel.delete(v):sel.add(v)}
+      start()}; c.appendChild(b);
+  });
+}
+function start(list){
+  deck = shuffle(list || (chap==="starred"?starDeck():Q.filter(q=>sel.has(String(q[0])))));
+  i=0; right=0; answered=0; missed=[]; chips(); show();
+}
+function stats(){
+  $("pos").textContent=`Question ${Math.min(i+1,deck.length)} of ${deck.length}`;
+  $("score").textContent=`${right}/${answered}`;
+  $("fill").style.width=(deck.length?answered/deck.length*100:0)+"%";
+}
+function show(){
+  stats();
+  const card=$("card");
+  if(!deck.length){card.className="card end";card.innerHTML=chap==="starred"?`<div class="tag">Nothing starred</div><p class="sub">Tap ☆ on any question to remember it.</p>`:`<div class="tag">No chapters selected</div><p class="sub">Tap one or more chapters, or All.</p>`;return}
+  if(i>=deck.length){return end()}
+  const q=deck[i]; const opts=shuffle(q.slice(2).map((t,n)=>({t,ok:n===0})));
+  card.className="card";
+  card.innerHTML=`<div class="top"><div class="tag">Chapter ${q[0]} · ${CH[q[0]]}</div><button class="star" id="star" aria-pressed="false" aria-label="Remember">☆</button></div><p class="q"></p><div class="opts"></div><div class="foot"><span class="verdict" aria-live="polite"></span><button class="btn" id="next" hidden>Next</button></div>`;
+  card.querySelector(".q").textContent=q[1];
+  $("star").onclick=()=>toggleStar(q); refreshStar();
+  const box=card.querySelector(".opts");
+  opts.forEach((o,n)=>{
+    const b=document.createElement("button"); b.className="opt"; b.id="opt-"+n;
+    b.innerHTML=`<span class="k">${"ABCD"[n]}</span><span></span>`; b.lastChild.textContent=o.t;
+    b.onclick=()=>pick(b,o,opts,box,q); box.appendChild(b);
+  });
+}
+function pick(b,o,opts,box,q){
+  answered++; if(o.ok) right++; else missed.push(q);
+  [...box.children].forEach((el,n)=>{
+    el.disabled=true;
+    if(opts[n].ok) el.classList.add("right");
+    else if(el===b) el.classList.add("wrong");
+    else el.classList.add("dim");
+  });
+  const v=$("card").querySelector(".verdict");
+  v.textContent=o.ok?"Correct":"Incorrect"; v.className="verdict "+(o.ok?"g":"b");
+  const nx=$("next"); nx.hidden=false; nx.textContent=i===deck.length-1?"See results":"Next";
+  nx.onclick=()=>{i++;show()}; nx.focus({preventScroll:true});
+  stats();
+}
+function end(){
+  const pct=deck.length?Math.round(right/deck.length*100):0;
+  const card=$("card"); card.className="card end";
+  card.innerHTML=`<div class="tag">Done</div><p class="big">${right}/${deck.length}</p><p class="sub">${pct}% correct</p><div class="row"></div>`;
+  const row=card.querySelector(".row");
+  if(missed.length){const m=document.createElement("button");m.className="btn";m.id="redo-missed";m.textContent=`Retry ${missed.length} missed`;const list=missed.slice();m.onclick=()=>start(list);row.appendChild(m)}
+  const r=document.createElement("button");r.className="btn ghost";r.id="restart";r.textContent="Start over";r.onclick=()=>start();row.appendChild(r);
+}
+start();
+initStore();
+</script>
+</body>
+</html>
