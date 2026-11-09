@@ -32,9 +32,13 @@ h3{font-size:1rem;margin:20px 0 8px}
 table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);font-size:.95rem;font-variant-numeric:tabular-nums}
 th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
 tr:last-child th,tr:last-child td{border-bottom:0}
-td:nth-last-child(-n+2),thead th:nth-last-child(-n+2){white-space:nowrap;width:1%}
+.temps td:nth-last-child(-n+2),.temps thead th:nth-last-child(-n+2){white-space:nowrap;width:1%}
 .serving td:nth-child(3){width:7.5em}
 .serving th:first-child{width:8em}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.grid{min-width:520px}
+.grid th,.grid td{vertical-align:top}
+.sat th{width:38%;vertical-align:top}
 @media (max-width:480px){table{font-size:.85rem}th,td{padding:7px 6px}}
 thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 </style>
@@ -45,11 +49,11 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 
 <h1>Reference</h1>
 
-<details open>
-<summary><h2>Temperatures</h2></summary>
+<details>
+<summary><h2>Temperatures and Percentages</h2></summary>
 
 <h3>Recommended Serving Temperatures</h3>
-<table class="serving">
+<table class="temps serving">
 <thead><tr><th>Style</th><th>E.g.</th><th>Service</th><th>°C</th><th>°F</th></tr></thead>
 <tr><th>Sweet wines</th><td>Sauternes</td><td>Well chilled</td><td>6–8</td><td>43–46</td></tr>
 <tr><th>Sparkling wines</th><td>Champagne</td><td>Well chilled</td><td>6–10</td><td>43–50</td></tr>
@@ -61,7 +65,7 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <p class="note">Chapter 3.</p>
 
 <h3>Fermentation Temperatures</h3>
-<table>
+<table class="temps">
 <thead><tr><th>Wine</th><th>°C</th><th>°F</th></tr></thead>
 <tr><th>White</th><td>12–22</td><td>54–72</td></tr>
 <tr><th>Rosé</th><td>12–22</td><td>54–72</td></tr>
@@ -70,13 +74,127 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <p class="note">Rosé made by short maceration is fermented at white-wine temperatures once drained off the skins. Chapter 5.</p>
 
 <h3>Environmental Temperatures</h3>
-<table>
+<table class="temps">
 <thead><tr><th>Climate</th><th>°C</th><th>°F</th></tr></thead>
 <tr><th>Cool</th><td>≤ 16.5</td><td>≤ 62</td></tr>
 <tr><th>Moderate</th><td>16.5–18.5</td><td>62–65</td></tr>
 <tr><th>Warm</th><td>18.5–21.0</td><td>65–70</td></tr>
 </table>
 <p class="note">Average growing season temperature. Chapter 4.</p>
+
+<h3>Alcohol Levels</h3>
+<table class="temps">
+<thead><tr><th>Level</th><th>Wine (% abv)</th><th>Fortified (% abv)</th></tr></thead>
+<tr><th>Low</th><td>&lt; 11</td><td>15–16.4</td></tr>
+<tr><th>Medium</th><td>11–13.9</td><td>16.5–18.4</td></tr>
+<tr><th>High</th><td>≥ 14</td><td>≥ 18.5</td></tr>
+</table>
+<p class="note">SAT three-point scale. Chapter 1.</p>
+</details>
+
+<details>
+<summary><h2>Tables</h2></summary>
+
+<h3>Body, Flavours and Aromas</h3>
+<div class="scroll">
+<table class="grid">
+<thead><tr><th>Grape</th><th>Just-ripe grapes</th><th>Ripe grapes</th><th>Extra-ripe grapes</th><th>Age-worthy</th></tr></thead>
+<tr><th>Merlot</th><td>Light–medium body<br>Fresh red fruit (strawberry, red plum)<br>Herbaceous (green bell pepper)</td><td>Medium–full body<br>Cooked black fruit (blackberry, black plum)</td><td>—</td><td>Dried fruit<br>Tobacco</td></tr>
+</table>
+</div>
+
+<h3>Climate and Volume</h3>
+<div class="scroll">
+<table class="grid">
+<thead><tr><th>Grape</th><th>Climate</th><th>Climatic influences</th><th>High volume</th></tr></thead>
+<tr><th>Merlot</th><td>Moderate, warm</td><td>Bordeaux: Atlantic Ocean, high rainfall<br>Chile: altitude<br>Stellenbosch: altitude, sea breezes<br>—</td><td>—<br>Central Valley, Chile<br>—<br>California</td></tr>
+</table>
+</div>
+</details>
+
+<details>
+<summary><h2>WSET Level 2 SAT®</h2></summary>
+
+<h3>Appearance</h3>
+<table class="sat">
+<tr><th>Clarity</th><td>clear – hazy (faulty?)</td></tr>
+<tr><th>Intensity</th><td>pale – medium – deep</td></tr>
+<tr><th>Colour</th><td>white: lemon-green – lemon – gold – amber – brown<br>rosé: pink – pink-orange – orange<br>red: purple – ruby – garnet – tawny – brown</td></tr>
+</table>
+
+<h3>Nose</h3>
+<table class="sat">
+<tr><th>Condition</th><td>clean – unclean (faulty?)</td></tr>
+<tr><th>Intensity</th><td>light – medium – pronounced</td></tr>
+<tr><th>Aroma characteristics</th><td>primary, secondary, tertiary</td></tr>
+</table>
+
+<h3>Palate</h3>
+<table class="sat">
+<tr><th>Sweetness</th><td>dry – off-dry – medium – sweet</td></tr>
+<tr><th>Acidity</th><td>low – medium – high</td></tr>
+<tr><th>Tannin</th><td>low – medium – high</td></tr>
+<tr><th>Alcohol</th><td>low – medium – high</td></tr>
+<tr><th>Body</th><td>light – medium – full</td></tr>
+<tr><th>Flavour intensity</th><td>light – medium – pronounced</td></tr>
+<tr><th>Flavour characteristics</th><td>e.g. primary, secondary, tertiary</td></tr>
+<tr><th>Finish</th><td>short – medium – long</td></tr>
+</table>
+
+<h3>Conclusions</h3>
+<table class="sat">
+<tr><th>Quality level</th><td>faulty – poor – acceptable – good – very good – outstanding</td></tr>
+</table>
+
+<h3>Primary Aromas and Flavours</h3>
+<p class="note">Aromas and flavours of the grape and alcoholic fermentation</p>
+<table class="sat">
+<tr><th>Floral</th><td>blossom, rose, violet</td></tr>
+<tr><th>Green fruit</th><td>apple, pear, gooseberry, grape</td></tr>
+<tr><th>Citrus fruit</th><td>grapefruit, lemon, lime, orange</td></tr>
+<tr><th>Stone fruit</th><td>peach, apricot, nectarine</td></tr>
+<tr><th>Tropical fruit</th><td>banana, lychee, mango, melon, passion fruit, pineapple</td></tr>
+<tr><th>Red fruit</th><td>redcurrant, cranberry, raspberry, strawberry, red cherry, red plum</td></tr>
+<tr><th>Black fruit</th><td>blackcurrant, blackberry, blueberry, black cherry, black plum</td></tr>
+<tr><th>Herbaceous</th><td>green bell pepper (capsicum), grass, tomato leaf, asparagus</td></tr>
+<tr><th>Herbal</th><td>eucalyptus, mint, fennel, dill, dried herbs</td></tr>
+<tr><th>Spice</th><td>black/white pepper, liquorice</td></tr>
+<tr><th>Fruit ripeness</th><td>unripe fruit, ripe fruit, dried fruit, cooked fruit</td></tr>
+<tr><th>Other</th><td>wet stones, candy</td></tr>
+</table>
+
+<h3>Secondary Aromas and Flavours</h3>
+<p class="note">Aromas and flavours of post-fermentation winemaking</p>
+<table class="sat">
+<tr><th>Yeast (lees, autolysis, flor)</th><td>biscuit, pastry, bread, toasted bread, bread dough, cheese, yogurt</td></tr>
+<tr><th>Malolactic conversion</th><td>butter, cheese, cream</td></tr>
+<tr><th>Oak</th><td>vanilla, cloves, coconut, cedar, charred wood, smoke, chocolate, coffee</td></tr>
+<tr><th>Lees</th><td>Dead yeast cells and grape solids that settle at the bottom of the tank, barrel, or bottle after fermentation. Contact adds texture and flavor.</td></tr>
+<tr><th>Autolysis</th><td>Dead yeast’s own enzymes breaking the cells down over months to years. Releases compounds that add brioche, biscuit, and nutty notes and a creamy texture. Most important in traditional-method sparkling wines.</td></tr>
+<tr><th>Flor</th><td>A film of living yeast that grows on the surface of wine in a partly filled barrel. It’s found in Fino and Manzanilla sherry and in Jura’s vin jaune. It protects the wine from oxygen and adds saline, almond, and bready notes.</td></tr>
+</table>
+
+<h3>Tertiary Aromas and Flavours</h3>
+<p class="note">Aromas and flavours of maturation</p>
+<table class="sat">
+<tr><th>Red wine</th><td>dried fruit, leather, earth, mushroom, meat, tobacco, wet leaves, forest floor, caramel</td></tr>
+<tr><th>White wine</th><td>dried fruit, orange marmalade, petrol (gasoline), cinnamon, ginger, nutmeg, almond, hazelnut, honey, caramel</td></tr>
+<tr><th>Deliberately oxidised wines</th><td>almond, hazelnut, walnut, chocolate, coffee, caramel</td></tr>
+</table>
+<p class="note">Book version, Chapter 1.</p>
+</details>
+
+<details>
+<summary><h2>Random</h2></summary>
+<h3>Tasting</h3>
+<ul>
+<li>Sample size: <b>5 cL (1.7 US fl. oz.)</b>. Chapter 1.
+  <ul>
+  <li>Sufficient to assess appearance, nose and palate.</li>
+  <li>Small enough to swirl without spilling.</li>
+  </ul>
+</li>
+</ul>
 </details>
 
 </main>
