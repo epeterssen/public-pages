@@ -81,7 +81,7 @@ h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0;text-wra
   </header>
   <div class="chips" id="chips" role="group" aria-label="Chapter"></div>
   <div>
-    <div class="bar"><span id="pos">Question 1 of 0</span><span>Score <b id="score">0/0</b></span></div>
+    <div class="bar"><span id="pos">Question 1 of 0</span><span>Score <b id="score">0/0 (0%)</b></span></div>
     <div class="track"><div class="fill" id="fill"></div></div>
   </div>
   <section class="card" id="card"></section>
@@ -310,7 +310,7 @@ function start(list){
 }
 function stats(){
   $("pos").textContent=`Question ${Math.min(i+1,deck.length)} of ${deck.length}`;
-  $("score").textContent=`${right}/${answered}`;
+  $("score").textContent=`${right}/${answered} (${answered?Math.round(right/answered*100):0}%)`;
   $("fill").style.width=(deck.length?answered/deck.length*100:0)+"%";
 }
 function show(){
