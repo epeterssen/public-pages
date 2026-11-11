@@ -42,6 +42,10 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 .sat th,.sat td{vertical-align:top}
 @media (max-width:480px){table{font-size:.85rem}th,td{padding:7px 6px}}
 thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sortable thead th{cursor:pointer;user-select:none;white-space:nowrap}
+.sortable thead th::after{content:"";display:inline-block;width:1em;margin-left:4px}
+.sortable thead th[aria-sort="ascending"]::after{content:"▲"}
+.sortable thead th[aria-sort="descending"]::after{content:"▼"}
 </style>
 </head>
 <body>
@@ -91,6 +95,125 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <tr><th>High</th><td>≥ 14</td><td>≥ 18.5</td></tr>
 </table>
 <p class="note">SAT three-point scale. Chapter 1.</p>
+</details>
+
+<details>
+<summary><h2>Regions</h2></summary>
+
+<div class="scroll">
+<table class="grid sortable">
+<thead><tr><th>Country</th><th>Location</th><th>Region</th><th>Grape</th></tr></thead>
+<tbody>
+<tr><td>France</td><td>Burgundy (north)</td><td>Chablis AOC</td><td>Chardonnay</td></tr>
+<tr><td>France</td><td>Burgundy (Côte de Nuits)</td><td>Gevrey-Chambertin AOC</td><td>Pinot Noir</td></tr>
+<tr><td>France</td><td>Burgundy (Côte de Nuits)</td><td>Nuits-Saint-Georges AOC</td><td>Pinot Noir</td></tr>
+<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Beaune AOC</td><td>Pinot Noir</td></tr>
+<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Pommard AOC</td><td>Pinot Noir</td></tr>
+<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Meursault AOC</td><td>Chardonnay</td></tr>
+<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Puligny-Montrachet AOC</td><td>Chardonnay</td></tr>
+<tr><td>France</td><td>Burgundy (Mâconnais, south)</td><td>Mâcon AOC</td><td>Chardonnay</td></tr>
+<tr><td>France</td><td>Burgundy (Mâconnais, south)</td><td>Pouilly-Fuissé AOC</td><td>Chardonnay</td></tr>
+<tr><td>France</td><td>Burgundy (whole region)</td><td>Bourgogne AOC</td><td>Pinot Noir, Chardonnay</td></tr>
+<tr><td>France</td><td>Beaujolais (south, flat)</td><td>Beaujolais AOC</td><td>Gamay</td></tr>
+<tr><td>France</td><td>Beaujolais (north, slopes)</td><td>Beaujolais Villages AOC</td><td>Gamay</td></tr>
+<tr><td>France</td><td>Beaujolais (cru)</td><td>Fleurie AOC</td><td>Gamay</td></tr>
+<tr><td>France</td><td>Loire Valley</td><td>Vouvray AOC</td><td>Chenin Blanc</td></tr>
+<tr><td>France</td><td>Loire Valley</td><td>Sancerre AOC</td><td>Sauvignon Blanc</td></tr>
+<tr><td>France</td><td>Loire Valley</td><td>Pouilly-Fumé AOC</td><td>Sauvignon Blanc</td></tr>
+<tr><td>France</td><td>Loire Valley</td><td>Touraine AOC</td><td>Sauvignon Blanc</td></tr>
+<tr><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux AOC</td><td>Sauvignon Blanc, Sémillon, Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux Supérieur AOC</td><td>Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Sauternes AOC</td><td>Sémillon</td></tr>
+<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Graves AOC</td><td>Sauvignon Blanc, Sémillon, Cabernet Sauvignon, Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Pessac-Léognan AOC</td><td>Sauvignon Blanc, Sémillon, Cabernet Sauvignon, Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Haut-Médoc AOC</td><td>Cabernet Sauvignon, Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Margaux AOC</td><td>Cabernet Sauvignon, Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Pauillac AOC</td><td>Cabernet Sauvignon, Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Right Bank)</td><td>Saint-Émilion AOC</td><td>Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Right Bank)</td><td>Saint-Émilion Grand Cru AOC</td><td>Merlot</td></tr>
+<tr><td>France</td><td>Bordeaux (Right Bank)</td><td>Pomerol AOC</td><td>Merlot</td></tr>
+<tr><td>France</td><td>Alsace (north-east)</td><td>Alsace AOC</td><td>Riesling, Pinot Gris, Gewurztraminer</td></tr>
+<tr><td>France</td><td>Alsace (north-east)</td><td>Alsace Grand Cru AOC</td><td>Riesling, Pinot Gris, Gewurztraminer</td></tr>
+<tr><td>France</td><td>Rhône (north)</td><td>Côte Rôtie AOC</td><td>Syrah (+ Viognier co-fermented)</td></tr>
+<tr><td>France</td><td>Rhône (north)</td><td>Hermitage AOC</td><td>Syrah</td></tr>
+<tr><td>France</td><td>Rhône (north)</td><td>Crozes-Hermitage AOC</td><td>Syrah</td></tr>
+<tr><td>France</td><td>Rhône (north)</td><td>Condrieu AOC</td><td>Viognier</td></tr>
+<tr><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône AOC</td><td>Grenache, Syrah</td></tr>
+<tr><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône Villages AOC</td><td>Grenache, Syrah</td></tr>
+<tr><td>France</td><td>Rhône (south)</td><td>Châteauneuf-du-Pape AOC</td><td>Grenache, Syrah</td></tr>
+<tr><td>France</td><td>Languedoc-Roussillon (south)</td><td>Pays d'Oc IGP</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon, Syrah</td></tr>
+<tr><td>France</td><td>Languedoc-Roussillon (south)</td><td>Minervois AOC</td><td>Syrah, Grenache</td></tr>
+<tr><td>France</td><td>Provence (east of Languedoc)</td><td>Côtes de Provence AOC</td><td>Grenache (rosé)</td></tr>
+<tr><td>Germany</td><td>Mosel (north)</td><td>Mosel</td><td>Riesling</td></tr>
+<tr><td>Germany</td><td>Rhine (north bank)</td><td>Rheingau</td><td>Riesling</td></tr>
+<tr><td>Germany</td><td>Pfalz (south-west)</td><td>Pfalz</td><td>Riesling</td></tr>
+<tr><td>Hungary</td><td>Tokaj (north-east)</td><td>Tokaj</td><td>Furmint</td></tr>
+<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Gavi DOCG</td><td>Cortese</td></tr>
+<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Barolo DOCG</td><td>Nebbiolo</td></tr>
+<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Barbaresco DOCG</td><td>Nebbiolo</td></tr>
+<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Barbera d'Asti DOCG</td><td>Barbera</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>delle Venezie DOC</td><td>Pinot Grigio</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Veneto IGT</td><td>Pinot Grigio</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Soave DOC</td><td>Garganega</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Soave DOC Classico</td><td>Garganega</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Recioto di Soave DOCG</td><td>Garganega</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Valpolicella DOC</td><td>Corvina</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Valpolicella DOC Classico</td><td>Corvina</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Amarone della Valpolicella DOCG</td><td>Corvina</td></tr>
+<tr><td>Italy</td><td>Veneto (north-east)</td><td>Recioto della Valpolicella DOCG</td><td>Corvina</td></tr>
+<tr><td>Italy</td><td>Friuli-Venezia Giulia (north-east corner)</td><td>Friuli-Venezia Giulia</td><td>Pinot Grigio</td></tr>
+<tr><td>Italy</td><td>Tuscany (central-west)</td><td>Chianti DOCG</td><td>Sangiovese</td></tr>
+<tr><td>Italy</td><td>Tuscany (central-west)</td><td>Chianti Classico DOCG</td><td>Sangiovese</td></tr>
+<tr><td>Italy</td><td>Tuscany (south)</td><td>Brunello di Montalcino DOCG</td><td>Sangiovese</td></tr>
+<tr><td>Italy</td><td>Marche (central, east coast)</td><td>Verdicchio dei Castelli di Jesi DOC</td><td>Verdicchio</td></tr>
+<tr><td>Italy</td><td>Abruzzo (east-central)</td><td>Montepulciano d'Abruzzo DOC</td><td>Montepulciano</td></tr>
+<tr><td>Italy</td><td>Campania (south)</td><td>Fiano di Avellino DOCG</td><td>Fiano</td></tr>
+<tr><td>Italy</td><td>Puglia (south)</td><td>Puglia</td><td>Primitivo</td></tr>
+<tr><td>Spain</td><td>Galicia (north-west)</td><td>Rías Baixas DO</td><td>Albariño</td></tr>
+<tr><td>Spain</td><td>Rioja (north-east)</td><td>Rioja DOCa</td><td>Tempranillo, Garnacha</td></tr>
+<tr><td>Spain</td><td>Navarra (north-east, next to Rioja)</td><td>Navarra DO</td><td>Garnacha</td></tr>
+<tr><td>Spain</td><td>Catalunya (north-east)</td><td>Catalunya DO</td><td>Tempranillo</td></tr>
+<tr><td>Spain</td><td>Catalunya (north-east)</td><td>Priorat DOCa</td><td>Garnacha</td></tr>
+<tr><td>Spain</td><td>Duero (inland, high altitude)</td><td>Ribera del Duero DO</td><td>Tempranillo</td></tr>
+<tr><td>USA</td><td>California (statewide)</td><td>California</td><td>Zinfandel, Chardonnay, Merlot, Cabernet Sauvignon</td></tr>
+<tr><td>USA</td><td>California (inland)</td><td>Central Valley</td><td>Chardonnay</td></tr>
+<tr><td>USA</td><td>California (north coast)</td><td>Los Carneros</td><td>Pinot Noir, Chardonnay</td></tr>
+<tr><td>USA</td><td>California (north coast)</td><td>Sonoma</td><td>Pinot Noir, Chardonnay, Merlot, Cabernet Sauvignon</td></tr>
+<tr><td>USA</td><td>California (north coast)</td><td>Napa Valley</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon</td></tr>
+<tr><td>USA</td><td>Napa Valley (central)</td><td>Oakville</td><td>Cabernet Sauvignon</td></tr>
+<tr><td>USA</td><td>Napa Valley (central)</td><td>Rutherford</td><td>Cabernet Sauvignon</td></tr>
+<tr><td>USA</td><td>Napa Valley (far north)</td><td>Calistoga</td><td>Cabernet Sauvignon</td></tr>
+<tr><td>USA</td><td>California (Central Coast)</td><td>Santa Barbara County</td><td>Pinot Noir, Chardonnay</td></tr>
+<tr><td>USA</td><td>Oregon (north-west)</td><td>Oregon</td><td>Pinot Noir, Chardonnay</td></tr>
+<tr><td>Chile</td><td>Coast (north of Santiago)</td><td>Casablanca Valley</td><td>Pinot Noir, Chardonnay, Sauvignon Blanc</td></tr>
+<tr><td>Chile</td><td>Central Valley (inland)</td><td>Central Valley</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon, Carmenère</td></tr>
+<tr><td>Chile</td><td>Central Valley (inland)</td><td>Maipo Valley</td><td>Cabernet Sauvignon</td></tr>
+<tr><td>Chile</td><td>Central Valley (inland)</td><td>Colchagua Valley</td><td>Cabernet Sauvignon</td></tr>
+<tr><td>Argentina</td><td>Mendoza (high altitude, Andes)</td><td>Mendoza</td><td>Malbec</td></tr>
+<tr><td>South Africa</td><td>Western Cape (south-west)</td><td>Western Cape</td><td>Chenin Blanc, Chardonnay, Pinotage</td></tr>
+<tr><td>South Africa</td><td>Western Cape (south coast)</td><td>Walker Bay</td><td>Pinot Noir, Chardonnay</td></tr>
+<tr><td>South Africa</td><td>Western Cape (south of Cape Town)</td><td>Constantia</td><td>Sauvignon Blanc</td></tr>
+<tr><td>South Africa</td><td>Western Cape (near Cape Town)</td><td>Elgin</td><td>Sauvignon Blanc</td></tr>
+<tr><td>South Africa</td><td>Western Cape (near Cape Town)</td><td>Stellenbosch</td><td>Merlot, Cabernet Sauvignon</td></tr>
+<tr><td>Australia</td><td>South-east (broad)</td><td>South Eastern Australia</td><td>Chardonnay, Shiraz</td></tr>
+<tr><td>Australia</td><td>Victoria (south-east)</td><td>Yarra Valley</td><td>Pinot Noir, Chardonnay</td></tr>
+<tr><td>Australia</td><td>Victoria (south-east)</td><td>Mornington Peninsula</td><td>Pinot Noir</td></tr>
+<tr><td>Australia</td><td>South Australia (south)</td><td>Barossa Valley</td><td>Semillon, Shiraz, Grenache</td></tr>
+<tr><td>Australia</td><td>South Australia (south)</td><td>McLaren Vale</td><td>Grenache</td></tr>
+<tr><td>Australia</td><td>South Australia (south)</td><td>Eden Valley</td><td>Riesling</td></tr>
+<tr><td>Australia</td><td>South Australia (south)</td><td>Clare Valley</td><td>Riesling</td></tr>
+<tr><td>Australia</td><td>South Australia (south)</td><td>Adelaide Hills</td><td>Chardonnay, Sauvignon Blanc</td></tr>
+<tr><td>Australia</td><td>South Australia (south)</td><td>Coonawarra</td><td>Cabernet Sauvignon</td></tr>
+<tr><td>Australia</td><td>New South Wales (east)</td><td>Hunter Valley</td><td>Semillon, Shiraz</td></tr>
+<tr><td>Australia</td><td>Western Australia (south-west)</td><td>Margaret River</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon</td></tr>
+<tr><td>New Zealand</td><td>North Island (south)</td><td>Martinborough</td><td>Pinot Noir</td></tr>
+<tr><td>New Zealand</td><td>North Island (east coast)</td><td>Hawke's Bay</td><td>Chardonnay, Merlot, Cabernet Sauvignon</td></tr>
+<tr><td>New Zealand</td><td>South Island (north-east)</td><td>Marlborough</td><td>Pinot Noir, Chardonnay, Sauvignon Blanc</td></tr>
+<tr><td>New Zealand</td><td>South Island (south)</td><td>Central Otago</td><td>Pinot Noir</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">Click a column heading to sort; click again to reverse, a third time to restore the original order.</p>
 </details>
 
 <details>
@@ -239,6 +362,20 @@ document.querySelectorAll('details>summary').forEach(s=>s.addEventListener('clic
   const open=!s.parentElement.open;
   document.querySelectorAll('details').forEach(d=>d.open=open);
 }));
+// Click a sortable table heading to cycle: ascending → descending → original order
+document.querySelectorAll('table.sortable').forEach(t=>{
+  const ths=[...t.tHead.rows[0].cells], tb=t.tBodies[0], orig=[...tb.rows];
+  ths.forEach((th,i)=>th.addEventListener('click',()=>{
+    const cur=th.getAttribute('aria-sort');
+    ths.forEach(h=>h.removeAttribute('aria-sort'));
+    if(cur==='descending'){tb.append(...orig);return;}
+    const asc=cur!=='ascending';
+    th.setAttribute('aria-sort',asc?'ascending':'descending');
+    const rows=[...tb.rows];
+    rows.sort((a,b)=>a.cells[i].textContent.localeCompare(b.cells[i].textContent,undefined,{sensitivity:'base'})*(asc?1:-1));
+    tb.append(...rows);
+  }));
+});
 </script>
 </body>
 </html>
