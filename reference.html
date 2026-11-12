@@ -39,11 +39,16 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 .grid{min-width:520px}
 .wide{width:min(1100px,calc(100vw - 48px));position:relative;left:50%;transform:translateX(-50%)}
 .tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 8px}
-.widen{font:inherit;font-size:.8rem;color:var(--accent);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer}
+.widen,.reveal-all{font:inherit;font-size:.8rem;color:var(--accent);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer}
 .filter{font:inherit;font-size:.85rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 10px;flex:1 1 160px;max-width:280px}
 .filter:focus{outline:none;border-color:var(--accent)}
 .count{font-size:.8rem;color:var(--muted)}
-.widen:hover{border-color:var(--accent)}
+.widen:hover,.reveal-all:hover{border-color:var(--accent)}
+.tools .widen{order:2;margin-left:auto}
+h3.with-btn{display:flex;align-items:center;justify-content:space-between;gap:8px}
+h3.with-btn .reveal-all{font-weight:400}
+.quiz tbody tr{cursor:pointer}
+.quiz tbody tr:not(.shown) td:nth-last-child(-n+2){color:transparent;user-select:none}
 .grid th,.grid td{vertical-align:top}
 .sat tbody th{width:38%}
 .sat th,.sat td{vertical-align:top}
@@ -64,42 +69,50 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <details>
 <summary><h2>Temperatures and Percentages</h2></summary>
 
-<h3>Recommended Serving Temperatures</h3>
-<table class="temps serving">
+<h3 class="with-btn">Recommended Serving Temperatures<button type="button" class="reveal-all">Show all</button></h3>
+<table class="temps serving quiz">
 <thead><tr><th>Style</th><th>E.g.</th><th>Service</th><th>°C</th><th>°F</th></tr></thead>
+<tbody>
 <tr><th>Sweet wines</th><td>Sauternes</td><td>Well chilled</td><td>6–8</td><td>43–46</td></tr>
 <tr><th>Sparkling wines</th><td>Champagne</td><td>Well chilled</td><td>6–10</td><td>43–50</td></tr>
 <tr><th>Light-, medium-bodied white and rosé</th><td>Pinot Grigio</td><td>Chilled</td><td>7–10</td><td>45–50</td></tr>
 <tr><th>Full-bodied white</th><td>Oaked Chardonnay</td><td>Lightly chilled</td><td>10–13</td><td>50–55</td></tr>
 <tr><th>Light-bodied red</th><td>Beaujolais</td><td>Room temp or lightly chilled</td><td>13–18</td><td>55–64</td></tr>
 <tr><th>Medium-, full-bodied red</th><td>Shiraz</td><td>Room temperature</td><td>15–18</td><td>59–64</td></tr>
+</tbody>
 </table>
 <p class="note">Chapter 3.</p>
 
-<h3>Fermentation Temperatures</h3>
-<table class="temps">
+<h3 class="with-btn">Fermentation Temperatures<button type="button" class="reveal-all">Show all</button></h3>
+<table class="temps quiz">
 <thead><tr><th>Wine</th><th>°C</th><th>°F</th></tr></thead>
+<tbody>
 <tr><th>White</th><td>12–22</td><td>54–72</td></tr>
 <tr><th>Rosé</th><td>12–22</td><td>54–72</td></tr>
 <tr><th>Red</th><td>20–32</td><td>68–90</td></tr>
+</tbody>
 </table>
 <p class="note">Rosé made by short maceration is fermented at white-wine temperatures once drained off the skins. Chapter 5.</p>
 
-<h3>Environmental Temperatures</h3>
-<table class="temps">
+<h3 class="with-btn">Environmental Temperatures<button type="button" class="reveal-all">Show all</button></h3>
+<table class="temps quiz">
 <thead><tr><th>Climate</th><th>°C</th><th>°F</th></tr></thead>
+<tbody>
 <tr><th>Cool</th><td>≤ 16.5</td><td>≤ 62</td></tr>
 <tr><th>Moderate</th><td>16.5–18.5</td><td>62–65</td></tr>
 <tr><th>Warm</th><td>18.5–21.0</td><td>65–70</td></tr>
+</tbody>
 </table>
 <p class="note">Average growing season temperature. Chapter 4.</p>
 
-<h3>Alcohol Levels</h3>
-<table class="temps">
+<h3 class="with-btn">Alcohol Levels<button type="button" class="reveal-all">Show all</button></h3>
+<table class="temps quiz">
 <thead><tr><th>Level</th><th>Wine (% abv)</th><th>Fortified (% abv)</th></tr></thead>
+<tbody>
 <tr><th>Low</th><td>&lt; 11</td><td>15–16.4</td></tr>
 <tr><th>Medium</th><td>11–13.9</td><td>16.5–18.4</td></tr>
 <tr><th>High</th><td>≥ 14</td><td>≥ 18.5</td></tr>
+</tbody>
 </table>
 <p class="note">SAT three-point scale. Chapter 1.</p>
 </details>
@@ -527,6 +540,13 @@ document.querySelectorAll('input.filter').forEach(f=>{
     for(const r of tb.rows){const t=fold(r.textContent+' '); const ok=terms.every(w=>t.includes(w)); r.hidden=!ok; if(ok)shown++;}
     count.textContent=terms.length?`${shown} of ${tb.rows.length}`:'';
   });
+});
+// Quiz tables: last two cells hidden until the row is clicked; button shows/hides all
+document.querySelectorAll('table.quiz').forEach(t=>{
+  const rows=[...t.tBodies[0].rows], b=t.previousElementSibling.querySelector('.reveal-all');
+  const sync=()=>{b.textContent=rows.every(r=>r.classList.contains('shown'))?'Hide all':'Show all';};
+  rows.forEach(r=>r.addEventListener('click',()=>{r.classList.toggle('shown');sync();}));
+  b.addEventListener('click',()=>{const show=b.textContent==='Show all';rows.forEach(r=>r.classList.toggle('shown',show));sync();});
 });
 // Click a sortable table heading to cycle: ascending → descending → original order
 document.querySelectorAll('table.sortable').forEach(t=>{

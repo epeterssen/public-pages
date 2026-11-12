@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Temperatures and Percentages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: single centered study column; chapter chips, one question card, answer stack, score bar */
+:root{
+  --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1;
+  --accent:#7a1f3d; --accent-soft:#f1e3e8;
+  --star:#b7791f; --good:#1f7a45; --good-bg:#e2f3e8; --bad:#b3261e; --bad-bg:#fbe4e2;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0;text-wrap:balance}
+.back{color:var(--accent);text-decoration:none;font-size:.9rem;align-self:flex-start}
+.sub{color:var(--muted);margin:2px 0 0;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:500 .85rem var(--body);cursor:pointer}
+.chip:disabled{opacity:.45;cursor:default}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar b{color:var(--fg)}
+.track{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .25s}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.q{font-family:var(--display);font-size:1.3rem;line-height:1.3;margin:0;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:12px 14px;font:400 1rem var(--body);cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt .k{font-weight:600;color:var(--muted);min-width:1.1em}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.right .k{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .k{color:var(--bad)}
+.opt.dim{opacity:.5}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.verdict{font-weight:600;font-size:.95rem}
+.verdict.g{color:var(--good)} .verdict.b{color:var(--bad)}
+.btn{border:none;background:var(--accent);color:var(--surface);border-radius:10px;padding:11px 18px;font:600 .95rem var(--body);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.end{text-align:center;gap:10px;align-items:center}
+.status{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.chip.miss{border-color:var(--star);color:var(--star)}
+.chip.miss[aria-pressed="true"]{background:var(--star);border-color:var(--star);color:var(--surface)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.star{border:none;background:transparent;color:var(--muted);font-size:1.5rem;line-height:1;padding:4px 6px;cursor:pointer;border-radius:8px}
+.star[aria-pressed="true"]{color:var(--star)}
+.star:hover{color:var(--star)}
+.star:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.big{font-family:var(--display);font-size:3rem;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+@media (prefers-reduced-motion: reduce){.fill{transition:none}}
+</style>
+<style>*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="index.html">← WSET2 Study</a>
+  <header>
+    <h1>Temperatures and Percentages</h1>
+    <p class="sub">One question per row of the Reference tables. Tap tables to combine them. Tap an answer to reveal.</p>
+    <p class="status" id="status">Loading starred questions…</p>
+  </header>
+  <div class="chips" id="chips" role="group" aria-label="Table"></div>
+  <div>
+    <div class="bar"><span id="pos">Question 1 of 0</span><span>Score <b id="score">0/0 (0%)</b></span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+  <section class="card" id="card"></section>
+</div>
+
+<script>
+const CH={1:"Serving Temperatures",2:"Fermentation Temperatures",3:"Environmental Temperatures",4:"Alcohol Levels"};
+// [chapter, question, correct, wrong, wrong, wrong]
+const Q=[
+[1,"Service temperature for sweet wines (e.g. Sauternes)?","Well chilled, 6–8°C (43–46°F)","Chilled, 7–10°C (45–50°F)","Lightly chilled, 10–13°C (50–55°F)","Room temperature, 15–18°C (59–64°F)"],
+[1,"Service temperature for sparkling wines (e.g. Champagne)?","Well chilled, 6–10°C (43–50°F)","Chilled, 7–10°C (45–50°F)","Lightly chilled, 10–13°C (50–55°F)","Room temp or lightly chilled, 13–18°C (55–64°F)"],
+[1,"Service temperature for light- and medium-bodied whites and rosé (e.g. Pinot Grigio)?","Chilled, 7–10°C (45–50°F)","Well chilled, 6–8°C (43–46°F)","Lightly chilled, 10–13°C (50–55°F)","Room temp or lightly chilled, 13–18°C (55–64°F)"],
+[1,"Service temperature for full-bodied whites (e.g. oaked Chardonnay)?","Lightly chilled, 10–13°C (50–55°F)","Chilled, 7–10°C (45–50°F)","Well chilled, 6–8°C (43–46°F)","Room temperature, 15–18°C (59–64°F)"],
+[1,"Service temperature for light-bodied reds (e.g. Beaujolais)?","Room temp or lightly chilled, 13–18°C (55–64°F)","Lightly chilled, 10–13°C (50–55°F)","Room temperature, 15–18°C (59–64°F)","Chilled, 7–10°C (45–50°F)"],
+[1,"Service temperature for medium- and full-bodied reds (e.g. Shiraz)?","Room temperature, 15–18°C (59–64°F)","Room temp or lightly chilled, 13–18°C (55–64°F)","Warm, 18–22°C (64–72°F)","Lightly chilled, 10–13°C (50–55°F)"],
+[2,"Fermentation temperature range for white wine?","12–22°C (54–72°F)","20–32°C (68–90°F)","5–10°C (41–50°F)","25–35°C (77–95°F)"],
+[2,"Fermentation temperature range for rosé (once drained off the skins)?","12–22°C (54–72°F)","20–32°C (68–90°F)","8–12°C (46–54°F)","22–28°C (72–82°F)"],
+[2,"Fermentation temperature range for red wine?","20–32°C (68–90°F)","12–22°C (54–72°F)","30–40°C (86–104°F)","15–25°C (59–77°F)"],
+[3,"Average growing-season temperature for a cool climate?","16.5°C (62°F) or below","18.5°C (65°F) or below","14°C (57°F) or below","16.5–18.5°C (62–65°F)"],
+[3,"Average growing-season temperature for a moderate climate?","16.5–18.5°C (62–65°F)","16.5°C (62°F) or below","18.5–21°C (65–70°F)","15–17°C (59–63°F)"],
+[3,"Average growing-season temperature for a warm climate?","18.5–21°C (65–70°F)","16.5–18.5°C (62–65°F)","21–24°C (70–75°F)","17–19.5°C (63–67°F)"],
+[4,"Low alcohol for a (non-fortified) wine is…","Below 11% abv","Below 12% abv","Below 10% abv","Below 9% abv"],
+[4,"Medium alcohol for a (non-fortified) wine is…","11–13.9% abv","12–14.9% abv","10–12.9% abv","11.5–14.5% abv"],
+[4,"High alcohol for a (non-fortified) wine is…","14% abv and above","13% abv and above","15% abv and above","14.5% abv and above"],
+[4,"Low alcohol for a fortified wine is…","15–16.4% abv","14–15.9% abv","15–17.4% abv","16–17.4% abv"],
+[4,"Medium alcohol for a fortified wine is…","16.5–18.4% abv","15–16.4% abv","17–19.4% abv","16–17.9% abv"],
+[4,"High alcohol for a fortified wine is…","18.5% abv and above","17% abv and above","20% abv and above","16.5% abv and above"],
+];
+
+const $=id=>document.getElementById(id);
+let chap="sel", sel=new Set(Object.keys(CH)), deck=[], i=0, right=0, answered=0, missed=[];
+// Starred ("Remember") questions: one doc per question in "starred"; deleted when unstarred
+function key(q){let h=0;for(const c of q[1])h=(h*31+c.charCodeAt(0))|0;return "q"+(h>>>0).toString(36)}
+const byKey={}; Q.forEach(q=>byKey[key(q)]=q);
+let stars={}, store=null, mode="none", writing=Promise.resolve();
+function setStatus(t){$("status").textContent=t}
+function starDeck(){return Object.keys(stars).filter(k=>byKey[k]).map(k=>byKey[k])}
+function loadLocal(){try{stars=JSON.parse(localStorage.getItem("wset2-temps-starred")||"{}")}catch(e){stars={}}}
+function saveLocal(){try{localStorage.setItem("wset2-temps-starred",JSON.stringify(stars))}catch(e){}}
+function refreshStar(){const s=$("star"); if(!s||!deck[i]) return; const on=!!stars[key(deck[i])]; s.setAttribute("aria-pressed",String(on)); s.textContent=on?"★":"☆"; s.title=on?"Remove from Remember":"Remember this question"}
+async function initStore(){
+  let db=null; try{db=await claude.use("db")}catch(e){}
+  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();return}
+  store=db.collection("starred"); mode="db";
+  let t=setTimeout(()=>setStatus("Can't reach starred questions yet."),10000);
+  store.onSnapshot(snap=>{
+    const m={}; snap.docs.forEach(d=>{if(d.exists)m[d.id]=d.data()}); stars=m;
+    if(!snap.metadata.fromCache){clearTimeout(t);setStatus("Starred questions are saved to your account.")}
+    chips(); refreshStar();
+  },e=>{clearTimeout(t);mode="local";loadLocal();setStatus("Saving stars in this browser only.");chips();refreshStar()});
+}
+function toggleStar(q){
+  const k=key(q), on=!stars[k];
+  if(on) stars[k]={ch:q[0],q:q[1],answer:q[2],starredAt:new Date().toISOString()}; else delete stars[k];
+  chips(); refreshStar();
+  if(mode==="db"){const doc=stars[k]; writing=writing.then(()=>on?store.doc(k).set(doc):store.doc(k).delete()).catch(()=>setStatus("Couldn't save that star. Check your connection."))}
+  else saveLocal();
+}
+function shuffle(a){a=a.slice();for(let j=a.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[a[j],a[k]]=[a[k],a[j]]}return a}
+
+function chips(){
+  const c=$("chips"); c.innerHTML="";
+  const n=starDeck().length, NCH=Object.keys(CH).length;
+  [["all",(chap==="sel"&&sel.size===NCH)?"None":"All"],...Object.keys(CH).map(k=>[k,CH[k]]),["starred","★ Remember ("+n+")"]].forEach(([v,l])=>{
+    const b=document.createElement("button"); b.className="chip"+(v==="starred"?" miss":""); b.id="chip-"+v; b.textContent=l;
+    if(v==="starred"&&!n&&chap!=="starred") b.disabled=true;
+    const on=v==="starred"?chap==="starred":v==="all"?false:(chap==="sel"&&sel.has(v));
+    b.setAttribute("aria-pressed",String(on)); b.title=v==="all"?(l==="None"?"Clear all tables":"Select all tables"):v==="starred"?"Questions you starred":CH[v];
+    b.onclick=()=>{
+      if(v==="starred"){chap="starred";sel.clear()}
+      else if(v==="all"){const full=chap==="sel"&&sel.size===NCH; chap="sel"; sel=full?new Set():new Set(Object.keys(CH))}
+      else{if(chap!=="sel"){chap="sel";sel.clear()} sel.has(v)?sel.delete(v):sel.add(v)}
+      start()}; c.appendChild(b);
+  });
+}
+function start(list){
+  deck = shuffle(list || (chap==="starred"?starDeck():Q.filter(q=>sel.has(String(q[0])))));
+  i=0; right=0; answered=0; missed=[]; chips(); show();
+}
+function stats(){
+  $("pos").textContent=`Question ${Math.min(i+1,deck.length)} of ${deck.length}`;
+  $("score").textContent=`${right}/${answered} (${answered?Math.round(right/answered*100):0}%)`;
+  $("fill").style.width=(deck.length?answered/deck.length*100:0)+"%";
+}
+function show(){
+  stats();
+  const card=$("card");
+  if(!deck.length){card.className="card end";card.innerHTML=chap==="starred"?`<div class="tag">Nothing starred</div><p class="sub">Tap ☆ on any question to remember it.</p>`:`<div class="tag">No tables selected</div><p class="sub">Tap one or more tables, or All.</p>`;return}
+  if(i>=deck.length){return end()}
+  const q=deck[i]; const opts=shuffle(q.slice(2).map((t,n)=>({t,ok:n===0})));
+  card.className="card";
+  card.innerHTML=`<div class="top"><div class="tag">${CH[q[0]]}</div><button class="star" id="star" aria-pressed="false" aria-label="Remember">☆</button></div><p class="q"></p><div class="opts"></div><div class="foot"><span class="verdict" aria-live="polite"></span><button class="btn" id="next" hidden>Next</button></div>`;
+  card.querySelector(".q").textContent=q[1];
+  $("star").onclick=()=>toggleStar(q); refreshStar();
+  const box=card.querySelector(".opts");
+  opts.forEach((o,n)=>{
+    const b=document.createElement("button"); b.className="opt"; b.id="opt-"+n;
+    b.innerHTML=`<span class="k">${"ABCD"[n]}</span><span></span>`; b.lastChild.textContent=o.t;
+    b.onclick=()=>pick(b,o,opts,box,q); box.appendChild(b);
+  });
+}
+function pick(b,o,opts,box,q){
+  answered++; if(o.ok) right++; else missed.push(q);
+  [...box.children].forEach((el,n)=>{
+    el.disabled=true;
+    if(opts[n].ok) el.classList.add("right");
+    else if(el===b) el.classList.add("wrong");
+    else el.classList.add("dim");
+  });
+  const v=$("card").querySelector(".verdict");
+  v.textContent=o.ok?"Correct":"Incorrect"; v.className="verdict "+(o.ok?"g":"b");
+  const nx=$("next"); nx.hidden=false; nx.textContent=i===deck.length-1?"See results":"Next";
+  nx.onclick=()=>{i++;show()}; nx.focus({preventScroll:true});
+  stats();
+}
+function end(){
+  const pct=deck.length?Math.round(right/deck.length*100):0;
+  const card=$("card"); card.className="card end";
+  card.innerHTML=`<div class="tag">Done</div><p class="big">${right}/${deck.length}</p><p class="sub">${pct}% correct</p><div class="row"></div>`;
+  const row=card.querySelector(".row");
+  if(missed.length){const m=document.createElement("button");m.className="btn";m.id="redo-missed";m.textContent=`Retry ${missed.length} missed`;const list=missed.slice();m.onclick=()=>start(list);row.appendChild(m)}
+  const r=document.createElement("button");r.className="btn ghost";r.id="restart";r.textContent="Start over";r.onclick=()=>start();row.appendChild(r);
+}
+start();
+initStore();
+</script>
+</body>
+</html>
