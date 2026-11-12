@@ -38,6 +38,12 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .grid{min-width:520px}
 .wide{width:min(1100px,calc(100vw - 48px));position:relative;left:50%;transform:translateX(-50%)}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 8px}
+.widen{font:inherit;font-size:.8rem;color:var(--accent);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer}
+.filter{font:inherit;font-size:.85rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 10px;flex:1 1 160px;max-width:280px}
+.filter:focus{outline:none;border-color:var(--accent)}
+.count{font-size:.8rem;color:var(--muted)}
+.widen:hover{border-color:var(--accent)}
 .grid th,.grid td{vertical-align:top}
 .sat tbody th{width:38%}
 .sat th,.sat td{vertical-align:top}
@@ -101,122 +107,189 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <details>
 <summary><h2>Regions</h2></summary>
 
-<div class="scroll wide">
+<div class="tools"><button type="button" class="widen" data-key="regionsWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter regions"><span class="count"></span></div>
+<div class="scroll">
 <table class="grid sortable">
-<thead><tr><th>Country</th><th>Location</th><th>Region</th><th>Grape</th></tr></thead>
+<thead><tr><th>Grape</th><th>Country</th><th>Location</th><th>Region</th></tr></thead>
 <tbody>
-<tr><td>France</td><td>Burgundy (north)</td><td>Chablis AOC</td><td>Chardonnay</td></tr>
-<tr><td>France</td><td>Burgundy (Côte de Nuits)</td><td>Gevrey-Chambertin AOC</td><td>Pinot Noir</td></tr>
-<tr><td>France</td><td>Burgundy (Côte de Nuits)</td><td>Nuits-Saint-Georges AOC</td><td>Pinot Noir</td></tr>
-<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Beaune AOC</td><td>Pinot Noir</td></tr>
-<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Pommard AOC</td><td>Pinot Noir</td></tr>
-<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Meursault AOC</td><td>Chardonnay</td></tr>
-<tr><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Puligny-Montrachet AOC</td><td>Chardonnay</td></tr>
-<tr><td>France</td><td>Burgundy (Mâconnais, south)</td><td>Mâcon AOC</td><td>Chardonnay</td></tr>
-<tr><td>France</td><td>Burgundy (Mâconnais, south)</td><td>Pouilly-Fuissé AOC</td><td>Chardonnay</td></tr>
-<tr><td>France</td><td>Burgundy (whole region)</td><td>Bourgogne AOC</td><td>Pinot Noir, Chardonnay</td></tr>
-<tr><td>France</td><td>Beaujolais (south, flat)</td><td>Beaujolais AOC</td><td>Gamay</td></tr>
-<tr><td>France</td><td>Beaujolais (north, slopes)</td><td>Beaujolais Villages AOC</td><td>Gamay</td></tr>
-<tr><td>France</td><td>Beaujolais (cru)</td><td>Fleurie AOC</td><td>Gamay</td></tr>
-<tr><td>France</td><td>Loire Valley</td><td>Vouvray AOC</td><td>Chenin Blanc</td></tr>
-<tr><td>France</td><td>Loire Valley</td><td>Sancerre AOC</td><td>Sauvignon Blanc</td></tr>
-<tr><td>France</td><td>Loire Valley</td><td>Pouilly-Fumé AOC</td><td>Sauvignon Blanc</td></tr>
-<tr><td>France</td><td>Loire Valley</td><td>Touraine AOC</td><td>Sauvignon Blanc</td></tr>
-<tr><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux AOC</td><td>Sauvignon Blanc, Sémillon, Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux Supérieur AOC</td><td>Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Sauternes AOC</td><td>Sémillon</td></tr>
-<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Graves AOC</td><td>Sauvignon Blanc, Sémillon, Cabernet Sauvignon, Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Pessac-Léognan AOC</td><td>Sauvignon Blanc, Sémillon, Cabernet Sauvignon, Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Haut-Médoc AOC</td><td>Cabernet Sauvignon, Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Margaux AOC</td><td>Cabernet Sauvignon, Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Left Bank)</td><td>Pauillac AOC</td><td>Cabernet Sauvignon, Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Right Bank)</td><td>Saint-Émilion AOC</td><td>Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Right Bank)</td><td>Saint-Émilion Grand Cru AOC</td><td>Merlot</td></tr>
-<tr><td>France</td><td>Bordeaux (Right Bank)</td><td>Pomerol AOC</td><td>Merlot</td></tr>
-<tr><td>France</td><td>Alsace (north-east)</td><td>Alsace AOC</td><td>Riesling, Pinot Gris, Gewurztraminer</td></tr>
-<tr><td>France</td><td>Alsace (north-east)</td><td>Alsace Grand Cru AOC</td><td>Riesling, Pinot Gris, Gewurztraminer</td></tr>
-<tr><td>France</td><td>Rhône (north)</td><td>Côte Rôtie AOC</td><td>Syrah (+ Viognier co-fermented)</td></tr>
-<tr><td>France</td><td>Rhône (north)</td><td>Hermitage AOC</td><td>Syrah</td></tr>
-<tr><td>France</td><td>Rhône (north)</td><td>Crozes-Hermitage AOC</td><td>Syrah</td></tr>
-<tr><td>France</td><td>Rhône (north)</td><td>Condrieu AOC</td><td>Viognier</td></tr>
-<tr><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône AOC</td><td>Grenache, Syrah</td></tr>
-<tr><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône Villages AOC</td><td>Grenache, Syrah</td></tr>
-<tr><td>France</td><td>Rhône (south)</td><td>Châteauneuf-du-Pape AOC</td><td>Grenache, Syrah</td></tr>
-<tr><td>France</td><td>Languedoc-Roussillon (south)</td><td>Pays d'Oc IGP</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon, Syrah</td></tr>
-<tr><td>France</td><td>Languedoc-Roussillon (south)</td><td>Minervois AOC</td><td>Syrah, Grenache</td></tr>
-<tr><td>France</td><td>Provence (east of Languedoc)</td><td>Côtes de Provence AOC</td><td>Grenache (rosé)</td></tr>
-<tr><td>France</td><td>Champagne (north)</td><td>Champagne AOC</td><td>Chardonnay, Pinot Noir, Meunier (sparkling)</td></tr>
-<tr><td>Germany</td><td>Mosel (north)</td><td>Mosel</td><td>Riesling</td></tr>
-<tr><td>Germany</td><td>Rhine (north bank)</td><td>Rheingau</td><td>Riesling</td></tr>
-<tr><td>Germany</td><td>Pfalz (south-west)</td><td>Pfalz</td><td>Riesling</td></tr>
-<tr><td>Hungary</td><td>Tokaj (north-east)</td><td>Tokaj</td><td>Furmint</td></tr>
-<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Gavi DOCG</td><td>Cortese</td></tr>
-<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Barolo DOCG</td><td>Nebbiolo</td></tr>
-<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Barbaresco DOCG</td><td>Nebbiolo</td></tr>
-<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Barbera d'Asti DOCG</td><td>Barbera</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>delle Venezie DOC</td><td>Pinot Grigio</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Veneto IGT</td><td>Pinot Grigio</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Soave DOC</td><td>Garganega</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Soave DOC Classico</td><td>Garganega</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Recioto di Soave DOCG</td><td>Garganega</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Valpolicella DOC</td><td>Corvina</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Valpolicella DOC Classico</td><td>Corvina</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Amarone della Valpolicella DOCG</td><td>Corvina</td></tr>
-<tr><td>Italy</td><td>Veneto (north-east)</td><td>Recioto della Valpolicella DOCG</td><td>Corvina</td></tr>
-<tr><td>Italy</td><td>Friuli-Venezia Giulia (north-east corner)</td><td>Friuli-Venezia Giulia</td><td>Pinot Grigio</td></tr>
-<tr><td>Italy</td><td>Tuscany (central-west)</td><td>Chianti DOCG</td><td>Sangiovese</td></tr>
-<tr><td>Italy</td><td>Tuscany (central-west)</td><td>Chianti Classico DOCG</td><td>Sangiovese</td></tr>
-<tr><td>Italy</td><td>Tuscany (south)</td><td>Brunello di Montalcino DOCG</td><td>Sangiovese</td></tr>
-<tr><td>Italy</td><td>Marche (central, east coast)</td><td>Verdicchio dei Castelli di Jesi DOC</td><td>Verdicchio</td></tr>
-<tr><td>Italy</td><td>Abruzzo (east-central)</td><td>Montepulciano d'Abruzzo DOC</td><td>Montepulciano</td></tr>
-<tr><td>Italy</td><td>Campania (south)</td><td>Fiano di Avellino DOCG</td><td>Fiano</td></tr>
-<tr><td>Italy</td><td>Puglia (south)</td><td>Puglia</td><td>Primitivo</td></tr>
-<tr><td>Italy</td><td>Piemonte (north-west)</td><td>Asti DOCG</td><td>Moscato (sweet sparkling)</td></tr>
-<tr><td>Italy</td><td>North-east Italy</td><td>Prosecco DOC</td><td>Glera (sparkling)</td></tr>
-<tr><td>Spain</td><td>Galicia (north-west)</td><td>Rías Baixas DO</td><td>Albariño</td></tr>
-<tr><td>Spain</td><td>Rioja (north-east)</td><td>Rioja DOCa</td><td>Tempranillo, Garnacha</td></tr>
-<tr><td>Spain</td><td>Navarra (north-east, next to Rioja)</td><td>Navarra DO</td><td>Garnacha</td></tr>
-<tr><td>Spain</td><td>Catalunya (north-east)</td><td>Catalunya DO</td><td>Tempranillo</td></tr>
-<tr><td>Spain</td><td>Catalunya (north-east)</td><td>Priorat DOCa</td><td>Garnacha</td></tr>
-<tr><td>Spain</td><td>Duero (inland, high altitude)</td><td>Ribera del Duero DO</td><td>Tempranillo</td></tr>
-<tr><td>Spain</td><td>Catalunya (north-east)</td><td>Cava</td><td>Local Spanish varieties, Chardonnay, Pinot Noir (sparkling)</td></tr>
-<tr><td>Spain</td><td>Jerez de la Frontera (south)</td><td>Sherry</td><td>Palomino, Pedro Ximénez (fortified)</td></tr>
-<tr><td>Portugal</td><td>Upper Douro</td><td>Port</td><td>Local black varieties (fortified)</td></tr>
-<tr><td>USA</td><td>California (statewide)</td><td>California</td><td>Zinfandel, Chardonnay, Merlot, Cabernet Sauvignon</td></tr>
-<tr><td>USA</td><td>California (inland)</td><td>Central Valley</td><td>Chardonnay, Cabernet Sauvignon</td></tr>
-<tr><td>USA</td><td>California (north coast)</td><td>Los Carneros</td><td>Pinot Noir, Chardonnay</td></tr>
-<tr><td>USA</td><td>California (north coast)</td><td>Sonoma</td><td>Pinot Noir, Chardonnay, Merlot, Cabernet Sauvignon</td></tr>
-<tr><td>USA</td><td>California (north coast)</td><td>Napa Valley</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon</td></tr>
-<tr><td>USA</td><td>Napa Valley (central)</td><td>Oakville</td><td>Cabernet Sauvignon</td></tr>
-<tr><td>USA</td><td>Napa Valley (central)</td><td>Rutherford</td><td>Cabernet Sauvignon</td></tr>
-<tr><td>USA</td><td>Napa Valley (far north)</td><td>Calistoga</td><td>Cabernet Sauvignon</td></tr>
-<tr><td>USA</td><td>California (Central Coast)</td><td>Santa Barbara County</td><td>Pinot Noir, Chardonnay</td></tr>
-<tr><td>USA</td><td>Oregon (north-west)</td><td>Oregon</td><td>Pinot Noir, Chardonnay</td></tr>
-<tr><td>Chile</td><td>Coast (north of Santiago)</td><td>Casablanca Valley</td><td>Pinot Noir, Chardonnay, Sauvignon Blanc</td></tr>
-<tr><td>Chile</td><td>Central Valley (inland)</td><td>Central Valley</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon, Carmenère</td></tr>
-<tr><td>Chile</td><td>Central Valley (inland)</td><td>Maipo Valley</td><td>Cabernet Sauvignon</td></tr>
-<tr><td>Chile</td><td>Central Valley (inland)</td><td>Colchagua Valley</td><td>Cabernet Sauvignon</td></tr>
-<tr><td>Argentina</td><td>Mendoza (high altitude, Andes)</td><td>Mendoza</td><td>Malbec</td></tr>
-<tr><td>South Africa</td><td>Western Cape (south-west)</td><td>Western Cape</td><td>Chenin Blanc, Chardonnay, Pinotage</td></tr>
-<tr><td>South Africa</td><td>Western Cape (south coast)</td><td>Walker Bay</td><td>Pinot Noir, Chardonnay</td></tr>
-<tr><td>South Africa</td><td>Western Cape (south of Cape Town)</td><td>Constantia</td><td>Sauvignon Blanc</td></tr>
-<tr><td>South Africa</td><td>Western Cape (near Cape Town)</td><td>Elgin</td><td>Sauvignon Blanc</td></tr>
-<tr><td>South Africa</td><td>Western Cape (near Cape Town)</td><td>Stellenbosch</td><td>Merlot, Cabernet Sauvignon</td></tr>
-<tr><td>Australia</td><td>South-east (broad)</td><td>South Eastern Australia</td><td>Chardonnay, Shiraz</td></tr>
-<tr><td>Australia</td><td>Victoria (south-east)</td><td>Yarra Valley</td><td>Pinot Noir, Chardonnay</td></tr>
-<tr><td>Australia</td><td>Victoria (south-east)</td><td>Mornington Peninsula</td><td>Pinot Noir</td></tr>
-<tr><td>Australia</td><td>South Australia (south)</td><td>Barossa Valley</td><td>Semillon, Shiraz, Grenache</td></tr>
-<tr><td>Australia</td><td>South Australia (south)</td><td>McLaren Vale</td><td>Grenache</td></tr>
-<tr><td>Australia</td><td>South Australia (south)</td><td>Eden Valley</td><td>Riesling</td></tr>
-<tr><td>Australia</td><td>South Australia (south)</td><td>Clare Valley</td><td>Riesling</td></tr>
-<tr><td>Australia</td><td>South Australia (south)</td><td>Adelaide Hills</td><td>Chardonnay, Sauvignon Blanc</td></tr>
-<tr><td>Australia</td><td>South Australia (south)</td><td>Coonawarra</td><td>Cabernet Sauvignon</td></tr>
-<tr><td>Australia</td><td>New South Wales (east)</td><td>Hunter Valley</td><td>Semillon, Shiraz</td></tr>
-<tr><td>Australia</td><td>Western Australia (south-west)</td><td>Margaret River</td><td>Chardonnay, Sauvignon Blanc, Merlot, Cabernet Sauvignon</td></tr>
-<tr><td>New Zealand</td><td>North Island (south)</td><td>Martinborough</td><td>Pinot Noir</td></tr>
-<tr><td>New Zealand</td><td>North Island (east coast)</td><td>Hawke's Bay</td><td>Chardonnay, Merlot, Cabernet Sauvignon</td></tr>
-<tr><td>New Zealand</td><td>South Island (north-east)</td><td>Marlborough</td><td>Pinot Noir, Chardonnay, Sauvignon Blanc</td></tr>
-<tr><td>New Zealand</td><td>South Island (south)</td><td>Central Otago</td><td>Pinot Noir</td></tr>
+<tr><td>Chardonnay</td><td>France</td><td>Burgundy (north)</td><td>Chablis AOC</td></tr>
+<tr><td>Pinot Noir</td><td>France</td><td>Burgundy (Côte de Nuits)</td><td>Gevrey-Chambertin AOC</td></tr>
+<tr><td>Pinot Noir</td><td>France</td><td>Burgundy (Côte de Nuits)</td><td>Nuits-Saint-Georges AOC</td></tr>
+<tr><td>Pinot Noir</td><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Beaune AOC</td></tr>
+<tr><td>Pinot Noir</td><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Pommard AOC</td></tr>
+<tr><td>Chardonnay</td><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Meursault AOC</td></tr>
+<tr><td>Chardonnay</td><td>France</td><td>Burgundy (Côte de Beaune)</td><td>Puligny-Montrachet AOC</td></tr>
+<tr><td>Chardonnay</td><td>France</td><td>Burgundy (Mâconnais, south)</td><td>Mâcon AOC</td></tr>
+<tr><td>Chardonnay</td><td>France</td><td>Burgundy (Mâconnais, south)</td><td>Pouilly-Fuissé AOC</td></tr>
+<tr><td>Pinot Noir</td><td>France</td><td>Burgundy (whole region)</td><td>Bourgogne AOC</td></tr>
+<tr><td>Chardonnay</td><td>France</td><td>Burgundy (whole region)</td><td>Bourgogne AOC</td></tr>
+<tr><td>Gamay</td><td>France</td><td>Beaujolais (south, flat)</td><td>Beaujolais AOC</td></tr>
+<tr><td>Gamay</td><td>France</td><td>Beaujolais (north, slopes)</td><td>Beaujolais Villages AOC</td></tr>
+<tr><td>Gamay</td><td>France</td><td>Beaujolais (cru)</td><td>Fleurie AOC</td></tr>
+<tr><td>Chenin Blanc</td><td>France</td><td>Loire Valley</td><td>Vouvray AOC</td></tr>
+<tr><td>Sauvignon Blanc</td><td>France</td><td>Loire Valley</td><td>Sancerre AOC</td></tr>
+<tr><td>Sauvignon Blanc</td><td>France</td><td>Loire Valley</td><td>Pouilly-Fumé AOC</td></tr>
+<tr><td>Sauvignon Blanc</td><td>France</td><td>Loire Valley</td><td>Touraine AOC</td></tr>
+<tr><td>Sauvignon Blanc</td><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux AOC</td></tr>
+<tr><td>Sémillon</td><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (whole region)</td><td>Bordeaux Supérieur AOC</td></tr>
+<tr><td>Sémillon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Sauternes AOC</td></tr>
+<tr><td>Sauvignon Blanc</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Graves AOC</td></tr>
+<tr><td>Sémillon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Graves AOC</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Graves AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Graves AOC</td></tr>
+<tr><td>Sauvignon Blanc</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Pessac-Léognan AOC</td></tr>
+<tr><td>Sémillon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Pessac-Léognan AOC</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Pessac-Léognan AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Pessac-Léognan AOC</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Haut-Médoc AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Haut-Médoc AOC</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Margaux AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Margaux AOC</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Pauillac AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Left Bank)</td><td>Pauillac AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Right Bank)</td><td>Saint-Émilion AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Right Bank)</td><td>Saint-Émilion Grand Cru AOC</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Bordeaux (Right Bank)</td><td>Pomerol AOC</td></tr>
+<tr><td>Riesling</td><td>France</td><td>Alsace (north-east)</td><td>Alsace AOC</td></tr>
+<tr><td>Pinot Gris</td><td>France</td><td>Alsace (north-east)</td><td>Alsace AOC</td></tr>
+<tr><td>Gewurztraminer</td><td>France</td><td>Alsace (north-east)</td><td>Alsace AOC</td></tr>
+<tr><td>Riesling</td><td>France</td><td>Alsace (north-east)</td><td>Alsace Grand Cru AOC</td></tr>
+<tr><td>Pinot Gris</td><td>France</td><td>Alsace (north-east)</td><td>Alsace Grand Cru AOC</td></tr>
+<tr><td>Gewurztraminer</td><td>France</td><td>Alsace (north-east)</td><td>Alsace Grand Cru AOC</td></tr>
+<tr><td>Syrah (+ Viognier co-fermented)</td><td>France</td><td>Rhône (north)</td><td>Côte Rôtie AOC</td></tr>
+<tr><td>Syrah</td><td>France</td><td>Rhône (north)</td><td>Hermitage AOC</td></tr>
+<tr><td>Syrah</td><td>France</td><td>Rhône (north)</td><td>Crozes-Hermitage AOC</td></tr>
+<tr><td>Viognier</td><td>France</td><td>Rhône (north)</td><td>Condrieu AOC</td></tr>
+<tr><td>Grenache</td><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône AOC</td></tr>
+<tr><td>Syrah</td><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône AOC</td></tr>
+<tr><td>Grenache</td><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône Villages AOC</td></tr>
+<tr><td>Syrah</td><td>France</td><td>Rhône (south)</td><td>Côtes du Rhône Villages AOC</td></tr>
+<tr><td>Grenache</td><td>France</td><td>Rhône (south)</td><td>Châteauneuf-du-Pape AOC</td></tr>
+<tr><td>Syrah</td><td>France</td><td>Rhône (south)</td><td>Châteauneuf-du-Pape AOC</td></tr>
+<tr><td>Chardonnay</td><td>France</td><td>Languedoc-Roussillon (south)</td><td>Pays d'Oc IGP</td></tr>
+<tr><td>Sauvignon Blanc</td><td>France</td><td>Languedoc-Roussillon (south)</td><td>Pays d'Oc IGP</td></tr>
+<tr><td>Merlot</td><td>France</td><td>Languedoc-Roussillon (south)</td><td>Pays d'Oc IGP</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>France</td><td>Languedoc-Roussillon (south)</td><td>Pays d'Oc IGP</td></tr>
+<tr><td>Syrah</td><td>France</td><td>Languedoc-Roussillon (south)</td><td>Pays d'Oc IGP</td></tr>
+<tr><td>Syrah</td><td>France</td><td>Languedoc-Roussillon (south)</td><td>Minervois AOC</td></tr>
+<tr><td>Grenache</td><td>France</td><td>Languedoc-Roussillon (south)</td><td>Minervois AOC</td></tr>
+<tr><td>Grenache (rosé)</td><td>France</td><td>Provence (east of Languedoc)</td><td>Côtes de Provence AOC</td></tr>
+<tr><td>Chardonnay (sparkling)</td><td>France</td><td>Champagne (north)</td><td>Champagne AOC</td></tr>
+<tr><td>Pinot Noir (sparkling)</td><td>France</td><td>Champagne (north)</td><td>Champagne AOC</td></tr>
+<tr><td>Meunier (sparkling)</td><td>France</td><td>Champagne (north)</td><td>Champagne AOC</td></tr>
+<tr><td>Riesling</td><td>Germany</td><td>Mosel (north)</td><td>Mosel</td></tr>
+<tr><td>Riesling</td><td>Germany</td><td>Rhine (north bank)</td><td>Rheingau</td></tr>
+<tr><td>Riesling</td><td>Germany</td><td>Pfalz (south-west)</td><td>Pfalz</td></tr>
+<tr><td>Furmint</td><td>Hungary</td><td>Tokaj (north-east)</td><td>Tokaj</td></tr>
+<tr><td>Cortese</td><td>Italy</td><td>Piemonte (north-west)</td><td>Gavi DOCG</td></tr>
+<tr><td>Nebbiolo</td><td>Italy</td><td>Piemonte (north-west)</td><td>Barolo DOCG</td></tr>
+<tr><td>Nebbiolo</td><td>Italy</td><td>Piemonte (north-west)</td><td>Barbaresco DOCG</td></tr>
+<tr><td>Barbera</td><td>Italy</td><td>Piemonte (north-west)</td><td>Barbera d'Asti DOCG</td></tr>
+<tr><td>Pinot Grigio</td><td>Italy</td><td>Veneto (north-east)</td><td>delle Venezie DOC</td></tr>
+<tr><td>Pinot Grigio</td><td>Italy</td><td>Veneto (north-east)</td><td>Veneto IGT</td></tr>
+<tr><td>Garganega</td><td>Italy</td><td>Veneto (north-east)</td><td>Soave DOC</td></tr>
+<tr><td>Garganega</td><td>Italy</td><td>Veneto (north-east)</td><td>Soave DOC Classico</td></tr>
+<tr><td>Garganega</td><td>Italy</td><td>Veneto (north-east)</td><td>Recioto di Soave DOCG</td></tr>
+<tr><td>Corvina</td><td>Italy</td><td>Veneto (north-east)</td><td>Valpolicella DOC</td></tr>
+<tr><td>Corvina</td><td>Italy</td><td>Veneto (north-east)</td><td>Valpolicella DOC Classico</td></tr>
+<tr><td>Corvina</td><td>Italy</td><td>Veneto (north-east)</td><td>Amarone della Valpolicella DOCG</td></tr>
+<tr><td>Corvina</td><td>Italy</td><td>Veneto (north-east)</td><td>Recioto della Valpolicella DOCG</td></tr>
+<tr><td>Pinot Grigio</td><td>Italy</td><td>Friuli-Venezia Giulia (north-east corner)</td><td>Friuli-Venezia Giulia</td></tr>
+<tr><td>Sangiovese</td><td>Italy</td><td>Tuscany (central-west)</td><td>Chianti DOCG</td></tr>
+<tr><td>Sangiovese</td><td>Italy</td><td>Tuscany (central-west)</td><td>Chianti Classico DOCG</td></tr>
+<tr><td>Sangiovese</td><td>Italy</td><td>Tuscany (south)</td><td>Brunello di Montalcino DOCG</td></tr>
+<tr><td>Verdicchio</td><td>Italy</td><td>Marche (central, east coast)</td><td>Verdicchio dei Castelli di Jesi DOC</td></tr>
+<tr><td>Montepulciano</td><td>Italy</td><td>Abruzzo (east-central)</td><td>Montepulciano d'Abruzzo DOC</td></tr>
+<tr><td>Fiano</td><td>Italy</td><td>Campania (south)</td><td>Fiano di Avellino DOCG</td></tr>
+<tr><td>Primitivo</td><td>Italy</td><td>Puglia (south)</td><td>Puglia</td></tr>
+<tr><td>Moscato (sweet sparkling)</td><td>Italy</td><td>Piemonte (north-west)</td><td>Asti DOCG</td></tr>
+<tr><td>Glera (sparkling)</td><td>Italy</td><td>North-east Italy</td><td>Prosecco DOC</td></tr>
+<tr><td>Albariño</td><td>Spain</td><td>Galicia (north-west)</td><td>Rías Baixas DO</td></tr>
+<tr><td>Tempranillo</td><td>Spain</td><td>Rioja (north-east)</td><td>Rioja DOCa</td></tr>
+<tr><td>Garnacha</td><td>Spain</td><td>Rioja (north-east)</td><td>Rioja DOCa</td></tr>
+<tr><td>Garnacha</td><td>Spain</td><td>Navarra (north-east, next to Rioja)</td><td>Navarra DO</td></tr>
+<tr><td>Tempranillo</td><td>Spain</td><td>Catalunya (north-east)</td><td>Catalunya DO</td></tr>
+<tr><td>Garnacha</td><td>Spain</td><td>Catalunya (north-east)</td><td>Priorat DOCa</td></tr>
+<tr><td>Tempranillo</td><td>Spain</td><td>Duero (inland, high altitude)</td><td>Ribera del Duero DO</td></tr>
+<tr><td>Local Spanish varieties (sparkling)</td><td>Spain</td><td>Catalunya (north-east)</td><td>Cava</td></tr>
+<tr><td>Chardonnay (sparkling)</td><td>Spain</td><td>Catalunya (north-east)</td><td>Cava</td></tr>
+<tr><td>Pinot Noir (sparkling)</td><td>Spain</td><td>Catalunya (north-east)</td><td>Cava</td></tr>
+<tr><td>Palomino (fortified)</td><td>Spain</td><td>Jerez de la Frontera (south)</td><td>Sherry</td></tr>
+<tr><td>Pedro Ximénez (fortified)</td><td>Spain</td><td>Jerez de la Frontera (south)</td><td>Sherry</td></tr>
+<tr><td>Local black varieties (fortified)</td><td>Portugal</td><td>Upper Douro</td><td>Port</td></tr>
+<tr><td>Zinfandel</td><td>USA</td><td>California (statewide)</td><td>California</td></tr>
+<tr><td>Chardonnay</td><td>USA</td><td>California (statewide)</td><td>California</td></tr>
+<tr><td>Merlot</td><td>USA</td><td>California (statewide)</td><td>California</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>USA</td><td>California (statewide)</td><td>California</td></tr>
+<tr><td>Chardonnay</td><td>USA</td><td>California (inland)</td><td>Central Valley</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>USA</td><td>California (inland)</td><td>Central Valley</td></tr>
+<tr><td>Pinot Noir</td><td>USA</td><td>California (north coast)</td><td>Los Carneros</td></tr>
+<tr><td>Chardonnay</td><td>USA</td><td>California (north coast)</td><td>Los Carneros</td></tr>
+<tr><td>Pinot Noir</td><td>USA</td><td>California (north coast)</td><td>Sonoma</td></tr>
+<tr><td>Chardonnay</td><td>USA</td><td>California (north coast)</td><td>Sonoma</td></tr>
+<tr><td>Merlot</td><td>USA</td><td>California (north coast)</td><td>Sonoma</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>USA</td><td>California (north coast)</td><td>Sonoma</td></tr>
+<tr><td>Chardonnay</td><td>USA</td><td>California (north coast)</td><td>Napa Valley</td></tr>
+<tr><td>Sauvignon Blanc</td><td>USA</td><td>California (north coast)</td><td>Napa Valley</td></tr>
+<tr><td>Merlot</td><td>USA</td><td>California (north coast)</td><td>Napa Valley</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>USA</td><td>California (north coast)</td><td>Napa Valley</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>USA</td><td>Napa Valley (central)</td><td>Oakville</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>USA</td><td>Napa Valley (central)</td><td>Rutherford</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>USA</td><td>Napa Valley (far north)</td><td>Calistoga</td></tr>
+<tr><td>Pinot Noir</td><td>USA</td><td>California (Central Coast)</td><td>Santa Barbara County</td></tr>
+<tr><td>Chardonnay</td><td>USA</td><td>California (Central Coast)</td><td>Santa Barbara County</td></tr>
+<tr><td>Pinot Noir</td><td>USA</td><td>Oregon (north-west)</td><td>Oregon</td></tr>
+<tr><td>Chardonnay</td><td>USA</td><td>Oregon (north-west)</td><td>Oregon</td></tr>
+<tr><td>Pinot Noir</td><td>Chile</td><td>Coast (north of Santiago)</td><td>Casablanca Valley</td></tr>
+<tr><td>Chardonnay</td><td>Chile</td><td>Coast (north of Santiago)</td><td>Casablanca Valley</td></tr>
+<tr><td>Sauvignon Blanc</td><td>Chile</td><td>Coast (north of Santiago)</td><td>Casablanca Valley</td></tr>
+<tr><td>Chardonnay</td><td>Chile</td><td>Central Valley (inland)</td><td>Central Valley</td></tr>
+<tr><td>Sauvignon Blanc</td><td>Chile</td><td>Central Valley (inland)</td><td>Central Valley</td></tr>
+<tr><td>Merlot</td><td>Chile</td><td>Central Valley (inland)</td><td>Central Valley</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>Chile</td><td>Central Valley (inland)</td><td>Central Valley</td></tr>
+<tr><td>Carmenère</td><td>Chile</td><td>Central Valley (inland)</td><td>Central Valley</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>Chile</td><td>Central Valley (inland)</td><td>Maipo Valley</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>Chile</td><td>Central Valley (inland)</td><td>Colchagua Valley</td></tr>
+<tr><td>Malbec</td><td>Argentina</td><td>Mendoza (high altitude, Andes)</td><td>Mendoza</td></tr>
+<tr><td>Chenin Blanc</td><td>South Africa</td><td>Western Cape (south-west)</td><td>Western Cape</td></tr>
+<tr><td>Chardonnay</td><td>South Africa</td><td>Western Cape (south-west)</td><td>Western Cape</td></tr>
+<tr><td>Pinotage</td><td>South Africa</td><td>Western Cape (south-west)</td><td>Western Cape</td></tr>
+<tr><td>Pinot Noir</td><td>South Africa</td><td>Western Cape (south coast)</td><td>Walker Bay</td></tr>
+<tr><td>Chardonnay</td><td>South Africa</td><td>Western Cape (south coast)</td><td>Walker Bay</td></tr>
+<tr><td>Sauvignon Blanc</td><td>South Africa</td><td>Western Cape (south of Cape Town)</td><td>Constantia</td></tr>
+<tr><td>Sauvignon Blanc</td><td>South Africa</td><td>Western Cape (near Cape Town)</td><td>Elgin</td></tr>
+<tr><td>Merlot</td><td>South Africa</td><td>Western Cape (near Cape Town)</td><td>Stellenbosch</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>South Africa</td><td>Western Cape (near Cape Town)</td><td>Stellenbosch</td></tr>
+<tr><td>Chardonnay</td><td>Australia</td><td>South-east (broad)</td><td>South Eastern Australia</td></tr>
+<tr><td>Shiraz</td><td>Australia</td><td>South-east (broad)</td><td>South Eastern Australia</td></tr>
+<tr><td>Pinot Noir</td><td>Australia</td><td>Victoria (south-east)</td><td>Yarra Valley</td></tr>
+<tr><td>Chardonnay</td><td>Australia</td><td>Victoria (south-east)</td><td>Yarra Valley</td></tr>
+<tr><td>Pinot Noir</td><td>Australia</td><td>Victoria (south-east)</td><td>Mornington Peninsula</td></tr>
+<tr><td>Semillon</td><td>Australia</td><td>South Australia (south)</td><td>Barossa Valley</td></tr>
+<tr><td>Shiraz</td><td>Australia</td><td>South Australia (south)</td><td>Barossa Valley</td></tr>
+<tr><td>Grenache</td><td>Australia</td><td>South Australia (south)</td><td>Barossa Valley</td></tr>
+<tr><td>Grenache</td><td>Australia</td><td>South Australia (south)</td><td>McLaren Vale</td></tr>
+<tr><td>Riesling</td><td>Australia</td><td>South Australia (south)</td><td>Eden Valley</td></tr>
+<tr><td>Riesling</td><td>Australia</td><td>South Australia (south)</td><td>Clare Valley</td></tr>
+<tr><td>Chardonnay</td><td>Australia</td><td>South Australia (south)</td><td>Adelaide Hills</td></tr>
+<tr><td>Sauvignon Blanc</td><td>Australia</td><td>South Australia (south)</td><td>Adelaide Hills</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>Australia</td><td>South Australia (south)</td><td>Coonawarra</td></tr>
+<tr><td>Semillon</td><td>Australia</td><td>New South Wales (east)</td><td>Hunter Valley</td></tr>
+<tr><td>Shiraz</td><td>Australia</td><td>New South Wales (east)</td><td>Hunter Valley</td></tr>
+<tr><td>Chardonnay</td><td>Australia</td><td>Western Australia (south-west)</td><td>Margaret River</td></tr>
+<tr><td>Sauvignon Blanc</td><td>Australia</td><td>Western Australia (south-west)</td><td>Margaret River</td></tr>
+<tr><td>Merlot</td><td>Australia</td><td>Western Australia (south-west)</td><td>Margaret River</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>Australia</td><td>Western Australia (south-west)</td><td>Margaret River</td></tr>
+<tr><td>Pinot Noir</td><td>New Zealand</td><td>North Island (south)</td><td>Martinborough</td></tr>
+<tr><td>Chardonnay</td><td>New Zealand</td><td>North Island (east coast)</td><td>Hawke's Bay</td></tr>
+<tr><td>Merlot</td><td>New Zealand</td><td>North Island (east coast)</td><td>Hawke's Bay</td></tr>
+<tr><td>Cabernet Sauvignon</td><td>New Zealand</td><td>North Island (east coast)</td><td>Hawke's Bay</td></tr>
+<tr><td>Pinot Noir</td><td>New Zealand</td><td>South Island (north-east)</td><td>Marlborough</td></tr>
+<tr><td>Chardonnay</td><td>New Zealand</td><td>South Island (north-east)</td><td>Marlborough</td></tr>
+<tr><td>Sauvignon Blanc</td><td>New Zealand</td><td>South Island (north-east)</td><td>Marlborough</td></tr>
+<tr><td>Pinot Noir</td><td>New Zealand</td><td>South Island (south)</td><td>Central Otago</td></tr>
 </tbody>
 </table>
 </div>
@@ -224,32 +297,101 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 </details>
 
 <details>
-<summary><h2>Tables</h2></summary>
+<summary><h2>Characteristics</h2></summary>
 
-<h3>Characteristics</h3>
+<div class="tools"><button type="button" class="widen" data-key="charsWide" aria-pressed="false">Widen table</button></div>
 <div class="scroll">
-<table class="grid">
-<thead><tr><th>Grape</th><th>Colour</th><th>Climate</th><th>Sweetness</th><th>Acidity</th><th>Tannins</th><th>Body</th></tr></thead>
-<tr><th>Merlot</th><td>Black</td><td>Mod, warm</td><td>Dry</td><td>Med</td><td>Med</td><td>Light–full</td></tr>
-<tr><th>Gewurztraminer</th><td>White</td><td>Cool, mod</td><td>Dry to sweet</td><td>Low–med</td><td>—</td><td>Full</td></tr>
-<tr><th>Viognier</th><td>White</td><td>Mod</td><td>Dry</td><td>Low–med</td><td>—</td><td>Med–full</td></tr>
-<tr><th>Albariño</th><td>White</td><td>Mod</td><td>Dry</td><td>High</td><td>—</td><td>Med</td></tr>
+<table class="grid sortable">
+<thead><tr><th>Grape</th><th>Colour</th><th>Sweetness</th><th>Acidity</th><th>Tannins</th><th>Body</th></tr></thead>
+<tbody>
+<tr><th>Pinot Noir</th><td>Black</td><td>Dry</td><td>High</td><td>Low–med</td><td>Light–full</td></tr>
+<tr><th>Zinfandel/Primitivo</th><td>Black</td><td>Dry, medium (rosé)</td><td>Med–high</td><td>Med–high</td><td>Full</td></tr>
+<tr><th>Riesling</th><td>White</td><td>Dry to sweet</td><td>High</td><td>—</td><td>Light–full</td></tr>
+<tr><th>Chenin Blanc</th><td>White</td><td>Dry to sweet</td><td>High</td><td>—</td><td>Med</td></tr>
+<tr><th>Sémillon/Semillon</th><td>White</td><td>Dry, sweet</td><td>Med–high</td><td>—</td><td>Light–full</td></tr>
+<tr><th>Furmint</th><td>White</td><td>Dry to sweet</td><td>High</td><td>—</td><td>Full</td></tr>
+<tr><th>Chardonnay</th><td>White</td><td>Dry</td><td>Med–high</td><td>—</td><td>Light–full</td></tr>
+<tr><th>Sauvignon Blanc</th><td>White</td><td>Dry</td><td>High</td><td>—</td><td>Light–med</td></tr>
+<tr><th>Pinot Grigio/Pinot Gris</th><td>White</td><td>Dry to sweet</td><td>Med–high</td><td>—</td><td>Light–full</td></tr>
+<tr><th>Gewurztraminer</th><td>White</td><td>Dry to sweet</td><td>Low–med</td><td>—</td><td>Full</td></tr>
+<tr><th>Viognier</th><td>White</td><td>Dry</td><td>Low–med</td><td>—</td><td>Med–full</td></tr>
+<tr><th>Albariño</th><td>White</td><td>Dry</td><td>High</td><td>—</td><td>Med</td></tr>
+<tr><th>Merlot</th><td>Black</td><td>Dry</td><td>Med</td><td>Med</td><td>Light–full</td></tr>
+<tr><th>Cabernet Sauvignon</th><td>Black</td><td>Dry</td><td>High</td><td>High</td><td>Med–full</td></tr>
+<tr><th>Syrah/Shiraz</th><td>Black</td><td>Dry</td><td>Med–high</td><td>Med–high</td><td>Med–full</td></tr>
+<tr><th>Gamay</th><td>Black</td><td>Dry</td><td>High</td><td>Low–med</td><td>Light–med</td></tr>
+<tr><th>Grenache/Garnacha</th><td>Black</td><td>Dry, dry to medium (rosé)</td><td>Low</td><td>Low–med</td><td>Med–full</td></tr>
+<tr><th>Tempranillo</th><td>Black</td><td>Dry</td><td>Med</td><td>Med</td><td>Med–full</td></tr>
+<tr><th>Carmenère</th><td>Black</td><td>Dry</td><td>Med–high</td><td>High</td><td>Full</td></tr>
+<tr><th>Malbec</th><td>Black</td><td>Dry</td><td>—</td><td>High</td><td>Full</td></tr>
+<tr><th>Pinotage</th><td>Black</td><td>Dry</td><td>High</td><td>Med</td><td>Med–full</td></tr>
+<tr><th>Cortese</th><td>White</td><td>Dry</td><td>High</td><td>—</td><td>Light</td></tr>
+<tr><th>Garganega</th><td>White</td><td>Dry, sweet</td><td>High</td><td>—</td><td>Med</td></tr>
+<tr><th>Verdicchio</th><td>White</td><td>Dry</td><td>High</td><td>—</td><td>Med</td></tr>
+<tr><th>Fiano</th><td>White</td><td>Dry</td><td>Med</td><td>—</td><td>Med–full</td></tr>
+<tr><th>Nebbiolo</th><td>Black</td><td>Dry</td><td>High</td><td>High</td><td>Full</td></tr>
+<tr><th>Barbera</th><td>Black</td><td>Dry</td><td>High</td><td>Low–med</td><td>—</td></tr>
+<tr><th>Corvina</th><td>Black</td><td>Dry to sweet</td><td>High</td><td>Low–med</td><td>Light–full</td></tr>
+<tr><th>Sangiovese</th><td>Black</td><td>Dry</td><td>High</td><td>High</td><td>Med–full</td></tr>
+<tr><th>Montepulciano</th><td>Black</td><td>Dry</td><td>Med</td><td>High</td><td>—</td></tr>
+</tbody>
 </table>
 </div>
+<p class="note">Chapters 6–23, in chapter order. — means not given (or no tannin, for whites). Click a column heading to sort; click again to reverse, a third time to restore the original order.</p>
+</details>
+
+<details>
+<summary><h2>Climate and Volume</h2></summary>
+
+<div class="tools"><button type="button" class="widen" data-key="climateWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter climate and volume"><span class="count"></span></div>
+<div class="scroll">
+<table class="grid sortable">
+<thead><tr><th>Grape</th><th>Climate</th><th>Climatic influences</th><th>High volume</th></tr></thead>
+<tbody>
+<tr><th>Pinot Noir</th><td>Cool, moderate</td><td>Burgundy: cool (north) to moderate (south), south/south-east-facing slopes<br>Los Carneros: morning fogs from San Pablo Bay<br>Sonoma: Pacific Ocean breezes<br>Santa Barbara County: sea breezes from west and south<br>Oregon: northerly latitude, Pacific exposure<br>Casablanca Valley: Pacific sea breezes, morning fogs<br>Walker Bay: strong southerly sea breezes<br>Yarra Valley, Mornington Peninsula: Southern Ocean breezes<br>Central Otago: ring of mountains blocks sea breezes and rain, sunny days, cool nights</td><td>—</td></tr>
+<tr><th>Zinfandel/Primitivo</th><td>Warm</td><td>Puglia: warm, southern Italy</td><td>Puglia</td></tr>
+<tr><th>Riesling</th><td>Cool, moderate</td><td>Mosel: northerly latitude, south/south-west-facing slopes, sunlight reflected from the river<br>Rheingau: south-facing slopes on the north bank of the Rhine<br>Pfalz: mountains to the west, dry, sunny<br>Alsace: Vosges Mountains block rain-bearing westerly winds, dry, sunny<br>Eden Valley, Clare Valley: altitude</td><td>—</td></tr>
+<tr><th>Chenin Blanc</th><td>Cool, moderate, warm</td><td>Western Cape: warm inland areas</td><td>Western Cape</td></tr>
+<tr><th>Sémillon/Semillon</th><td>Moderate, warm</td><td>Hunter Valley: warm, harvested early to keep acidity</td><td>—</td></tr>
+<tr><th>Furmint</th><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Chardonnay</th><td>Cool, moderate, warm</td><td>Chablis: cool, frost risk<br>Languedoc-Roussillon: warm, Mediterranean coast<br>Central Valley (California): mountains block sea influence, very warm, dry, irrigated<br>Los Carneros: morning fogs from San Pablo Bay<br>Sonoma: Pacific sea breezes<br>Napa Valley: warmer further north<br>Santa Barbara County: sea breezes funnelled inland by lateral valleys<br>Adelaide Hills: altitude<br>Yarra Valley: ocean currents from the south<br>Margaret River: warm, cooling sea breezes<br>Marlborough: cool, sunny, sea breezes, plentiful rainfall<br>Casablanca Valley: Pacific sea breezes, morning fogs<br>Central Valley (Chile): warmer, altitude<br>Walker Bay: strong sea breezes from the south</td><td>Languedoc-Roussillon<br>Central Valley, California<br>South Eastern Australia<br>Central Valley, Chile<br>Western Cape</td></tr>
+<tr><th>Sauvignon Blanc</th><td>Cool, moderate</td><td>Loire (Sancerre, Pouilly-Fumé): cool<br>Languedoc-Roussillon: warm, altitude<br>Marlborough: cool<br>Adelaide Hills: altitude<br>Casablanca Valley: sea breezes, morning fogs<br>Constantia: Southern Ocean sea breezes<br>Elgin: altitude<br>Napa Valley: cooler areas</td><td>Touraine (inexpensive)<br>Central Valley, Chile</td></tr>
+<tr><th>Pinot Grigio/Pinot Gris</th><td>Cool, moderate</td><td>Alsace: Vosges foothills facing east/south-east</td><td>Veneto (delle Venezie DOC, Veneto IGT)</td></tr>
+<tr><th>Gewurztraminer</th><td>Cool, moderate</td><td>—</td><td>—</td></tr>
+<tr><th>Viognier</th><td>Moderate</td><td>—</td><td>—</td></tr>
+<tr><th>Albariño</th><td>Moderate</td><td>Rías Baixas: Atlantic Ocean, cooler, wetter, cloudier</td><td>—</td></tr>
+<tr><th>Merlot</th><td>Moderate, warm</td><td>Bordeaux: Atlantic Ocean, high rainfall<br>Languedoc-Roussillon: warm<br>Central Valley (Chile): warm, dry, altitude<br>Stellenbosch: altitude, sea breezes<br>Hawke's Bay: plentiful rainfall</td><td>Central Valley, Chile<br>California</td></tr>
+<tr><th>Cabernet Sauvignon</th><td>Moderate, warm</td><td>Bordeaux: maritime, heavy rainfall, gravel soils drain and hold heat<br>Languedoc-Roussillon: warm, less variable weather<br>Napa Valley: warm, sunny, long season (Calistoga warmest)<br>Central Valley (California): hot, irrigated<br>Maipo, Colchagua: Andes foothills to Coastal Ranges<br>Stellenbosch: altitude<br>Margaret River: warm, coastal breezes, winter rainfall<br>Coonawarra: cloud cover, cooling southerly breezes<br>Hawke's Bay: moderate, needs warmest sites</td><td>California (Central Valley)</td></tr>
+<tr><th>Syrah/Shiraz</th><td>Moderate, warm</td><td>Northern Rhône: moderate, steep slopes, aspect<br>Languedoc-Roussillon: warm<br>Barossa Valley: warm<br>Hunter Valley: very hot summers, cloud cover, sea breezes</td><td>South Eastern Australia</td></tr>
+<tr><th>Gamay</th><td>Moderate</td><td>Beaujolais: flat, fertile south, sloped north</td><td>Beaujolais AOC</td></tr>
+<tr><th>Grenache/Garnacha</th><td>Warm</td><td>Southern Rhône: warm, southerly latitude, flat valley<br>Châteauneuf-du-Pape: stones absorb and radiate heat<br>Languedoc-Roussillon: warm<br>Priorat: warm, dry<br>Barossa Valley, McLaren Vale: warm</td><td>—</td></tr>
+<tr><th>Tempranillo</th><td>Moderate</td><td>Rioja: moderate<br>Ribera del Duero: high altitude, warm days, cool nights</td><td>Catalunya</td></tr>
+<tr><th>Carmenère</th><td>Warm</td><td>Central Valley (Chile): needs warmest, sunniest sites</td><td>—</td></tr>
+<tr><th>Malbec</th><td>Warm</td><td>Mendoza: high altitude</td><td>—</td></tr>
+<tr><th>Pinotage</th><td>Warm</td><td>Western Cape: warm, dry</td><td>—</td></tr>
+<tr><th>Cortese</th><td>Moderate</td><td>Piemonte: Alpine foothills, mountains to the north</td><td>—</td></tr>
+<tr><th>Garganega</th><td>Moderate</td><td>Veneto: Alpine foothills, river plains</td><td>—</td></tr>
+<tr><th>Verdicchio</th><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Fiano</th><td>—</td><td>Campania: mountainous</td><td>—</td></tr>
+<tr><th>Nebbiolo</th><td>Moderate</td><td>Barolo: steep south-facing slopes</td><td>—</td></tr>
+<tr><th>Barbera</th><td>Moderate</td><td>Piemonte: Alpine foothills, mountains to the north</td><td>—</td></tr>
+<tr><th>Corvina</th><td>Moderate</td><td>Valpolicella Classico: hillier heartland</td><td>—</td></tr>
+<tr><th>Sangiovese</th><td>Warm</td><td>Chianti Classico: higher altitude, long ripening season<br>Montalcino: warm, sunny</td><td>Chianti (inexpensive)</td></tr>
+<tr><th>Montepulciano</th><td>Warm</td><td>Apennine Mountains divide Tuscany from Abruzzo</td><td>Abruzzo</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">Chapters 6–23. High volume = regions the notes name as sources of inexpensive, high-volume wine. Click a column heading to sort; click again to reverse, a third time to restore the original order.</p>
+</details>
+
+<details>
+<summary><h2>Tables</h2></summary>
 
 <h3>Body, Flavours and Aromas</h3>
 <div class="scroll">
 <table class="grid">
 <thead><tr><th>Grape</th><th>Just-ripe grapes</th><th>Ripe grapes</th><th>Extra-ripe grapes</th><th>Age-worthy</th></tr></thead>
 <tr><th>Merlot</th><td>Light–medium body<br>Fresh red fruit (strawberry, red plum)<br>Herbaceous (green bell pepper)</td><td>Medium–full body<br>Cooked black fruit (blackberry, black plum)</td><td>—</td><td>Dried fruit<br>Tobacco</td></tr>
-</table>
-</div>
-
-<h3>Climate and Volume</h3>
-<div class="scroll">
-<table class="grid">
-<thead><tr><th>Grape</th><th>Climate</th><th>Climatic influences</th><th>High volume</th></tr></thead>
-<tr><th>Merlot</th><td>Moderate, warm</td><td>Bordeaux: Atlantic Ocean, high rainfall<br>Chile: altitude<br>Stellenbosch: altitude, sea breezes<br>—</td><td>—<br>Central Valley, Chile<br>—<br>California</td></tr>
 </table>
 </div>
 </details>
@@ -369,6 +511,23 @@ document.querySelectorAll('details>summary').forEach(s=>s.addEventListener('clic
   const open=!s.parentElement.open;
   document.querySelectorAll('details').forEach(d=>d.open=open);
 }));
+// Wide/narrow toggle for tables with a .widen button just before them (choice remembered per browser)
+document.querySelectorAll('button.widen').forEach(b=>{
+  const box=b.parentElement.nextElementSibling;
+  const set=w=>{box.classList.toggle('wide',w);b.setAttribute('aria-pressed',w);b.textContent=w?'Narrow table':'Widen table';};
+  try{const v=localStorage.getItem(b.dataset.key);if(v!==null)set(v==='1');}catch(e){}
+  b.addEventListener('click',()=>{const w=!box.classList.contains('wide');set(w);try{localStorage.setItem(b.dataset.key,w?'1':'0');}catch(e){}});
+});
+// Filter box: hide rows that don't contain the typed text (ignores case and accents)
+const fold=x=>x.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+document.querySelectorAll('input.filter').forEach(f=>{
+  const tb=f.parentElement.nextElementSibling.querySelector('tbody'), count=f.parentElement.querySelector('.count');
+  f.addEventListener('input',()=>{
+    const terms=fold(f.value).split(/\s+/).filter(Boolean); let shown=0;
+    for(const r of tb.rows){const t=fold(r.textContent+' '); const ok=terms.every(w=>t.includes(w)); r.hidden=!ok; if(ok)shown++;}
+    count.textContent=terms.length?`${shown} of ${tb.rows.length}`:'';
+  });
+});
 // Click a sortable table heading to cycle: ascending → descending → original order
 document.querySelectorAll('table.sortable').forEach(t=>{
   const ths=[...t.tHead.rows[0].cells], tb=t.tBodies[0], orig=[...tb.rows];
