@@ -51,6 +51,8 @@ h3.with-btn{display:flex;align-items:center;justify-content:space-between;gap:8p
 h3.with-btn .reveal-all{font-weight:400}
 .quiz tbody tr{cursor:pointer}
 .quiz tbody tr:not(.shown) td:nth-last-child(-n+2){color:transparent;user-select:none}
+.quiz-all tbody tr:not(.shown) td{color:transparent;user-select:none}
+.sortable.quiz-all thead th{white-space:normal;vertical-align:bottom}
 .grid th,.grid td{vertical-align:top}
 .sat tbody th{width:38%}
 .sat th,.sat td{vertical-align:top}
@@ -140,6 +142,36 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <details>
 <summary><h2>Regions</h2></summary>
 
+<h3 class="with-btn">Significant Varieties in Region<button type="button" class="reveal-all">Show all</button></h3>
+<div class="tools"><button type="button" class="widen" data-key="varietiesWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter varieties"><span class="count"></span></div>
+<div class="scroll">
+<table class="grid sortable quiz quiz-all">
+<thead><tr><th>Region</th><th>Most Planted Variety</th><th>Most Important Variety</th><th>Only Variety Allowed</th><th>Exclusive to</th></tr></thead>
+<tbody>
+<tr><th>Adelaide Hills</th><td>Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Argentina</th><td>—</td><td>Malbec (black)</td><td>—</td><td>—</td></tr>
+<tr><th>Australia</th><td>Shiraz</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Barolo DOCG</th><td>—</td><td>—</td><td>Nebbiolo</td><td>—</td></tr>
+<tr><th>Beaujolais</th><td>—</td><td>—</td><td>—</td><td>Gamay (almost)</td></tr>
+<tr><th>Bordeaux</th><td>Merlot</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Bordeaux Right Bank</th><td>—</td><td>Merlot</td><td>—</td><td>—</td></tr>
+<tr><th>Chile</th><td>Cabernet Sauvignon</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Germany</th><td>—</td><td>Riesling</td><td>—</td><td>—</td></tr>
+<tr><th>Hawke's Bay</th><td>Chardonnay (white)</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Northern Rhône</th><td>—</td><td>—</td><td>Syrah</td><td>—</td></tr>
+<tr><th>Pouilly-Fumé AOC</th><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
+<tr><th>Sancerre AOC</th><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
+<tr><th>Sauternes</th><td>—</td><td>Semillon</td><td>—</td><td>—</td></tr>
+<tr><th>Soave</th><td>—</td><td>Garganega</td><td>—</td><td>—</td></tr>
+<tr><th>South Africa</th><td>Chenin Blanc (white)</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Tokaj</th><td>Furmint</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><th>Valpolicella</th><td>—</td><td>Corvina</td><td>—</td><td>—</td></tr>
+<tr><th>Vouvray AOC</th><td>—</td><td>—</td><td>Chenin Blanc</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Regions by Variety</h3>
 <div class="tools"><button type="button" class="widen" data-key="regionsWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter regions"><span class="count"></span></div>
 <div class="scroll">
 <table class="grid sortable">
@@ -419,29 +451,6 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 
 <details>
 <summary><h2>Tables</h2></summary>
-
-<h3 class="with-btn">Most Planted and Most Important Varieties<button type="button" class="reveal-all">Show all</button></h3>
-<div class="tools"><input type="search" class="filter" placeholder="Filter…" aria-label="Filter varieties"><span class="count"></span></div>
-<div class="scroll">
-<table class="grid sortable quiz">
-<thead><tr><th>Region</th><th>Most Planted Variety</th><th>Most Important Variety</th></tr></thead>
-<tbody>
-<tr><th>Adelaide Hills</th><td>Sauvignon Blanc</td><td>—</td></tr>
-<tr><th>Argentina</th><td>—</td><td>Malbec (black)</td></tr>
-<tr><th>Australia</th><td>Shiraz</td><td>—</td></tr>
-<tr><th>Bordeaux</th><td>Merlot</td><td>—</td></tr>
-<tr><th>Bordeaux Right Bank</th><td>—</td><td>Merlot</td></tr>
-<tr><th>Chile</th><td>Cabernet Sauvignon</td><td>—</td></tr>
-<tr><th>Germany</th><td>—</td><td>Riesling</td></tr>
-<tr><th>Hawke's Bay</th><td>Chardonnay (white)</td><td>—</td></tr>
-<tr><th>Sauternes</th><td>—</td><td>Semillon</td></tr>
-<tr><th>Soave</th><td>—</td><td>Garganega</td></tr>
-<tr><th>South Africa</th><td>Chenin Blanc (white)</td><td>—</td></tr>
-<tr><th>Tokaj</th><td>Furmint</td><td>—</td></tr>
-<tr><th>Valpolicella</th><td>—</td><td>Corvina</td></tr>
-</tbody>
-</table>
-</div>
 
 <h3>Body, Flavours and Aromas</h3>
 <div class="scroll">
