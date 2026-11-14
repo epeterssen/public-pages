@@ -420,6 +420,29 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <details>
 <summary><h2>Tables</h2></summary>
 
+<h3 class="with-btn">Most Planted and Most Important Varieties<button type="button" class="reveal-all">Show all</button></h3>
+<div class="tools"><input type="search" class="filter" placeholder="Filter…" aria-label="Filter varieties"><span class="count"></span></div>
+<div class="scroll">
+<table class="grid sortable quiz">
+<thead><tr><th>Region</th><th>Most Planted Variety</th><th>Most Important Variety</th></tr></thead>
+<tbody>
+<tr><th>Adelaide Hills</th><td>Sauvignon Blanc</td><td>—</td></tr>
+<tr><th>Argentina</th><td>—</td><td>Malbec (black)</td></tr>
+<tr><th>Australia</th><td>Shiraz</td><td>—</td></tr>
+<tr><th>Bordeaux</th><td>Merlot</td><td>—</td></tr>
+<tr><th>Bordeaux Right Bank</th><td>—</td><td>Merlot</td></tr>
+<tr><th>Chile</th><td>Cabernet Sauvignon</td><td>—</td></tr>
+<tr><th>Germany</th><td>—</td><td>Riesling</td></tr>
+<tr><th>Hawke's Bay</th><td>Chardonnay (white)</td><td>—</td></tr>
+<tr><th>Sauternes</th><td>—</td><td>Semillon</td></tr>
+<tr><th>Soave</th><td>—</td><td>Garganega</td></tr>
+<tr><th>South Africa</th><td>Chenin Blanc (white)</td><td>—</td></tr>
+<tr><th>Tokaj</th><td>Furmint</td><td>—</td></tr>
+<tr><th>Valpolicella</th><td>—</td><td>Corvina</td></tr>
+</tbody>
+</table>
+</div>
+
 <h3>Body, Flavours and Aromas</h3>
 <div class="scroll">
 <table class="grid">
@@ -563,7 +586,9 @@ document.querySelectorAll('input.filter').forEach(f=>{
 });
 // Quiz tables: last two cells hidden until the row is clicked; button shows/hides all
 document.querySelectorAll('table.quiz').forEach(t=>{
-  const rows=[...t.tBodies[0].rows], b=t.previousElementSibling.querySelector('.reveal-all');
+  // Button is in the nearest preceding heading (table may sit inside .scroll after a .tools bar)
+  let p=t.closest('.scroll')||t; do p=p.previousElementSibling; while(p&&!p.querySelector('.reveal-all'));
+  const rows=[...t.tBodies[0].rows], b=p.querySelector('.reveal-all');
   const sync=()=>{b.textContent=rows.every(r=>r.classList.contains('shown'))?'Hide all':'Show all';};
   rows.forEach(r=>r.addEventListener('click',()=>{r.classList.toggle('shown');sync();}));
   b.addEventListener('click',()=>{const show=b.textContent==='Show all';rows.forEach(r=>r.classList.toggle('shown',show));sync();});

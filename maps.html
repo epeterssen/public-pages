@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WSET2 Maps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1; --accent:#7a1f3d;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.back{color:var(--accent);text-decoration:none;font-size:.9rem}
+h1{font-family:var(--display);font-weight:400;font-size:1.8rem;line-height:1.2;margin:12px 0 4px}
+h2{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:24px 0 8px;color:var(--accent)}
+h3{font-size:1rem;margin:16px 0 8px}
+summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:1.1rem;line-height:1;color:var(--accent);transition:transform .15s;margin-top:16px}
+details[open]>summary::before{transform:rotate(90deg)}
+summary h2,summary h3{display:inline}
+summary h3{color:var(--accent)}
+details details{margin-left:24px}
+details details>summary::before{font-size:.9rem;margin-top:8px}
+.tools{display:flex;align-items:center;gap:8px;margin:16px 0 0}
+.filter{font:inherit;font-size:.85rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 10px;flex:1 1 160px;max-width:280px}
+.filter:focus{outline:none;border-color:var(--accent)}
+.count{font-size:.8rem;color:var(--muted)}
+figure{margin:12px 0 0}
+figure a{display:block}
+figure img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+figcaption{color:var(--muted);font-size:.85rem;margin-top:6px}
+/* Full-size viewer */
+dialog.zoom{padding:0;border:0;background:transparent;max-width:none;max-height:none;width:100vw;height:100dvh;overflow:auto}
+dialog.zoom::backdrop{background:rgba(0,0,0,.85)}
+dialog.zoom img{display:block;max-width:none;margin:auto;cursor:zoom-out}
+dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.6);color:#fff;font-size:1.5rem;line-height:1;cursor:pointer}
+</style>
+</head>
+<body>
+<main class="wrap">
+<a class="back" href="index.html">← WSET2 Study</a>
+
+<h1>Maps</h1>
+<div class="tools"><input type="search" class="filter" placeholder="Filter sections…" aria-label="Filter sections"><span class="count"></span></div>
+
+<details>
+<summary><h2>USA</h2></summary>
+
+<details>
+<summary><h3>California</h3></summary>
+
+<details>
+<summary><h3>Napa Valley</h3></summary>
+<figure>
+<a href="images/napa-valley-avas.png" class="zoomable"><img src="images/napa-valley-avas.png" alt="Map of Napa Valley AVAs, California: Calistoga, Howell Mountain, Diamond Mountain District, Spring Mountain District, St. Helena, Rutherford, Oakville, Yountville, Stags Leap District, Mt. Veeder, Oak Knoll District, Atlas Peak, Chiles Valley, Coombsville, Wild Horse Valley and Los Carneros" loading="lazy"></a>
+<figcaption>Napa Valley AVAs. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+</details>
+
+<details>
+<summary><h3>Sonoma County</h3></summary>
+<figure>
+<a href="images/sonoma-county-avas.png" class="zoomable"><img src="images/sonoma-county-avas.png" alt="Map of Sonoma County AVAs, California: Sonoma Coast, West Sonoma Coast, Fort Ross-Seaview, Northern Sonoma, Rockpile, Dry Creek Valley, Alexander Valley, Pine Mountain-Cloverdale Peak, Knights Valley, Chalk Hill, Russian River Valley, Green Valley of RRV, Fountaingrove District, Sonoma Valley, Bennett Valley, Sonoma Mountain, Moon Mountain District, Petaluma Gap and Carneros" loading="lazy"></a>
+<figcaption>Sonoma County AVAs. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+</details>
+
+</details>
+
+<details>
+<summary><h3>Oregon</h3></summary>
+<figure>
+<a href="images/oregon-avas.png" class="zoomable"><img src="images/oregon-avas.png" alt="Map of Oregon AVAs: Willamette Valley (with Tualatin Hills, Laurelwood District, Yamhill-Carlton, Ribbon Ridge, Dundee Hills, Chehalem Mountains, McMinnville, Van Duzer Corridor, Eola-Amity Hills, Mount Pisgah and Lower Long Tom), Columbia Gorge, Columbia Valley, Walla Walla Valley, The Rocks District of Milton-Freewater, Snake River Valley, Southern Oregon, Umpqua Valley, Elkton Oregon, Red Hill Douglas County, Rogue Valley and Applegate Valley" loading="lazy"></a>
+<figcaption>Oregon AVAs. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+</details>
+
+</details>
+</main>
+<dialog class="zoom" aria-label="Full-size map"><button type="button" class="close" aria-label="Close">×</button><img alt=""></dialog>
+<script>
+// Alt-click any section heading to expand/collapse all sections
+document.querySelectorAll('details>summary').forEach(s=>s.addEventListener('click',e=>{
+  if(!e.altKey)return;
+  e.preventDefault();
+  const open=!s.parentElement.open;
+  document.querySelectorAll('details').forEach(d=>d.open=open);
+}));
+// Section filter: shows sections whose name matches (with everything inside them),
+// plus the parent sections on the way down, opened (ignores case and accents)
+const fold=x=>x.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const filter=document.querySelector('input.filter'), count=document.querySelector('.tools .count');
+const kids=d=>[...d.children].filter(c=>c.tagName==='DETAILS');
+const tops=[...document.querySelectorAll('main>details')];
+const all=[...document.querySelectorAll('main details')];
+let saved=null; // open/closed state from before filtering, restored when the filter is cleared
+filter.addEventListener('input',()=>{
+  const terms=fold(filter.value).split(/\s+/).filter(Boolean);
+  if(terms.length&&!saved)saved=all.map(d=>d.open);
+  if(!terms.length&&saved){all.forEach((d,i)=>{d.open=saved[i];d.hidden=false;});saved=null;count.textContent='';return;}
+  let hits=0;
+  const walk=(d,inherited)=>{
+    const own=terms.length>0&&terms.every(w=>fold(d.querySelector(':scope>summary').textContent).includes(w));
+    if(own)hits++;
+    let below=false;
+    for(const k of kids(d))below=walk(k,inherited||own)||below;
+    const show=!terms.length||inherited||own||below;
+    d.hidden=!show;
+    if(terms.length&&(own||below))d.open=true;
+    return own||below;
+  };
+  tops.forEach(d=>walk(d,false));
+  count.textContent=terms.length?`${hits} match${hits===1?'':'es'}`:'';
+});
+// Full-size viewer: opens in-page; close with ×, Escape, or a click on the map or backdrop
+const dlg=document.querySelector('dialog.zoom'), big=dlg.querySelector('img');
+document.querySelectorAll('a.zoomable').forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();
+  const img=a.querySelector('img');
+  big.src=a.href; big.alt=img.alt;
+  dlg.showModal(); dlg.scrollTo(0,0);
+}));
+dlg.addEventListener('click',()=>dlg.close());
+</script>
+</body>
+</html>
