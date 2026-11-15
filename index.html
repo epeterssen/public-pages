@@ -18,10 +18,13 @@
 :root[data-theme="dark"]{
   --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b; --accent:#e08aa6; color-scheme:dark}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
-.wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.wrap{max-width:960px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
 header{display:flex;align-items:center;gap:12px}
 h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0}
 .sub{color:var(--muted);margin:2px 0 0;font-size:.9rem}
+.cols{display:grid;gap:18px;align-items:start}
+@media (min-width:700px){.cols{grid-template-columns:1fr 1fr}}
+.col{display:flex;flex-direction:column;gap:18px}
 .link{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;color:var(--fg);text-decoration:none}
 .link:hover,.link:focus-visible{border-color:var(--accent)}
 .link b{font-family:var(--display);font-weight:400;font-size:1.3rem;display:block;color:var(--accent)}
@@ -41,7 +44,7 @@ body.open .panel{transform:none}
 body.open .scrim{opacity:1;pointer-events:auto}
 @media (min-width:1000px){
   body.open .scrim{opacity:0;pointer-events:none}
-  body.open .wrap{margin-left:calc(var(--panel) + max(24px, (100vw - var(--panel) - 640px) / 2))}
+  body.open .wrap{margin-left:calc(var(--panel) + max(24px, (100vw - var(--panel) - 960px) / 2))}
 }
 </style>
 </head>
@@ -69,21 +72,16 @@ body.open .scrim{opacity:1;pointer-events:auto}
     <button class="toggle" type="button" data-toggle aria-controls="panel" aria-expanded="false" aria-label="Open resources panel">☰</button>
     <h1>WSET2 Study</h1>
   </header>
-  <a class="link" href="wset2-book-text-question-bank.html">
-    <b>Chapter Review</b>
-    <span class="sub">All 25 chapters, from the book.</span>
+  <div class="cols">
+  <!-- Column 1: reference material -->
+  <div class="col">
+  <a class="link" href="regions.html">
+    <b>Regions and Varieties</b>
+    <span class="sub">Region and variety tables.</span>
   </a>
   <a class="link" href="wset2-temperatures-question-bank.html">
     <b>Temperatures and Percentages</b>
     <span class="sub">Serving, fermentation, climate and alcohol levels.</span>
-  </a>
-  <a class="link" href="wset2-fine-vintage-question-bank.html">
-    <b>Fine Vintage Questions</b>
-    <span class="sub">165 practice questions, 2025.</span>
-  </a>
-  <a class="link" href="wset-level-2-derek-drills.html">
-    <b>Derek's Drills</b>
-    <span class="sub">WSET Level 2 Drills, from Derek.</span>
   </a>
   <a class="link" href="maps.html">
     <b>Maps</b>
@@ -94,6 +92,23 @@ body.open .scrim{opacity:1;pointer-events:auto}
     <b>Reference and Visualizations</b>
     <span class="sub">Study reference.</span>
   </a>
+  </div>
+  <!-- Column 2: questions and drills -->
+  <div class="col">
+  <a class="link" href="wset2-book-text-question-bank.html">
+    <b>Chapter Review</b>
+    <span class="sub">All 25 chapters, from the book.</span>
+  </a>
+  <a class="link" href="wset2-fine-vintage-question-bank.html">
+    <b>Fine Vintage Questions</b>
+    <span class="sub">165 practice questions, 2025.</span>
+  </a>
+  <a class="link" href="wset-level-2-derek-drills.html">
+    <b>Derek's Drills</b>
+    <span class="sub">WSET Level 2 Drills, from Derek.</span>
+  </a>
+  </div>
+  </div>
 </main>
 <script>
 const opener=document.querySelector('header [data-toggle]');
