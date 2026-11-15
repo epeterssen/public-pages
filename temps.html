@@ -52,6 +52,7 @@ h3.with-btn{display:flex;align-items:center;justify-content:space-between;gap:8p
 h3.with-btn .reveal-all{font-weight:400}
 .quiz tbody tr{cursor:pointer}
 .quiz tbody tr:not(.shown) td:nth-last-child(-n+2){color:transparent;user-select:none}
+.staged tbody tr.half td:nth-last-child(2){color:inherit;user-select:auto}
 .quiz-all tbody tr:not(.shown) td{color:transparent;user-select:none}
 .sortable.quiz-all thead th{white-space:normal;vertical-align:bottom}
 .grid th,.grid td{vertical-align:top}
@@ -103,7 +104,7 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 </details>
 
 <details>
-<summary><h2>Environmental Temperatures</h2></summary>
+<summary><h2>Average Growing Season Temperature</h2></summary>
 <div class="tools"><button type="button" class="reveal-all">Show all</button></div>
 <table class="temps quiz">
 <thead><tr><th>Climate</th><th>°C</th><th>°F</th></tr></thead>
@@ -113,13 +114,13 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <tr><th>Warm</th><td>18.5–21.0</td><td>65–70</td></tr>
 </tbody>
 </table>
-<p class="note">Average growing season temperature. Chapter 4.</p>
+<p class="note">Chapter 4.</p>
 </details>
 
 <details>
 <summary><h2>Alcohol Levels</h2></summary>
 <div class="tools"><button type="button" class="reveal-all">Show all</button></div>
-<table class="temps quiz">
+<table class="temps quiz staged">
 <thead><tr><th>Level</th><th>Wine (% abv)</th><th>Fortified (% abv)</th></tr></thead>
 <tbody>
 <tr><th>Low</th><td>&lt; 11</td><td>15–16.4</td></tr>
@@ -162,8 +163,16 @@ document.querySelectorAll('table.quiz').forEach(t=>{
   let p=t.closest('.scroll')||t; do p=p.previousElementSibling; while(p&&!p.querySelector('.reveal-all'));
   const rows=[...t.tBodies[0].rows], b=p.querySelector('.reveal-all');
   const sync=()=>{b.textContent=rows.every(r=>r.classList.contains('shown'))?'Hide all':'Show all';};
-  rows.forEach(r=>r.addEventListener('click',()=>{r.classList.toggle('shown');sync();}));
-  b.addEventListener('click',()=>{const show=b.textContent==='Show all';rows.forEach(r=>r.classList.toggle('shown',show));sync();});
+  // Staged tables: click 1 shows the first answer column, click 2 shows both, click 3 hides
+  const staged=t.classList.contains('staged');
+  rows.forEach(r=>r.addEventListener('click',()=>{
+    if(!staged)r.classList.toggle('shown');
+    else if(r.classList.contains('shown'))r.classList.remove('shown');
+    else if(r.classList.contains('half'))r.classList.replace('half','shown');
+    else r.classList.add('half');
+    sync();
+  }));
+  b.addEventListener('click',()=>{const show=b.textContent==='Show all';rows.forEach(r=>{r.classList.remove('half');r.classList.toggle('shown',show);});sync();});
 });
 // Click a sortable table heading to cycle: ascending → descending → original order
 document.querySelectorAll('table.sortable').forEach(t=>{
