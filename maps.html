@@ -22,6 +22,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-
 h1{font-family:var(--display);font-weight:400;font-size:1.8rem;line-height:1.2;margin:12px 0 4px}
 h2{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:24px 0 8px;color:var(--accent)}
 h3{font-size:1rem;margin:16px 0 8px}
+h3.submap{color:var(--accent);margin-top:24px}
 summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
 summary::-webkit-details-marker{display:none}
 summary::before{content:"▶";font-size:1.1rem;line-height:1;color:var(--accent);transition:transform .15s;margin-top:16px}
@@ -34,6 +35,11 @@ details details>summary::before{font-size:.9rem;margin-top:8px}
 .filter{font:inherit;font-size:.85rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 10px;flex:1 1 160px;max-width:280px}
 .filter:focus{outline:none;border-color:var(--accent)}
 .count{font-size:.8rem;color:var(--muted)}
+.book{margin:6px 0 0;display:flex;flex-direction:column;gap:2px}
+.book .grapes{font-weight:600;color:var(--accent);color:color-mix(in srgb,var(--fg) 50%,var(--accent))}
+.book .regions{font-size:.85rem;color:var(--muted);list-style:none;margin:0;padding:0}
+.book .regions li{margin:1px 0}
+.book .regions .group{color:var(--fg);font-weight:600}
 figure{margin:12px 0 0}
 figure>a{display:block}
 figcaption a{color:var(--accent)}
@@ -58,6 +64,7 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 
 <details>
 <summary><h3>Australia</h3></summary>
+<div class="book"><span class="grapes">Shiraz, Cabernet Sauvignon, Grenache, Merlot, Pinot Noir, Chardonnay, Riesling, Semillon, Sauvignon Blanc</span><ul class="regions"><li><span class="group">South Australia</span>: Barossa Valley (Shiraz, Grenache, Semillon), Eden Valley (Riesling), Clare Valley (Riesling), Adelaide Hills (Chardonnay, Sauvignon Blanc), McLaren Vale (Grenache), Coonawarra (Cabernet Sauvignon)</li><li><span class="group">Victoria</span>: Yarra Valley (Pinot Noir, Chardonnay), Mornington Peninsula (Pinot Noir)</li><li><span class="group">New South Wales</span>: Hunter Valley (Semillon, Shiraz)</li><li><span class="group">Western Australia</span>: Margaret River (Chardonnay, Sauvignon Blanc, Cabernet Sauvignon, Merlot)</li><li><span class="group">South Eastern Australia</span> (Chardonnay, Shiraz)</li></ul></div>
 <figure>
 <a href="images/australia-regions.png" class="zoomable"><img src="images/australia-regions.png" alt="Map of the wine regions of Australia by state: Western Australia (Margaret River, Great Southern), South Australia (Clare Valley, Barossa Valley, Eden Valley, Adelaide Hills, McLaren Vale, Coonawarra), Queensland, New South Wales (Hunter, Riverina), Victoria (Yarra Valley, Mornington Peninsula, Heathcote) and Tasmania, plus the South Eastern Australia zone" loading="lazy"></a>
 <figcaption>Wine regions of Australia. Map: <a href="https://www.wineaustralia.com/" target="_blank" rel="noopener">Wine Australia</a>. Click to enlarge.</figcaption>
@@ -78,15 +85,68 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 </details>
 
 <details>
+<summary><h3>Burgundy</h3></summary>
+<div class="book"><span class="grapes">Pinot Noir, Chardonnay</span><ul class="regions"><li>Bourgogne AOC (Pinot Noir, Chardonnay)</li><li><span class="group">Chablis</span>: Chablis AOC (Chardonnay)</li><li><span class="group">Côte de Nuits</span>: Gevrey-Chambertin AOC (Pinot Noir), Nuits-Saint-Georges AOC (Pinot Noir)</li><li><span class="group">Côte de Beaune</span>: Beaune AOC (Pinot Noir), Pommard AOC (Pinot Noir), Meursault AOC (Chardonnay), Puligny-Montrachet AOC (Chardonnay)</li><li><span class="group">Mâconnais</span>: Mâcon AOC (Chardonnay), Pouilly-Fuissé AOC (Chardonnay)</li></ul></div>
+<figure>
+<a href="images/burgundy.png" class="zoomable"><img src="images/burgundy.png" alt="Map of Burgundy geographic designations, France: Côte d'Or, Hautes Côtes de Nuits, Hautes Côtes de Beaune, Côtes du Couchois, Côte Chalonnaise and Mâcon, with an inset of Chablis, Petit Chablis, Saint-Bris, Irancy, Tonnerre, Épineuil and Vézelay" loading="lazy"></a>
+<figcaption>Burgundy geographic designations. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+
+<h3 class="submap">Chablis</h3>
+<div class="book"><span class="grapes">Chardonnay</span><ul class="regions"><li>Chablis AOC (Chardonnay)</li><li>Chablis Premier Cru (Chardonnay)</li><li>Chablis Grand Cru (Chardonnay)</li></ul></div>
+<figure>
+<a href="images/chablis.png" class="zoomable"><img src="images/chablis.png" alt="Map of Chablis grands and premiers crus, Burgundy, France: Chablis Grand Cru (Bougros, Preuses, Vaudésir, Grenouilles, Valmur, Les Clos, Blanchot), premiers crus including Fourchaume, Montée de Tonnerre, Vaillons and Montmains, plus Chablis and Petit Chablis" loading="lazy"></a>
+<figcaption>Chablis grands and premiers crus. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+
+<h3 class="submap">Côte d'Or and Chablis</h3>
+<div class="book"><span class="grapes">Pinot Noir, Chardonnay</span><ul class="regions"><li><span class="group">Côte de Nuits</span>: Gevrey-Chambertin AOC (Pinot Noir), Nuits-Saint-Georges AOC (Pinot Noir)</li><li><span class="group">Côte de Beaune</span>: Beaune AOC (Pinot Noir), Pommard AOC (Pinot Noir), Meursault AOC (Chardonnay), Puligny-Montrachet AOC (Chardonnay)</li><li><span class="group">Chablis</span>: Chablis AOC (Chardonnay)</li></ul></div>
+<figure>
+<a href="images/cote-dor-chablis.png" class="zoomable"><img src="images/cote-dor-chablis.png" alt="Map of Côte d'Or and Chablis regions and villages, Burgundy, France: Côte de Nuits (Marsannay-la-Côte to Nuits-Saint-Georges) and Côte de Beaune (Pernand-Vergelesses to Santenay), with an inset of Chablis Grand Cru, Chablis, Petit Chablis, Saint-Bris and Irancy" loading="lazy"></a>
+<figcaption>Côte d'Or and Chablis regions and villages. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+
+<h3 class="submap">Côte de Nuits</h3>
+<div class="book"><span class="grapes">Pinot Noir</span><ul class="regions"><li><span class="group">Côte de Nuits</span>: Gevrey-Chambertin AOC (Pinot Noir), Nuits-Saint-Georges AOC (Pinot Noir)</li></ul></div>
+<figure>
+<a href="images/cote-de-nuits.png" class="zoomable"><img src="images/cote-de-nuits.png" alt="Map of Côte de Nuits crus and communes, Burgundy, France: Marsannay, Fixin, Gevrey-Chambertin, Morey-Saint-Denis, Chambolle-Musigny, Vougeot, Vosne-Romanée, Nuits-Saint-Georges and Côte de Nuits-Villages, showing grand cru and premier cru vineyards" loading="lazy"></a>
+<figcaption>Côte de Nuits crus and communes. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+
+<h3 class="submap">Côte de Beaune</h3>
+<div class="book"><span class="grapes">Pinot Noir, Chardonnay</span><ul class="regions"><li><span class="group">Côte de Beaune</span>: Beaune AOC (Pinot Noir), Pommard AOC (Pinot Noir), Meursault AOC (Chardonnay), Puligny-Montrachet AOC (Chardonnay)</li></ul></div>
+<figure>
+<a href="images/cote-de-beaune.png" class="zoomable"><img src="images/cote-de-beaune.png" alt="Map of Côte de Beaune crus and communes, Burgundy, France: Ladoix, Pernand-Vergelesses, Aloxe-Corton, Savigny-lès-Beaune, Chorey-lès-Beaune, Beaune, Pommard, Volnay, Monthélie, Auxey-Duresses, Saint-Romain, Meursault, Blagny, Saint-Aubin, Puligny-Montrachet, Chassagne-Montrachet, Santenay and Maranges, with insets of the Corton and Montrachet grand crus" loading="lazy"></a>
+<figcaption>Côte de Beaune crus and communes. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+
+<h3 class="submap">Beaujolais</h3>
+<div class="book"><span class="grapes">Gamay</span><ul class="regions"><li>Beaujolais AOC (Gamay)</li><li>Beaujolais Villages AOC (Gamay)</li><li><span class="group">Beaujolais crus</span>: Fleurie AOC (Gamay)</li></ul></div>
+<figure>
+<a href="images/beaujolais.png" class="zoomable"><img src="images/beaujolais.png" alt="Map of Beaujolais crus and villages, Burgundy, France: Saint-Amour, Juliénas, Chénas, Moulin-à-Vent, Fleurie, Chiroubles, Morgon, Régnié, Côte de Brouilly, Brouilly, Beaujolais Villages and Beaujolais" loading="lazy"></a>
+<figcaption>Beaujolais crus and villages. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+</details>
+
+<details>
 <summary><h3>Northern Rhône Valley</h3></summary>
+<div class="book"><span class="grapes">Syrah, Viognier</span><ul class="regions"><li>Côte Rôtie AOC (Syrah)</li><li>Condrieu AOC (Viognier)</li><li>Hermitage AOC (Syrah)</li><li>Crozes-Hermitage AOC (Syrah)</li></ul></div>
 <figure>
 <a href="images/northern-rhone-valley.png" class="zoomable"><img src="images/northern-rhone-valley.png" alt="Map of Northern Rhône Valley appellations, France: Côte-Rôtie, Condrieu, Château-Grillet, Saint-Joseph, Hermitage, Crozes-Hermitage, Cornas and Saint-Péray, with an inset of Crémant de Die, Coteaux de Die, Clairette de Die and Châtillon-en-Diois" loading="lazy"></a>
 <figcaption>Northern Rhône Valley appellations. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+
+<h3 class="submap">Côte-Rôtie</h3>
+<div class="book"><span class="grapes">Syrah</span><ul class="regions"><li>Côte Rôtie AOC (Syrah): far north of Northern Rhône, northern limit of where Syrah will successfully ripen; steep, stony slopes produce complex and peppery Syrah</li></ul></div>
+<figure>
+<a href="images/cote-rotie.png" class="zoomable"><img src="images/cote-rotie.png" alt="Map of Côte-Rôtie lieux-dits, Rhône Valley, France, between Tupin-Semons, Ampuis and Saint-Cyr-sur-Rhône along the Rhône" loading="lazy"></a>
+<figcaption>Côte-Rôtie lieux-dits. Map: SommGeo / GSI. Click to enlarge.</figcaption>
 </figure>
 </details>
 
 <details>
 <summary><h3>Southern Rhône Valley</h3></summary>
+<div class="book"><span class="grapes">Grenache, Syrah</span><ul class="regions"><li>Côtes du Rhône AOC (Grenache)</li><li>Côtes du Rhône Villages AOC (Grenache)</li><li>Châteauneuf-du-Pape AOC (Grenache)</li></ul></div>
 <figure>
 <a href="images/southern-rhone-valley.png" class="zoomable"><img src="images/southern-rhone-valley.png" alt="Map of Southern Rhône Valley appellations, France: Châteauneuf-du-Pape, Gigondas, Vacqueyras, Rasteau, Cairanne, Vinsobres, Beaumes-de-Venise, Lirac, Tavel, Côtes du Rhône, Côtes du Rhône-Villages, Grignan-les-Adhémar, Côtes du Vivarais, Duché d'Uzès, Costières de Nîmes, Clairette de Bellegarde, Ventoux and Luberon" loading="lazy"></a>
 <figcaption>Southern Rhône Valley appellations. Map: SommGeo / GSI. Click to enlarge.</figcaption>
@@ -108,6 +168,7 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 
 <details>
 <summary><h3>Northern Italy</h3></summary>
+<div class="book"><span class="grapes">Nebbiolo, Barbera, Corvina, Cortese, Garganega, Pinot Grigio, Glera, Moscato</span><ul class="regions"><li><span class="group">Piemonte</span>: Barolo DOCG (Nebbiolo), Barbaresco DOCG (Nebbiolo), Barbera d'Asti DOCG (Barbera), Gavi DOCG (Cortese), Asti DOCG (Moscato)</li><li><span class="group">Veneto</span>: Valpolicella DOC (Corvina), Valpolicella DOC Classico (Corvina), Amarone della Valpolicella DOCG (Corvina), Recioto della Valpolicella DOCG (Corvina), Soave DOC (Garganega), Soave DOC Classico (Garganega), Recioto di Soave DOCG (Garganega), Prosecco DOC (Glera), delle Venezie DOC (Pinot Grigio), Veneto IGT (Pinot Grigio)</li><li><span class="group">Friuli-Venezia Giulia</span> (Pinot Grigio)</li></ul></div>
 <figure>
 <a href="images/northern-italy-docg.png" class="zoomable"><img src="images/northern-italy-docg.png" alt="Map of Northern Italy DOCG regions: Barolo, Barbaresco, Barbera d'Asti, Gavi, Asti, Roero, Gattinara and Ghemme in Piedmont; Franciacorta and Valtellina in Lombardy; Amarone and Recioto della Valpolicella, Soave Superiore, Recioto di Soave, Bardolino Superiore and Conegliano Valdobbiadene Prosecco in Veneto; Colli Orientali del Friuli Picolit and Ramandolo in Friuli; Romagna Albana in Emilia-Romagna" loading="lazy"></a>
 <figcaption>Northern Italy DOCG regions. Map: SommGeo / GSI. Click to enlarge.</figcaption>
@@ -116,6 +177,7 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 
 <details>
 <summary><h3>Central Italy</h3></summary>
+<div class="book"><span class="grapes">Sangiovese, Verdicchio</span><ul class="regions"><li><span class="group">Tuscany</span>: Chianti DOCG (Sangiovese), Chianti Classico DOCG (Sangiovese), Brunello di Montalcino DOCG (Sangiovese)</li><li><span class="group">Marche</span>: Verdicchio dei Castelli di Jesi DOC (Verdicchio)</li></ul></div>
 <figure>
 <a href="images/central-italy-docg.png" class="zoomable"><img src="images/central-italy-docg.png" alt="Map of Central Italy DOCG regions: Chianti, Chianti Classico, Brunello di Montalcino, Vino Nobile di Montepulciano, Carmignano, Vernaccia di San Gimignano, Morellino di Scansano, Montecucco Sangiovese, Suvereto, Val di Cornia Rosso and Elba Aleatico Passito in Tuscany; Montefalco Sagrantino and Torgiano Rosso Riserva in Umbria; Castelli di Jesi Verdicchio Riserva, Verdicchio di Matelica Riserva, Vernaccia di Serrapetrona, Cònero and Offida in Marche; Frascati Superiore, Cannellino di Frascati and Cesanese del Piglio in Lazio" loading="lazy"></a>
 <figcaption>Central Italy DOCG regions. Map: SommGeo / GSI. Click to enlarge.</figcaption>
@@ -124,6 +186,7 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 
 <details>
 <summary><h3>Southern Italy</h3></summary>
+<div class="book"><span class="grapes">Montepulciano, Fiano, Primitivo</span><ul class="regions"><li><span class="group">Abruzzo</span>: Montepulciano d'Abruzzo DOC (Montepulciano)</li><li><span class="group">Campania</span>: Fiano di Avellino DOCG (Fiano)</li><li><span class="group">Puglia</span> (Primitivo)</li></ul></div>
 <figure>
 <a href="images/southern-italy-docg.png" class="zoomable"><img src="images/southern-italy-docg.png" alt="Map of Southern Italy DOCG regions: Montepulciano d'Abruzzo Colline Teramane, Terre Tollesi and Casauria in Abruzzo; Aglianico del Taburno, Greco di Tufo, Taurasi and Fiano di Avellino in Campania; Castel del Monte and Primitivo di Manduria Dolce Naturale in Puglia; Aglianico del Vulture Superiore in Basilicata; Cirò Classico in Calabria; Cerasuolo di Vittoria in Sicily; Vermentino di Gallura in Sardinia" loading="lazy"></a>
 <figcaption>Southern Italy DOCG regions. Map: SommGeo / GSI. Click to enlarge.</figcaption>
@@ -140,6 +203,7 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 
 <details>
 <summary><h3>Napa Valley</h3></summary>
+<div class="book"><span class="grapes">Cabernet Sauvignon, Merlot, Sauvignon Blanc, Pinot Noir, Chardonnay</span><ul class="regions"><li><span class="group">Napa Valley</span> (Cabernet Sauvignon, Merlot, Sauvignon Blanc): Oakville (Cabernet Sauvignon), Rutherford (Cabernet Sauvignon), Calistoga (Cabernet Sauvignon)</li><li><span class="group">Los Carneros</span> (Pinot Noir, Chardonnay)</li></ul></div>
 <figure>
 <a href="images/napa-valley-avas.png" class="zoomable"><img src="images/napa-valley-avas.png" alt="Map of Napa Valley AVAs, California: Calistoga, Howell Mountain, Diamond Mountain District, Spring Mountain District, St. Helena, Rutherford, Oakville, Yountville, Stags Leap District, Mt. Veeder, Oak Knoll District, Atlas Peak, Chiles Valley, Coombsville, Wild Horse Valley and Los Carneros" loading="lazy"></a>
 <figcaption>Napa Valley AVAs. Map: SommGeo / GSI. Click to enlarge.</figcaption>
@@ -148,6 +212,7 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 
 <details>
 <summary><h3>Sonoma County</h3></summary>
+<div class="book"><span class="grapes">Cabernet Sauvignon, Merlot, Pinot Noir, Chardonnay</span><ul class="regions"><li><span class="group">Sonoma</span> (Cabernet Sauvignon, Merlot, Pinot Noir, Chardonnay)</li><li><span class="group">Los Carneros</span> (Pinot Noir, Chardonnay)</li></ul></div>
 <figure>
 <a href="images/sonoma-county-avas.png" class="zoomable"><img src="images/sonoma-county-avas.png" alt="Map of Sonoma County AVAs, California: Sonoma Coast, West Sonoma Coast, Fort Ross-Seaview, Northern Sonoma, Rockpile, Dry Creek Valley, Alexander Valley, Pine Mountain-Cloverdale Peak, Knights Valley, Chalk Hill, Russian River Valley, Green Valley of RRV, Fountaingrove District, Sonoma Valley, Bennett Valley, Sonoma Mountain, Moon Mountain District, Petaluma Gap and Carneros" loading="lazy"></a>
 <figcaption>Sonoma County AVAs. Map: SommGeo / GSI. Click to enlarge.</figcaption>
@@ -158,6 +223,7 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 
 <details>
 <summary><h3>Oregon</h3></summary>
+<div class="book"><span class="grapes">Pinot Noir, Chardonnay</span><ul class="regions"><li><span class="group">Oregon</span> (Pinot Noir, Chardonnay)</li></ul></div>
 <figure>
 <a href="images/oregon-avas.png" class="zoomable"><img src="images/oregon-avas.png" alt="Map of Oregon AVAs: Willamette Valley (with Tualatin Hills, Laurelwood District, Yamhill-Carlton, Ribbon Ridge, Dundee Hills, Chehalem Mountains, McMinnville, Van Duzer Corridor, Eola-Amity Hills, Mount Pisgah and Lower Long Tom), Columbia Gorge, Columbia Valley, Walla Walla Valley, The Rocks District of Milton-Freewater, Snake River Valley, Southern Oregon, Umpqua Valley, Elkton Oregon, Red Hill Douglas County, Rogue Valley and Applegate Valley" loading="lazy"></a>
 <figcaption>Oregon AVAs. Map: SommGeo / GSI. Click to enlarge.</figcaption>
@@ -189,7 +255,8 @@ filter.addEventListener('input',()=>{
   if(!terms.length&&saved){all.forEach((d,i)=>{d.open=saved[i];d.hidden=false;});saved=null;count.textContent='';return;}
   let hits=0;
   const walk=(d,inherited)=>{
-    const own=terms.length>0&&terms.every(w=>fold(d.querySelector(':scope>summary').textContent).includes(w));
+    const txt=fold(d.querySelector(':scope>summary').textContent+' '+(d.querySelector(':scope>.book')?.textContent||''));
+    const own=terms.length>0&&terms.every(w=>txt.includes(w));
     if(own)hits++;
     let below=false;
     for(const k of kids(d))below=walk(k,inherited||own)||below;
