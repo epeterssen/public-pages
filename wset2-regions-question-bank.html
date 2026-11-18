@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Regions by …</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: single centered study column; chapter chips, one question card, answer stack, score bar */
+:root{
+  --bg:#f3f2f5; --surface:#ffffff; --fg:#1d1a22; --muted:#6b6573; --line:#dcd8e1;
+  --accent:#7a1f3d; --accent-soft:#f1e3e8;
+  --star:#b7791f; --good:#1f7a45; --good-bg:#e2f3e8; --bad:#b3261e; --bad-bg:#fbe4e2;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141218; --surface:#1e1b23; --fg:#ece8f0; --muted:#a39dab; --line:#34303b;
+  --accent:#e08aa6; --accent-soft:#3a2230;
+  --star:#f2c14e; --good:#5fd08a; --good-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0;text-wrap:balance}
+.back{color:var(--accent);text-decoration:none;font-size:.9rem;align-self:flex-start}
+.sub{color:var(--muted);margin:2px 0 0;font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:500 .85rem var(--body);cursor:pointer}
+.chip:disabled{opacity:.45;cursor:default}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar b{color:var(--fg)}
+.track{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .25s}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.q{font-family:var(--display);font-size:1.3rem;line-height:1.3;margin:0;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:12px 14px;font:400 1rem var(--body);cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt .k{font-weight:600;color:var(--muted);min-width:1.1em}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.right .k{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .k{color:var(--bad)}
+.opt.dim{opacity:.5}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.verdict{font-weight:600;font-size:.95rem}
+.verdict.g{color:var(--good)} .verdict.b{color:var(--bad)}
+.btn{border:none;background:var(--accent);color:var(--surface);border-radius:10px;padding:11px 18px;font:600 .95rem var(--body);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.end{text-align:center;gap:10px;align-items:center}
+.status{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.chip.miss{border-color:var(--star);color:var(--star)}
+.chip.miss[aria-pressed="true"]{background:var(--star);border-color:var(--star);color:var(--surface)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.star{border:none;background:transparent;color:var(--muted);font-size:1.5rem;line-height:1;padding:4px 6px;cursor:pointer;border-radius:8px}
+.star[aria-pressed="true"]{color:var(--star)}
+.star:hover{color:var(--star)}
+.star:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.big{font-family:var(--display);font-size:3rem;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+@media (prefers-reduced-motion: reduce){.fill{transition:none}}
+</style>
+<style>*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="index.html">← WSET2 Study</a>
+  <header>
+    <h1>Regions by …</h1>
+    <p class="sub">One question per row of the Regions by Variety and Regions by Country tables. Tap tables to combine them. Tap an answer to reveal.</p>
+    <p class="status" id="status">Loading starred questions…</p>
+  </header>
+  <div class="chips" id="chips" role="group" aria-label="Table"></div>
+  <div>
+    <div class="bar"><span id="pos">Question 1 of 0</span><span>Score <b id="score">0/0 (0%)</b></span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+  <section class="card" id="card"></section>
+</div>
+
+<script>
+const CH={1:"Regions by Variety",2:"Regions by Country"};
+// [chapter, question, correct, wrong, wrong, wrong]
+const Q=[
+[1,"Which grape is Chablis AOC noted for?","Chardonnay","Chenin Blanc","Viognier","Pinot Gris"],
+[1,"Which grape is Gevrey-Chambertin AOC noted for?","Pinot Noir","Viognier","Sémillon","Grenache"],
+[1,"Which grape is Nuits-Saint-Georges AOC noted for?","Pinot Noir","Riesling","Sémillon","Merlot"],
+[1,"Which grape is Beaune AOC noted for?","Pinot Noir","Chardonnay","Grenache","Sémillon"],
+[1,"Which grape is Pommard AOC noted for?","Pinot Noir","Merlot","Grenache","Sémillon"],
+[1,"Which grape is Meursault AOC noted for?","Chardonnay","Viognier","Meunier","Pinot Gris"],
+[1,"Which grape is Puligny-Montrachet AOC noted for?","Chardonnay","Meunier","Syrah","Gewurztraminer"],
+[1,"Which grape is Mâcon AOC noted for?","Chardonnay","Syrah","Gewurztraminer","Pinot Noir"],
+[1,"Which grape is Pouilly-Fuissé AOC noted for?","Chardonnay","Cabernet Sauvignon","Gamay","Riesling"],
+[1,"Besides Chardonnay, which grape is Bourgogne AOC noted for?","Pinot Noir","Syrah","Sauvignon Blanc","Riesling"],
+[1,"Besides Pinot Noir, which grape is Bourgogne AOC noted for?","Chardonnay","Gamay","Pinot Gris","Riesling"],
+[1,"Which grape is Beaujolais AOC noted for?","Gamay","Syrah","Grenache","Sémillon"],
+[1,"Which grape is Beaujolais Villages AOC noted for?","Gamay","Merlot","Pinot Noir","Viognier"],
+[1,"Which grape is Fleurie AOC noted for?","Gamay","Meunier","Viognier","Merlot"],
+[1,"Which grape is Vouvray AOC noted for?","Chenin Blanc","Grenache","Pinot Gris","Merlot"],
+[1,"Which grape is Sancerre AOC noted for?","Sauvignon Blanc","Grenache","Pinot Noir","Cabernet Sauvignon"],
+[1,"Which grape is Pouilly-Fumé AOC noted for?","Sauvignon Blanc","Viognier","Grenache","Merlot"],
+[1,"Which grape is Touraine AOC noted for?","Sauvignon Blanc","Cabernet Sauvignon","Merlot","Pinot Noir"],
+[1,"Besides Sémillon and Merlot, which grape is Bordeaux AOC noted for?","Sauvignon Blanc","Chenin Blanc","Pinot Gris","Grenache"],
+[1,"Besides Sauvignon Blanc and Merlot, which grape is Bordeaux AOC noted for?","Sémillon","Gewurztraminer","Gamay","Pinot Noir"],
+[1,"Besides Sauvignon Blanc and Sémillon, which grape is Bordeaux AOC noted for?","Merlot","Riesling","Pinot Gris","Chardonnay"],
+[1,"Which grape is Bordeaux Supérieur AOC noted for?","Merlot","Sauvignon Blanc","Viognier","Riesling"],
+[1,"Which grape is Sauternes AOC noted for?","Sémillon","Grenache","Pinot Noir","Meunier"],
+[1,"Besides Sémillon, Cabernet Sauvignon and Merlot, which grape is Graves AOC noted for?","Sauvignon Blanc","Chenin Blanc","Gamay","Pinot Gris"],
+[1,"Besides Sauvignon Blanc, Cabernet Sauvignon and Merlot, which grape is Graves AOC noted for?","Sémillon","Pinot Gris","Gewurztraminer","Grenache"],
+[1,"Besides Sauvignon Blanc, Sémillon and Merlot, which grape is Graves AOC noted for?","Cabernet Sauvignon","Gewurztraminer","Viognier","Riesling"],
+[1,"Besides Sauvignon Blanc, Sémillon and Cabernet Sauvignon, which grape is Graves AOC noted for?","Merlot","Syrah","Grenache","Gamay"],
+[1,"Besides Sémillon, Cabernet Sauvignon and Merlot, which grape is Pessac-Léognan AOC noted for?","Sauvignon Blanc","Pinot Noir","Syrah","Riesling"],
+[1,"Besides Sauvignon Blanc, Cabernet Sauvignon and Merlot, which grape is Pessac-Léognan AOC noted for?","Sémillon","Viognier","Riesling","Pinot Gris"],
+[1,"Besides Sauvignon Blanc, Sémillon and Merlot, which grape is Pessac-Léognan AOC noted for?","Cabernet Sauvignon","Gamay","Syrah","Pinot Gris"],
+[1,"Besides Sauvignon Blanc, Sémillon and Cabernet Sauvignon, which grape is Pessac-Léognan AOC noted for?","Merlot","Chardonnay","Gamay","Chenin Blanc"],
+[1,"Besides Merlot, which grape is Haut-Médoc AOC noted for?","Cabernet Sauvignon","Syrah","Sémillon","Riesling"],
+[1,"Besides Cabernet Sauvignon, which grape is Haut-Médoc AOC noted for?","Merlot","Meunier","Gewurztraminer","Chardonnay"],
+[1,"Besides Merlot, which grape is Margaux AOC noted for?","Cabernet Sauvignon","Pinot Noir","Meunier","Gamay"],
+[1,"Besides Cabernet Sauvignon, which grape is Margaux AOC noted for?","Merlot","Syrah","Pinot Noir","Chenin Blanc"],
+[1,"Besides Merlot, which grape is Pauillac AOC noted for?","Cabernet Sauvignon","Grenache","Chenin Blanc","Syrah"],
+[1,"Besides Cabernet Sauvignon, which grape is Pauillac AOC noted for?","Merlot","Pinot Noir","Syrah","Pinot Gris"],
+[1,"Which grape is Saint-Émilion AOC noted for?","Merlot","Sémillon","Grenache","Chardonnay"],
+[1,"Which grape is Saint-Émilion Grand Cru AOC noted for?","Merlot","Cabernet Sauvignon","Viognier","Chenin Blanc"],
+[1,"Which grape is Pomerol AOC noted for?","Merlot","Cabernet Sauvignon","Chenin Blanc","Sauvignon Blanc"],
+[1,"Besides Pinot Gris and Gewurztraminer, which grape is Alsace AOC noted for?","Riesling","Pinot Noir","Chardonnay","Meunier"],
+[1,"Besides Riesling and Gewurztraminer, which grape is Alsace AOC noted for?","Pinot Gris","Grenache","Syrah","Meunier"],
+[1,"Besides Riesling and Pinot Gris, which grape is Alsace AOC noted for?","Gewurztraminer","Sauvignon Blanc","Chenin Blanc","Viognier"],
+[1,"Besides Pinot Gris and Gewurztraminer, which grape is Alsace Grand Cru AOC noted for?","Riesling","Chenin Blanc","Chardonnay","Syrah"],
+[1,"Besides Riesling and Gewurztraminer, which grape is Alsace Grand Cru AOC noted for?","Pinot Gris","Merlot","Grenache","Sauvignon Blanc"],
+[1,"Besides Riesling and Pinot Gris, which grape is Alsace Grand Cru AOC noted for?","Gewurztraminer","Meunier","Chardonnay","Sémillon"],
+[1,"Which grape is Côte Rôtie AOC noted for? (+ Viognier co-fermented)","Syrah","Sauvignon Blanc","Gamay","Sémillon"],
+[1,"Which grape is Hermitage AOC noted for?","Syrah","Cabernet Sauvignon","Riesling","Sauvignon Blanc"],
+[1,"Which grape is Crozes-Hermitage AOC noted for?","Syrah","Cabernet Sauvignon","Grenache","Pinot Noir"],
+[1,"Which grape is Condrieu AOC noted for?","Viognier","Chardonnay","Pinot Gris","Gewurztraminer"],
+[1,"Besides Syrah, which grape is Côtes du Rhône AOC noted for?","Grenache","Sauvignon Blanc","Pinot Noir","Riesling"],
+[1,"Besides Grenache, which grape is Côtes du Rhône AOC noted for?","Syrah","Chardonnay","Pinot Gris","Cabernet Sauvignon"],
+[1,"Besides Syrah, which grape is Côtes du Rhône Villages AOC noted for?","Grenache","Gewurztraminer","Meunier","Merlot"],
+[1,"Besides Grenache, which grape is Côtes du Rhône Villages AOC noted for?","Syrah","Pinot Noir","Pinot Gris","Viognier"],
+[1,"Besides Syrah, which grape is Châteauneuf-du-Pape AOC noted for?","Grenache","Meunier","Sauvignon Blanc","Pinot Gris"],
+[1,"Besides Grenache, which grape is Châteauneuf-du-Pape AOC noted for?","Syrah","Pinot Gris","Sauvignon Blanc","Chardonnay"],
+[1,"Besides Sauvignon Blanc, Merlot, Cabernet Sauvignon and Syrah, which grape is Pays d'Oc IGP noted for?","Chardonnay","Meunier","Gamay","Sémillon"],
+[1,"Besides Chardonnay, Merlot, Cabernet Sauvignon and Syrah, which grape is Pays d'Oc IGP noted for?","Sauvignon Blanc","Pinot Gris","Sémillon","Gewurztraminer"],
+[1,"Besides Chardonnay, Sauvignon Blanc, Cabernet Sauvignon and Syrah, which grape is Pays d'Oc IGP noted for?","Merlot","Gamay","Chenin Blanc","Pinot Gris"],
+[1,"Besides Chardonnay, Sauvignon Blanc, Merlot and Syrah, which grape is Pays d'Oc IGP noted for?","Cabernet Sauvignon","Meunier","Sémillon","Pinot Noir"],
+[1,"Besides Chardonnay, Sauvignon Blanc, Merlot and Cabernet Sauvignon, which grape is Pays d'Oc IGP noted for?","Syrah","Gamay","Gewurztraminer","Pinot Gris"],
+[1,"Besides Grenache, which grape is Minervois AOC noted for?","Syrah","Cabernet Sauvignon","Chenin Blanc","Merlot"],
+[1,"Besides Syrah, which grape is Minervois AOC noted for?","Grenache","Pinot Noir","Merlot","Gewurztraminer"],
+[1,"Which grape is Côtes de Provence AOC noted for? (rosé)","Grenache","Syrah","Merlot","Sauvignon Blanc"],
+[1,"Besides Pinot Noir and Meunier, which grape is Champagne AOC noted for? (sparkling)","Chardonnay","Pinot Gris","Cabernet Sauvignon","Gamay"],
+[1,"Besides Chardonnay and Meunier, which grape is Champagne AOC noted for? (sparkling)","Pinot Noir","Sauvignon Blanc","Grenache","Riesling"],
+[1,"Besides Chardonnay and Pinot Noir, which grape is Champagne AOC noted for? (sparkling)","Meunier","Chenin Blanc","Sémillon","Syrah"],
+[1,"Which grape is Mosel noted for?","Riesling","Sauvignon Blanc","Meunier","Shiraz"],
+[1,"Which grape is Rheingau noted for?","Riesling","Garnacha","Shiraz","Montepulciano"],
+[1,"Which grape is Pfalz noted for?","Riesling","Pinot Grigio","Garganega","Merlot"],
+[1,"Which grape is Tokaj noted for?","Furmint","Chenin Blanc","Riesling","Semillon"],
+[1,"Which grape is Gavi DOCG noted for?","Cortese","Fiano","Corvina","Moscato"],
+[1,"Which grape is Barolo DOCG noted for?","Nebbiolo","Corvina","Primitivo","Barbera"],
+[1,"Which grape is Barbaresco DOCG noted for?","Nebbiolo","Barbera","Garganega","Moscato"],
+[1,"Which grape is Barbera d'Asti DOCG noted for?","Barbera","Cortese","Sangiovese","Moscato"],
+[1,"Which grape is delle Venezie DOC noted for?","Pinot Grigio","Moscato","Nebbiolo","Barbera"],
+[1,"Which grape is Veneto IGT noted for?","Pinot Grigio","Sangiovese","Montepulciano","Barbera"],
+[1,"Which grape is Soave DOC noted for?","Garganega","Pinot Grigio","Nebbiolo","Sangiovese"],
+[1,"Which grape is Soave DOC Classico noted for?","Garganega","Fiano","Corvina","Verdicchio"],
+[1,"Which grape is Recioto di Soave DOCG noted for?","Garganega","Primitivo","Fiano","Verdicchio"],
+[1,"Which grape is Valpolicella DOC noted for?","Corvina","Fiano","Verdicchio","Nebbiolo"],
+[1,"Which grape is Valpolicella DOC Classico noted for?","Corvina","Sangiovese","Primitivo","Fiano"],
+[1,"Which grape is Amarone della Valpolicella DOCG noted for?","Corvina","Montepulciano","Primitivo","Sangiovese"],
+[1,"Which grape is Recioto della Valpolicella DOCG noted for?","Corvina","Garganega","Fiano","Nebbiolo"],
+[1,"Which grape is Friuli-Venezia Giulia noted for?","Pinot Grigio","Cortese","Moscato","Primitivo"],
+[1,"Which grape is Chianti DOCG noted for?","Sangiovese","Verdicchio","Garganega","Nebbiolo"],
+[1,"Which grape is Chianti Classico DOCG noted for?","Sangiovese","Cortese","Glera","Verdicchio"],
+[1,"Which grape is Brunello di Montalcino DOCG noted for?","Sangiovese","Nebbiolo","Garganega","Cortese"],
+[1,"Which grape is Verdicchio dei Castelli di Jesi DOC noted for?","Verdicchio","Nebbiolo","Corvina","Cortese"],
+[1,"Which grape is Montepulciano d'Abruzzo DOC noted for?","Montepulciano","Garganega","Pinot Grigio","Glera"],
+[1,"Which grape is Fiano di Avellino DOCG noted for?","Fiano","Corvina","Moscato","Primitivo"],
+[1,"Which grape is Puglia noted for?","Primitivo","Corvina","Glera","Verdicchio"],
+[1,"Which grape is Asti DOCG noted for? (sweet sparkling)","Moscato","Nebbiolo","Garganega","Montepulciano"],
+[1,"Which grape is Prosecco DOC noted for? (sparkling)","Glera","Primitivo","Garganega","Montepulciano"],
+[1,"Which grape is Rías Baixas DO noted for?","Albariño","Local Spanish varieties","Chardonnay","Garnacha"],
+[1,"Besides Garnacha, which grape is Rioja DOCa noted for?","Tempranillo","Pedro Ximénez","Pinot Noir","Albariño"],
+[1,"Besides Tempranillo, which grape is Rioja DOCa noted for?","Garnacha","Albariño","Palomino","Local Spanish varieties"],
+[1,"Which grape is Navarra DO noted for?","Garnacha","Pinot Noir","Albariño","Local Spanish varieties"],
+[1,"Which grape is Catalunya DO noted for?","Tempranillo","Albariño","Chardonnay","Local Spanish varieties"],
+[1,"Which grape is Priorat DOCa noted for?","Garnacha","Albariño","Pinot Noir","Chardonnay"],
+[1,"Which grape is Ribera del Duero DO noted for?","Tempranillo","Pinot Noir","Albariño","Palomino"],
+[1,"Besides Chardonnay and Pinot Noir, which grape is Cava noted for? (sparkling)","Local Spanish varieties","Albariño","Palomino","Garnacha"],
+[1,"Besides local Spanish varieties and Pinot Noir, which grape is Cava noted for? (sparkling)","Chardonnay","Tempranillo","Albariño","Palomino"],
+[1,"Besides local Spanish varieties and Chardonnay, which grape is Cava noted for? (sparkling)","Pinot Noir","Palomino","Garnacha","Albariño"],
+[1,"Besides Pedro Ximénez, which grape is Sherry noted for? (fortified)","Palomino","Local Spanish varieties","Garnacha","Tempranillo"],
+[1,"Besides Palomino, which grape is Sherry noted for? (fortified)","Pedro Ximénez","Local Spanish varieties","Chardonnay","Tempranillo"],
+[1,"Which grape is Port noted for? (fortified)","Local black varieties","Pedro Ximénez","Corvina","Pinotage"],
+[1,"Besides Chardonnay, Merlot and Cabernet Sauvignon, which grape is California noted for?","Zinfandel","Sauvignon Blanc","Pinot Noir","Pinot Gris"],
+[1,"Besides Zinfandel, Merlot and Cabernet Sauvignon, which grape is California noted for?","Chardonnay","Sauvignon Blanc","Pinot Noir","Pedro Ximénez"],
+[1,"Besides Zinfandel, Chardonnay and Cabernet Sauvignon, which grape is California noted for?","Merlot","Sauvignon Blanc","Pinot Noir","Moscato"],
+[1,"Besides Zinfandel, Chardonnay and Merlot, which grape is California noted for?","Cabernet Sauvignon","Sauvignon Blanc","Pinot Noir","Local black varieties"],
+[1,"Besides Cabernet Sauvignon, which grape is Central Valley (USA) noted for?","Chardonnay","Pinot Noir","Zinfandel","Merlot"],
+[1,"Besides Chardonnay, which grape is Central Valley (USA) noted for?","Cabernet Sauvignon","Sauvignon Blanc","Pinot Noir","Zinfandel"],
+[1,"Besides Chardonnay, which grape is Los Carneros noted for?","Pinot Noir","Sauvignon Blanc","Merlot","Zinfandel"],
+[1,"Besides Pinot Noir, which grape is Los Carneros noted for?","Chardonnay","Zinfandel","Merlot","Sauvignon Blanc"],
+[1,"Besides Chardonnay, Merlot and Cabernet Sauvignon, which grape is Sonoma noted for?","Pinot Noir","Sauvignon Blanc","Zinfandel","Montepulciano"],
+[1,"Besides Pinot Noir, Merlot and Cabernet Sauvignon, which grape is Sonoma noted for?","Chardonnay","Zinfandel","Sauvignon Blanc","Montepulciano"],
+[1,"Besides Pinot Noir, Chardonnay and Cabernet Sauvignon, which grape is Sonoma noted for?","Merlot","Sauvignon Blanc","Zinfandel","Pinot Grigio"],
+[1,"Besides Pinot Noir, Chardonnay and Merlot, which grape is Sonoma noted for?","Cabernet Sauvignon","Sauvignon Blanc","Zinfandel","Glera"],
+[1,"Besides Sauvignon Blanc, Merlot and Cabernet Sauvignon, which grape is Napa Valley noted for?","Chardonnay","Zinfandel","Pinot Noir","Gamay"],
+[1,"Besides Chardonnay, Merlot and Cabernet Sauvignon, which grape is Napa Valley noted for?","Sauvignon Blanc","Zinfandel","Pinot Noir","Palomino"],
+[1,"Besides Chardonnay, Sauvignon Blanc and Cabernet Sauvignon, which grape is Napa Valley noted for?","Merlot","Zinfandel","Pinot Noir","Tempranillo"],
+[1,"Besides Chardonnay, Sauvignon Blanc and Merlot, which grape is Napa Valley noted for?","Cabernet Sauvignon","Pinot Noir","Zinfandel","Local Spanish varieties"],
+[1,"Which grape is Oakville noted for?","Cabernet Sauvignon","Pinot Noir","Merlot","Zinfandel"],
+[1,"Which grape is Rutherford noted for?","Cabernet Sauvignon","Zinfandel","Sauvignon Blanc","Pinot Noir"],
+[1,"Which grape is Calistoga noted for?","Cabernet Sauvignon","Sauvignon Blanc","Merlot","Zinfandel"],
+[1,"Besides Chardonnay, which grape is Santa Barbara County noted for?","Pinot Noir","Cabernet Sauvignon","Merlot","Sauvignon Blanc"],
+[1,"Besides Pinot Noir, which grape is Santa Barbara County noted for?","Chardonnay","Cabernet Sauvignon","Sauvignon Blanc","Merlot"],
+[1,"Besides Chardonnay, which grape is Oregon noted for?","Pinot Noir","Merlot","Cabernet Sauvignon","Sauvignon Blanc"],
+[1,"Besides Pinot Noir, which grape is Oregon noted for?","Chardonnay","Zinfandel","Merlot","Sauvignon Blanc"],
+[1,"Besides Chardonnay and Sauvignon Blanc, which grape is Casablanca Valley noted for?","Pinot Noir","Cabernet Sauvignon","Merlot","Carmenère"],
+[1,"Besides Pinot Noir and Sauvignon Blanc, which grape is Casablanca Valley noted for?","Chardonnay","Carmenère","Merlot","Cabernet Sauvignon"],
+[1,"Besides Pinot Noir and Chardonnay, which grape is Casablanca Valley noted for?","Sauvignon Blanc","Carmenère","Merlot","Cabernet Sauvignon"],
+[1,"Besides Sauvignon Blanc, Merlot, Cabernet Sauvignon and Carmenère, which grape is Central Valley (Chile) noted for?","Chardonnay","Pinot Noir","Shiraz","Primitivo"],
+[1,"Besides Chardonnay, Merlot, Cabernet Sauvignon and Carmenère, which grape is Central Valley (Chile) noted for?","Sauvignon Blanc","Pinot Noir","Viognier","Shiraz"],
+[1,"Besides Chardonnay, Sauvignon Blanc, Cabernet Sauvignon and Carmenère, which grape is Central Valley (Chile) noted for?","Merlot","Pinot Noir","Shiraz","Cortese"],
+[1,"Besides Chardonnay, Sauvignon Blanc, Merlot and Carmenère, which grape is Central Valley (Chile) noted for?","Cabernet Sauvignon","Pinot Noir","Grenache","Montepulciano"],
+[1,"Besides Chardonnay, Sauvignon Blanc, Merlot and Cabernet Sauvignon, which grape is Central Valley (Chile) noted for?","Carmenère","Pinot Noir","Local Spanish varieties","Nebbiolo"],
+[1,"Which grape is Maipo Valley noted for?","Cabernet Sauvignon","Sauvignon Blanc","Chardonnay","Carmenère"],
+[1,"Which grape is Colchagua Valley noted for?","Cabernet Sauvignon","Merlot","Chardonnay","Carmenère"],
+[1,"Which grape is Mendoza noted for?","Malbec","Zinfandel","Montepulciano","Cortese"],
+[1,"Besides Chardonnay and Pinotage, which grape is Western Cape noted for?","Chenin Blanc","Merlot","Pinot Noir","Sauvignon Blanc"],
+[1,"Besides Chenin Blanc and Pinotage, which grape is Western Cape noted for?","Chardonnay","Cabernet Sauvignon","Pinot Noir","Merlot"],
+[1,"Besides Chenin Blanc and Chardonnay, which grape is Western Cape noted for?","Pinotage","Pinot Noir","Merlot","Cabernet Sauvignon"],
+[1,"Besides Chardonnay, which grape is Walker Bay noted for?","Pinot Noir","Sauvignon Blanc","Chenin Blanc","Merlot"],
+[1,"Besides Pinot Noir, which grape is Walker Bay noted for?","Chardonnay","Merlot","Chenin Blanc","Pinotage"],
+[1,"Which grape is Constantia noted for?","Sauvignon Blanc","Chardonnay","Pinot Noir","Cabernet Sauvignon"],
+[1,"Which grape is Elgin noted for?","Sauvignon Blanc","Merlot","Pinotage","Pinot Noir"],
+[1,"Besides Cabernet Sauvignon, which grape is Stellenbosch noted for?","Merlot","Pinotage","Sauvignon Blanc","Chardonnay"],
+[1,"Besides Merlot, which grape is Stellenbosch noted for?","Cabernet Sauvignon","Chardonnay","Pinotage","Sauvignon Blanc"],
+[1,"Besides Shiraz, which grape is South Eastern Australia noted for?","Chardonnay","Merlot","Grenache","Riesling"],
+[1,"Besides Chardonnay, which grape is South Eastern Australia noted for?","Shiraz","Riesling","Sauvignon Blanc","Semillon"],
+[1,"Besides Chardonnay, which grape is Yarra Valley noted for?","Pinot Noir","Semillon","Sauvignon Blanc","Merlot"],
+[1,"Besides Pinot Noir, which grape is Yarra Valley noted for?","Chardonnay","Semillon","Shiraz","Merlot"],
+[1,"Which grape is Mornington Peninsula noted for?","Pinot Noir","Semillon","Merlot","Riesling"],
+[1,"Besides Shiraz and Grenache, which grape is Barossa Valley noted for?","Semillon","Sauvignon Blanc","Pinot Noir","Chardonnay"],
+[1,"Besides Semillon and Grenache, which grape is Barossa Valley noted for?","Shiraz","Cabernet Sauvignon","Sauvignon Blanc","Pinot Noir"],
+[1,"Besides Semillon and Shiraz, which grape is Barossa Valley noted for?","Grenache","Chardonnay","Sauvignon Blanc","Cabernet Sauvignon"],
+[1,"Which grape is McLaren Vale noted for?","Grenache","Merlot","Semillon","Shiraz"],
+[1,"Which grape is Eden Valley noted for?","Riesling","Pinot Noir","Shiraz","Semillon"],
+[1,"Which grape is Clare Valley noted for?","Riesling","Merlot","Pinot Noir","Shiraz"],
+[1,"Besides Sauvignon Blanc, which grape is Adelaide Hills noted for?","Chardonnay","Grenache","Shiraz","Cabernet Sauvignon"],
+[1,"Besides Chardonnay, which grape is Adelaide Hills noted for?","Sauvignon Blanc","Riesling","Semillon","Merlot"],
+[1,"Which grape is Coonawarra noted for?","Cabernet Sauvignon","Semillon","Grenache","Merlot"],
+[1,"Besides Shiraz, which grape is Hunter Valley noted for?","Semillon","Chardonnay","Cabernet Sauvignon","Sauvignon Blanc"],
+[1,"Besides Semillon, which grape is Hunter Valley noted for?","Shiraz","Grenache","Riesling","Chardonnay"],
+[1,"Besides Sauvignon Blanc, Merlot and Cabernet Sauvignon, which grape is Margaret River noted for?","Chardonnay","Riesling","Shiraz","Semillon"],
+[1,"Besides Chardonnay, Merlot and Cabernet Sauvignon, which grape is Margaret River noted for?","Sauvignon Blanc","Shiraz","Pinot Noir","Semillon"],
+[1,"Besides Chardonnay, Sauvignon Blanc and Cabernet Sauvignon, which grape is Margaret River noted for?","Merlot","Semillon","Grenache","Shiraz"],
+[1,"Besides Chardonnay, Sauvignon Blanc and Merlot, which grape is Margaret River noted for?","Cabernet Sauvignon","Grenache","Shiraz","Riesling"],
+[1,"Which grape is Martinborough noted for?","Pinot Noir","Merlot","Cabernet Sauvignon","Sauvignon Blanc"],
+[1,"Besides Merlot and Cabernet Sauvignon, which grape is Hawke's Bay noted for?","Chardonnay","Sauvignon Blanc","Pinot Noir","Pedro Ximénez"],
+[1,"Besides Chardonnay and Cabernet Sauvignon, which grape is Hawke's Bay noted for?","Merlot","Sauvignon Blanc","Pinot Noir","Nebbiolo"],
+[1,"Besides Chardonnay and Merlot, which grape is Hawke's Bay noted for?","Cabernet Sauvignon","Sauvignon Blanc","Pinot Noir","Sangiovese"],
+[1,"Besides Chardonnay and Sauvignon Blanc, which grape is Marlborough noted for?","Pinot Noir","Merlot","Cabernet Sauvignon","Glera"],
+[1,"Besides Pinot Noir and Sauvignon Blanc, which grape is Marlborough noted for?","Chardonnay","Merlot","Cabernet Sauvignon","Montepulciano"],
+[1,"Besides Pinot Noir and Chardonnay, which grape is Marlborough noted for?","Sauvignon Blanc","Cabernet Sauvignon","Merlot","Garnacha"],
+[1,"Which grape is Central Otago noted for?","Pinot Noir","Chardonnay","Cabernet Sauvignon","Sauvignon Blanc"],
+[2,"Mendoza is in which country?","Argentina","Italy","Spain","Australia"],
+[2,"South Eastern Australia is in which country?","Australia","Spain","Argentina","South Africa"],
+[2,"Hunter Valley is in which Australian state?","New South Wales","Western Australia","South Australia","Victoria"],
+[2,"Adelaide Hills is in which Australian state?","South Australia","New South Wales","Victoria","Western Australia"],
+[2,"Barossa Valley is in which Australian state?","South Australia","Victoria","New South Wales","Western Australia"],
+[2,"Clare Valley is in which Australian state?","South Australia","Western Australia","Victoria","New South Wales"],
+[2,"Coonawarra is in which Australian state?","South Australia","Western Australia","Victoria","New South Wales"],
+[2,"Eden Valley is in which Australian state?","South Australia","New South Wales","Western Australia","Victoria"],
+[2,"McLaren Vale is in which Australian state?","South Australia","New South Wales","Western Australia","Victoria"],
+[2,"Mornington Peninsula is in which Australian state?","Victoria","New South Wales","Western Australia","South Australia"],
+[2,"Yarra Valley is in which Australian state?","Victoria","South Australia","Western Australia","New South Wales"],
+[2,"Margaret River is in which Australian state?","Western Australia","Victoria","New South Wales","South Australia"],
+[2,"Casablanca Valley is in which Chilean region?","Aconcagua","Central Valley"],
+[2,"Colchagua Valley is in which Chilean region?","Central Valley","Aconcagua"],
+[2,"Maipo Valley is in which Chilean region?","Central Valley","Aconcagua"],
+[2,"Margaux AOC is in which French region?","Bordeaux – Left Bank – Médoc","Bordeaux – Left Bank – Graves","Bordeaux – Right Bank","Burgundy"],
+[2,"Pauillac AOC is in which French region?","Bordeaux – Left Bank – Médoc","Bordeaux – Left Bank – Graves","Bordeaux – Right Bank","Burgundy"],
+[2,"Pessac-Léognan AOC is in which French region?","Bordeaux – Left Bank – Graves","Bordeaux – Left Bank – Médoc","Bordeaux – Right Bank","Burgundy – Côte d'Or – Côte de Beaune"],
+[2,"Sauternes AOC is in which French region?","Bordeaux – Left Bank – Graves","Bordeaux – Left Bank – Médoc","Bordeaux – Right Bank","Alsace"],
+[2,"Pomerol AOC is in which French region?","Bordeaux – Right Bank","Bordeaux – Left Bank – Médoc","Bordeaux – Left Bank – Graves","Rhône – Southern Rhône"],
+[2,"Saint-Émilion AOC is in which French region?","Bordeaux – Right Bank","Bordeaux – Left Bank – Graves","Bordeaux – Left Bank – Médoc","Burgundy – Mâconnais"],
+[2,"Saint-Émilion Grand Cru AOC is in which French region?","Bordeaux – Right Bank","Bordeaux – Left Bank – Graves","Bordeaux – Left Bank – Médoc","Burgundy – Chablis"],
+[2,"Bourgogne AOC is in which French region?","Burgundy","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Chablis","Burgundy – Beaujolais"],
+[2,"Gevrey-Chambertin AOC is in which French region?","Burgundy – Côte d'Or – Côte de Nuits","Burgundy – Chablis","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Beaujolais"],
+[2,"Nuits-Saint-Georges AOC is in which French region?","Burgundy – Côte d'Or – Côte de Nuits","Burgundy – Chablis","Burgundy – Beaujolais","Burgundy – Mâconnais"],
+[2,"Beaune AOC is in which French region?","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Beaujolais","Burgundy – Mâconnais","Burgundy – Côte d'Or – Côte de Nuits"],
+[2,"Pommard AOC is in which French region?","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Côte d'Or – Côte de Nuits","Burgundy – Chablis","Burgundy – Beaujolais"],
+[2,"Meursault AOC is in which French region?","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Côte d'Or – Côte de Nuits","Burgundy – Chablis","Burgundy – Mâconnais"],
+[2,"Puligny-Montrachet AOC is in which French region?","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Chablis","Burgundy – Beaujolais","Burgundy – Mâconnais"],
+[2,"Mâcon AOC is in which French region?","Burgundy – Mâconnais","Burgundy – Chablis","Burgundy – Beaujolais","Burgundy – Côte d'Or – Côte de Nuits"],
+[2,"Pouilly-Fuissé AOC is in which French region?","Burgundy – Mâconnais","Burgundy – Chablis","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Beaujolais"],
+[2,"Fleurie AOC is in which French region?","Burgundy – Beaujolais","Burgundy – Chablis","Burgundy – Côte d'Or – Côte de Beaune","Burgundy – Mâconnais"],
+[2,"Minervois AOC is in which French region?","Languedoc-Roussillon","Rhône – Southern Rhône","Burgundy – Côte d'Or – Côte de Nuits","Burgundy"],
+[2,"Pays d'Oc IGP is in which French region?","Languedoc-Roussillon","Burgundy – Chablis","Provence","Bordeaux – Left Bank – Graves"],
+[2,"Vouvray AOC is in which French region?","Loire Valley – Touraine","Loire Valley – Central Vineyards","Bordeaux – Left Bank – Médoc","Rhône – Northern Rhône"],
+[2,"Pouilly-Fumé AOC is in which French region?","Loire Valley – Central Vineyards","Loire Valley – Touraine","Languedoc-Roussillon","Burgundy – Côte d'Or – Côte de Nuits"],
+[2,"Sancerre AOC is in which French region?","Loire Valley – Central Vineyards","Loire Valley – Touraine","Rhône","Champagne"],
+[2,"Condrieu AOC is in which French region?","Rhône – Northern Rhône","Rhône – Southern Rhône","Loire Valley – Central Vineyards","Burgundy – Beaujolais"],
+[2,"Côte Rôtie AOC is in which French region?","Rhône – Northern Rhône","Rhône – Southern Rhône","Burgundy – Chablis","Champagne"],
+[2,"Crozes-Hermitage AOC is in which French region?","Rhône – Northern Rhône","Rhône – Southern Rhône","Burgundy – Côte d'Or – Côte de Nuits","Bordeaux – Right Bank"],
+[2,"Hermitage AOC is in which French region?","Rhône – Northern Rhône","Rhône – Southern Rhône","Provence","Languedoc-Roussillon"],
+[2,"Châteauneuf-du-Pape AOC is in which French region?","Rhône – Southern Rhône","Rhône – Northern Rhône","Provence","Burgundy – Mâconnais"],
+[2,"Mosel is in which country?","Germany","France","Portugal","Hungary"],
+[2,"Pfalz is in which country?","Germany","New Zealand","USA","Chile"],
+[2,"Rheingau is in which country?","Germany","Spain","Chile","Italy"],
+[2,"Tokaj is in which country?","Hungary","USA","Argentina","Spain"],
+[2,"Fiano di Avellino DOCG is in which Italian region?","Campania","Tuscany","Abruzzo","Puglia"],
+[2,"Verdicchio dei Castelli di Jesi DOC is in which Italian region?","Marche","Campania","Friuli-Venezia Giulia","Piemonte"],
+[2,"Asti DOCG is in which Italian region?","Piemonte","Veneto","Marche","Campania"],
+[2,"Barbaresco DOCG is in which Italian region?","Piemonte","Marche","Campania","Abruzzo"],
+[2,"Barbera d'Asti DOCG is in which Italian region?","Piemonte","Friuli-Venezia Giulia","Campania","Tuscany"],
+[2,"Barolo DOCG is in which Italian region?","Piemonte","Tuscany","Abruzzo","Friuli-Venezia Giulia"],
+[2,"Gavi DOCG is in which Italian region?","Piemonte","Abruzzo","Marche","Puglia"],
+[2,"Brunello di Montalcino DOCG is in which Italian region?","Tuscany","Puglia","Marche","Campania"],
+[2,"Chianti DOCG is in which Italian region?","Tuscany","Friuli-Venezia Giulia","Piemonte","Marche"],
+[2,"Chianti Classico DOCG is in which Italian region?","Tuscany","Puglia","Marche","Friuli-Venezia Giulia"],
+[2,"Amarone della Valpolicella DOCG is in which Italian region?","Veneto","Marche","Piemonte","Abruzzo"],
+[2,"delle Venezie DOC is in which Italian region?","Veneto","Marche","Friuli-Venezia Giulia","Tuscany"],
+[2,"Prosecco DOC is in which Italian region?","Veneto","Campania","Marche","Friuli-Venezia Giulia"],
+[2,"Recioto della Valpolicella DOCG is in which Italian region?","Veneto","Puglia","Marche","Tuscany"],
+[2,"Recioto di Soave DOCG is in which Italian region?","Veneto","Piemonte","Friuli-Venezia Giulia","Abruzzo"],
+[2,"Soave DOC is in which Italian region?","Veneto","Abruzzo","Friuli-Venezia Giulia","Marche"],
+[2,"Soave DOC Classico is in which Italian region?","Veneto","Marche","Campania","Puglia"],
+[2,"Valpolicella DOC is in which Italian region?","Veneto","Friuli-Venezia Giulia","Marche","Abruzzo"],
+[2,"Valpolicella DOC Classico is in which Italian region?","Veneto","Piemonte","Puglia","Marche"],
+[2,"Hawke's Bay is on which New Zealand island?","North Island","South Island"],
+[2,"Martinborough is on which New Zealand island?","North Island","South Island"],
+[2,"Central Otago is on which New Zealand island?","South Island","North Island"],
+[2,"Marlborough is on which New Zealand island?","South Island","North Island"],
+[2,"Douro (Port) is in which country?","Portugal","Argentina","Germany","Italy"],
+[2,"Constantia is in which South African region?","Western Cape – Coastal Region","Western Cape – Cape South Coast"],
+[2,"Stellenbosch is in which South African region?","Western Cape – Coastal Region","Western Cape – Cape South Coast"],
+[2,"Elgin is in which South African region?","Western Cape – Cape South Coast","Western Cape – Coastal Region"],
+[2,"Walker Bay is in which South African region?","Western Cape – Cape South Coast","Western Cape – Coastal Region"],
+[2,"Catalunya DO is in which country?","Spain","Portugal","Italy","South Africa"],
+[2,"Cava is in which country?","Spain","New Zealand","Italy","Germany"],
+[2,"Jerez (Sherry) is in which country?","Spain","Argentina","Germany","USA"],
+[2,"Navarra DO is in which country?","Spain","South Africa","Italy","New Zealand"],
+[2,"Priorat DOCa is in which country?","Spain","USA","Australia","South Africa"],
+[2,"Rías Baixas DO is in which country?","Spain","South Africa","Argentina","New Zealand"],
+[2,"Ribera del Duero DO is in which country?","Spain","USA","Portugal","Italy"],
+[2,"Rioja DOCa is in which country?","Spain","Germany","Australia","Portugal"],
+[2,"Central Valley is in which US region?","California","California – Napa Valley","California – Sonoma","Oregon"],
+[2,"Santa Barbara County is in which US region?","California","California – Sonoma","California – Napa Valley","Oregon"],
+[2,"Calistoga is in which US region?","California – Napa Valley","California – Sonoma","Oregon"],
+[2,"Oakville is in which US region?","California – Napa Valley","California – Sonoma","Oregon"],
+[2,"Rutherford is in which US region?","California – Napa Valley","California – Sonoma","Oregon"],
+[2,"Los Carneros is in which US region?","California – Sonoma","California – Napa Valley","Oregon"],
+];
+
+const $=id=>document.getElementById(id);
+let chap="sel", sel=new Set(Object.keys(CH)), deck=[], i=0, right=0, answered=0, missed=[];
+// Starred ("Remember") questions: one doc per question in "starred"; deleted when unstarred
+function key(q){let h=0;for(const c of q[1])h=(h*31+c.charCodeAt(0))|0;return "q"+(h>>>0).toString(36)}
+const byKey={}; Q.forEach(q=>byKey[key(q)]=q);
+let stars={}, store=null, mode="none", writing=Promise.resolve();
+function setStatus(t){$("status").textContent=t}
+function starDeck(){return Object.keys(stars).filter(k=>byKey[k]).map(k=>byKey[k])}
+function loadLocal(){try{stars=JSON.parse(localStorage.getItem("wset2-regions-starred")||"{}")}catch(e){stars={}}}
+function saveLocal(){try{localStorage.setItem("wset2-regions-starred",JSON.stringify(stars))}catch(e){}}
+function refreshStar(){const s=$("star"); if(!s||!deck[i]) return; const on=!!stars[key(deck[i])]; s.setAttribute("aria-pressed",String(on)); s.textContent=on?"★":"☆"; s.title=on?"Remove from Remember":"Remember this question"}
+async function initStore(){
+  let db=null; try{db=await claude.use("db")}catch(e){}
+  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();return}
+  store=db.collection("starred"); mode="db";
+  let t=setTimeout(()=>setStatus("Can't reach starred questions yet."),10000);
+  store.onSnapshot(snap=>{
+    const m={}; snap.docs.forEach(d=>{if(d.exists)m[d.id]=d.data()}); stars=m;
+    if(!snap.metadata.fromCache){clearTimeout(t);setStatus("Starred questions are saved to your account.")}
+    chips(); refreshStar();
+  },e=>{clearTimeout(t);mode="local";loadLocal();setStatus("Saving stars in this browser only.");chips();refreshStar()});
+}
+function toggleStar(q){
+  const k=key(q), on=!stars[k];
+  if(on) stars[k]={ch:q[0],q:q[1],answer:q[2],starredAt:new Date().toISOString()}; else delete stars[k];
+  chips(); refreshStar();
+  if(mode==="db"){const doc=stars[k]; writing=writing.then(()=>on?store.doc(k).set(doc):store.doc(k).delete()).catch(()=>setStatus("Couldn't save that star. Check your connection."))}
+  else saveLocal();
+}
+function shuffle(a){a=a.slice();for(let j=a.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[a[j],a[k]]=[a[k],a[j]]}return a}
+
+function chips(){
+  const c=$("chips"); c.innerHTML="";
+  const n=starDeck().length, NCH=Object.keys(CH).length;
+  [["all",(chap==="sel"&&sel.size===NCH)?"None":"All"],...Object.keys(CH).map(k=>[k,CH[k]]),["starred","★ Remember ("+n+")"]].forEach(([v,l])=>{
+    const b=document.createElement("button"); b.className="chip"+(v==="starred"?" miss":""); b.id="chip-"+v; b.textContent=l;
+    if(v==="starred"&&!n&&chap!=="starred") b.disabled=true;
+    const on=v==="starred"?chap==="starred":v==="all"?false:(chap==="sel"&&sel.has(v));
+    b.setAttribute("aria-pressed",String(on)); b.title=v==="all"?(l==="None"?"Clear all tables":"Select all tables"):v==="starred"?"Questions you starred":CH[v];
+    b.onclick=()=>{
+      if(v==="starred"){chap="starred";sel.clear()}
+      else if(v==="all"){const full=chap==="sel"&&sel.size===NCH; chap="sel"; sel=full?new Set():new Set(Object.keys(CH))}
+      else{if(chap!=="sel"){chap="sel";sel.clear()} sel.has(v)?sel.delete(v):sel.add(v)}
+      start()}; c.appendChild(b);
+  });
+}
+function start(list){
+  deck = shuffle(list || (chap==="starred"?starDeck():Q.filter(q=>sel.has(String(q[0])))));
+  i=0; right=0; answered=0; missed=[]; chips(); show();
+}
+function stats(){
+  $("pos").textContent=`Question ${Math.min(i+1,deck.length)} of ${deck.length}`;
+  $("score").textContent=`${right}/${answered} (${answered?Math.round(right/answered*100):0}%)`;
+  $("fill").style.width=(deck.length?answered/deck.length*100:0)+"%";
+}
+function show(){
+  stats();
+  const card=$("card");
+  if(!deck.length){card.className="card end";card.innerHTML=chap==="starred"?`<div class="tag">Nothing starred</div><p class="sub">Tap ☆ on any question to remember it.</p>`:`<div class="tag">No tables selected</div><p class="sub">Tap one or more tables, or All.</p>`;return}
+  if(i>=deck.length){return end()}
+  const q=deck[i]; const opts=shuffle(q.slice(2).map((t,n)=>({t,ok:n===0})));
+  card.className="card";
+  card.innerHTML=`<div class="top"><div class="tag">${CH[q[0]]}</div><button class="star" id="star" aria-pressed="false" aria-label="Remember">☆</button></div><p class="q"></p><div class="opts"></div><div class="foot"><span class="verdict" aria-live="polite"></span><button class="btn" id="next" hidden>Next</button></div>`;
+  card.querySelector(".q").textContent=q[1];
+  $("star").onclick=()=>toggleStar(q); refreshStar();
+  const box=card.querySelector(".opts");
+  opts.forEach((o,n)=>{
+    const b=document.createElement("button"); b.className="opt"; b.id="opt-"+n;
+    b.innerHTML=`<span class="k">${"ABCD"[n]}</span><span></span>`; b.lastChild.textContent=o.t;
+    b.onclick=()=>pick(b,o,opts,box,q); box.appendChild(b);
+  });
+}
+function pick(b,o,opts,box,q){
+  answered++; if(o.ok) right++; else missed.push(q);
+  [...box.children].forEach((el,n)=>{
+    el.disabled=true;
+    if(opts[n].ok) el.classList.add("right");
+    else if(el===b) el.classList.add("wrong");
+    else el.classList.add("dim");
+  });
+  const v=$("card").querySelector(".verdict");
+  v.textContent=o.ok?"Correct":"Incorrect"; v.className="verdict "+(o.ok?"g":"b");
+  const nx=$("next"); nx.hidden=false; nx.textContent=i===deck.length-1?"See results":"Next";
+  nx.onclick=()=>{i++;show()}; nx.focus({preventScroll:true});
+  stats();
+}
+function end(){
+  const pct=deck.length?Math.round(right/deck.length*100):0;
+  const card=$("card"); card.className="card end";
+  card.innerHTML=`<div class="tag">Done</div><p class="big">${right}/${deck.length}</p><p class="sub">${pct}% correct</p><div class="row"></div>`;
+  const row=card.querySelector(".row");
+  if(missed.length){const m=document.createElement("button");m.className="btn";m.id="redo-missed";m.textContent=`Retry ${missed.length} missed`;const list=missed.slice();m.onclick=()=>start(list);row.appendChild(m)}
+  const r=document.createElement("button");r.className="btn ghost";r.id="restart";r.textContent="Start over";r.onclick=()=>start();row.appendChild(r);
+}
+start();
+initStore();
+</script>
+</body>
+</html>

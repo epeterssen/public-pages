@@ -28,6 +28,7 @@ h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0}
 .col-h{font-family:var(--display);font-weight:400;font-size:1.3rem;color:var(--muted);margin:0}
 .link{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;color:var(--fg);text-decoration:none}
 .link:hover,.link:focus-visible{border-color:var(--accent)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .link b{font-family:var(--display);font-weight:400;font-size:1.3rem;display:block;color:var(--accent)}
 
 /* Side panel */
@@ -77,9 +78,19 @@ body.open .scrim{opacity:1;pointer-events:auto}
   <!-- Column 1: reference material -->
   <div class="col">
   <h2 class="col-h">Study</h2>
-  <a class="link" href="regions.html">
-    <b>Regions and Varieties</b>
-    <span class="sub">Region and variety tables.</span>
+  <div class="pair">
+  <a class="link" href="variety.html">
+    <b>Regions by Variety</b>
+    <span class="sub">Where each grape is grown.</span>
+  </a>
+  <a class="link" href="country.html">
+    <b>Regions by Country</b>
+    <span class="sub">Regions and appellations.</span>
+  </a>
+  </div>
+  <a class="link" href="grapes.html">
+    <b>Grape Profiles</b>
+    <span class="sub">Varietal characteristics, climate and volume.</span>
   </a>
   <a class="link" href="temps.html">
     <b>Temperatures and Percentages</b>
@@ -102,6 +113,10 @@ body.open .scrim{opacity:1;pointer-events:auto}
   <!-- Column 2: questions and drills -->
   <div class="col">
   <h2 class="col-h">Test</h2>
+  <a class="link" href="wset2-regions-question-bank.html">
+    <b>Regions by …</b>
+    <span class="sub">Regions by variety and by country.</span>
+  </a>
   <a class="link" href="wset2-book-text-question-bank.html">
     <b>Chapter Review</b>
     <span class="sub">All 25 chapters, from the book.</span>
