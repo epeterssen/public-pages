@@ -258,7 +258,7 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <tr><td>Pinot Noir</td><td>Walker Bay</td><td>Western Cape (south coast)</td><td>South Africa</td></tr>
 <tr><td>Chardonnay</td><td>Walker Bay</td><td>Western Cape (south coast)</td><td>South Africa</td></tr>
 <tr><td>Sauvignon Blanc</td><td>Constantia</td><td>Western Cape (south of Cape Town)</td><td>South Africa</td></tr>
-<tr><td>Sauvignon Blanc</td><td>Elgin</td><td>Western Cape (near Cape Town)</td><td>South Africa</td></tr>
+<tr><td>Sauvignon Blanc</td><td>Elgin</td><td>Western Cape (south coast, high-altitude)</td><td>South Africa</td></tr>
 <tr><td>Merlot</td><td>Stellenbosch</td><td>Western Cape (near Cape Town)</td><td>South Africa</td></tr>
 <tr><td>Cabernet Sauvignon</td><td>Stellenbosch</td><td>Western Cape (near Cape Town)</td><td>South Africa</td></tr>
 <tr><td>Chardonnay</td><td>South Eastern Australia</td><td>South-east (broad)</td><td>Australia</td></tr>
@@ -404,8 +404,9 @@ const fold=x=>x.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 document.querySelectorAll('input.filter').forEach(f=>{
   const tb=f.parentElement.nextElementSibling.querySelector('tbody'), count=f.parentElement.querySelector('.count');
   f.addEventListener('input',()=>{
-    const terms=fold(f.value).split(/\s+/).filter(Boolean); let shown=0;
-    for(const r of tb.rows){const t=fold(r.textContent+' '); const ok=terms.every(w=>t.includes(w)); r.hidden=!ok; if(ok)shown++;}
+    // Each comma-separated phrase must appear within a single cell ("pinot g" matches Pinot Gris, not Pinot Noir + Germany)
+    const terms=fold(f.value).split(',').map(w=>w.trim().replace(/\s+/g,' ')).filter(Boolean); let shown=0;
+    for(const r of tb.rows){const cells=[...r.cells].map(c=>fold(c.textContent).replace(/\s+/g,' ')); const ok=terms.every(w=>cells.some(c=>c.includes(w))); r.hidden=!ok; if(ok)shown++;}
     count.textContent=terms.length?`${shown} of ${tb.rows.length}`:'';
   });
 });
