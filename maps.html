@@ -475,18 +475,31 @@ const filter=document.querySelector('input.filter'), count=document.querySelecto
 const kids=d=>[...d.children].filter(c=>c.tagName==='DETAILS');
 const tops=[...document.querySelectorAll('main>details')];
 const all=[...document.querySelectorAll('main details')];
+const norm=x=>fold(x).replace(/\s+/g,' ');
+// A section's content split into maps: what comes before the first map heading, then one unit per h3.submap
+// Each unit's searchable text: its heading, grapes/regions list and the map image labels (alt text)
+const units=d=>{const u=[[]]; for(const c of d.children){if(c.tagName==='SUMMARY'||c.tagName==='DETAILS')continue; if(c.matches('h3.submap'))u.push([]); u[u.length-1].push(c)}
+  return u.filter(x=>x.length).map(els=>({els,t:els.map(e=>norm(e.textContent+' '+[...e.querySelectorAll('img')].map(i=>i.alt).join(' ')))}))};
 let saved=null; // open/closed state from before filtering, restored when the filter is cleared
 filter.addEventListener('input',()=>{
-  const terms=fold(filter.value).split(/\s+/).filter(Boolean);
+  // Each comma-separated phrase must appear as typed within the section name or its book reference
+  const terms=fold(filter.value).split(',').map(w=>w.trim().replace(/\s+/g,' ')).filter(Boolean);
   if(terms.length&&!saved)saved=all.map(d=>d.open);
-  if(!terms.length&&saved){all.forEach((d,i)=>{d.open=saved[i];d.hidden=false;});saved=null;count.textContent='';return;}
+  if(!terms.length&&saved){all.forEach((d,i)=>{d.open=saved[i];d.hidden=false;units(d).forEach(u=>u.els.forEach(e=>e.hidden=false));});saved=null;count.textContent='';return;}
   let hits=0;
   const walk=(d,inherited)=>{
-    const txt=fold(d.querySelector(':scope>summary').textContent+' '+(d.querySelector(':scope>.book')?.textContent||''));
-    const own=terms.length>0&&terms.every(w=>txt.includes(w));
-    if(own)hits++;
+    const name=norm(d.querySelector(':scope>summary').textContent), us=units(d);
+    const nameHit=terms.length>0&&terms.every(w=>name.includes(w));
+    // Maps inside the section that match on their own (name, grapes/regions list or map labels)
+    let hitUnits=terms.length&&!nameHit&&!inherited?us.filter(u=>terms.every(w=>name.includes(w)||u.t.some(p=>p.includes(w)))):[];
+    // If a specific map matches, drop the section overview (its list names everything, so it would push the match down)
+    const isSub=u=>u.els[0].matches('h3.submap');
+    if(hitUnits.some(isSub))hitUnits=hitUnits.filter(isSub);
+    const own=nameHit||hitUnits.length>0;
+    hits+=nameHit?1:hitUnits.length;
+    us.forEach(u=>u.els.forEach(e=>e.hidden=hitUnits.length>0&&!hitUnits.includes(u)));
     let below=false;
-    for(const k of kids(d))below=walk(k,inherited||own)||below;
+    for(const k of kids(d))below=walk(k,inherited||nameHit)||below;
     const show=!terms.length||inherited||own||below;
     d.hidden=!show;
     if(terms.length&&(own||below))d.open=true;

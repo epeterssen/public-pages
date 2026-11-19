@@ -44,6 +44,8 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 .widen,.reveal-all{font:inherit;font-size:.8rem;color:var(--accent);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer}
 .filter{font:inherit;font-size:.85rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 10px;flex:1 1 160px;max-width:280px}
 .filter:focus{outline:none;border-color:var(--accent)}
+.ln{display:block}
+.ln[hidden]{display:none}
 .fwrap{position:relative;display:flex;flex:1 1 160px;max-width:280px}
 .fwrap .filter{flex:1 1 auto;max-width:none;min-width:0;padding-right:30px}
 @media (hover:none) and (pointer:coarse){.filter::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}}
@@ -329,10 +331,23 @@ document.querySelectorAll('input.filter').forEach(f=>{
 const fold=x=>x.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 document.querySelectorAll('input.filter').forEach(f=>{
   const tb=f.closest('.tools').nextElementSibling.querySelector('tbody'), count=f.closest('.tools').querySelector('.count');
+  const norm=x=>fold(x).replace(/\s+/g,' ');
+  // Cells with several lines (<br>): wrap each line so it can be hidden on its own
+  const lines=new Map();
+  for(const r of tb.rows)for(const c of r.cells){
+    if(!c.querySelector('br'))continue;
+    c.innerHTML=c.innerHTML.split(/<br\s*\/?>/i).map(h=>`<span class="ln">${h}</span>`).join('');
+    lines.set(c,[...c.querySelectorAll(':scope>.ln')]);
+  }
+  const text=c=>lines.has(c)?lines.get(c).map(l=>norm(l.textContent)).join(' '):norm(c.textContent);
   f.addEventListener('input',()=>{
     // Each comma-separated phrase must appear within a single cell ("pinot g" matches Pinot Gris, not Pinot Noir + Germany)
     const terms=fold(f.value).split(',').map(w=>w.trim().replace(/\s+/g,' ')).filter(Boolean); let shown=0;
-    for(const r of tb.rows){const cells=[...r.cells].map(c=>fold(c.textContent).replace(/\s+/g,' ')); const ok=terms.every(w=>cells.some(c=>c.includes(w))); r.hidden=!ok; if(ok)shown++;}
+    for(const r of tb.rows){
+      const ok=terms.every(w=>[...r.cells].some(c=>text(c).includes(w))); r.hidden=!ok; if(ok)shown++;
+      // Multi-line cells show only the lines containing a phrase (all lines if none do), e.g. "fleurie" → the Burgundy – Beaujolais line
+      for(const c of r.cells){const ls=lines.get(c); if(!ls)continue; const hit=ls.map(l=>terms.some(w=>norm(l.textContent).includes(w))); const any=hit.some(Boolean); ls.forEach((l,i)=>l.hidden=any&&!hit[i])}
+    }
     count.textContent=terms.length?`${shown} of ${tb.rows.length}`:'';
   });
 });
