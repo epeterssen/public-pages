@@ -42,6 +42,8 @@ details details>summary::before{font-size:.9rem;margin-top:8px}
 .fclear:hover{color:var(--accent)}
 .filter:placeholder-shown+.fclear{display:none}
 .count{font-size:.8rem;color:var(--muted)}
+[hidden]{display:none !important}
+mark.hl{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inherit;border-radius:2px;padding:0 1px}
 .book{margin:6px 0 0;display:flex;flex-direction:column;gap:2px}
 .book .grapes{font-weight:600;color:var(--accent);color:color-mix(in srgb,var(--fg) 50%,var(--accent))}
 .book .regions{font-size:.85rem;color:var(--muted);list-style:none;margin:0;padding:0}
@@ -199,6 +201,15 @@ dialog.zoom .close{position:fixed;top:max(12px,env(safe-area-inset-top,0px));rig
 <figure>
 <a href="images/champagne.png" class="zoomable"><img src="images/champagne.png" alt="Map of Champagne region and districts, France: Montagne de Reims, Vallée de la Marne, Côte des Blancs, Coteaux du Morin, Côte de Sézanne, Vitryat, Montgueux and Côte des Bar, with Rosé des Riceys, Reims, Épernay and Troyes" loading="lazy"></a>
 <figcaption>Champagne region and districts. Map: SommGeo / GSI. Click to enlarge.</figcaption>
+</figure>
+</details>
+
+<details>
+<summary><h3>Languedoc-Roussillon</h3></summary>
+<div class="book"><span class="grapes">Syrah, Grenache, Cabernet Sauvignon, Merlot, Chardonnay, Sauvignon Blanc</span><ul class="regions"><li>Minervois AOC (Syrah, Grenache)</li><li>Pays d'Oc IGP (Cabernet Sauvignon, Merlot, Syrah, Chardonnay, Sauvignon Blanc)</li></ul></div>
+<figure>
+<a href="images/languedoc-roussillon.png" class="zoomable"><img src="images/languedoc-roussillon.png" alt="Map of Languedoc-Roussillon appellations, France: Minervois, Minervois La Livinière, Muscat de St-Jean-de-Minervois, Cabardès, Côtes de la Malepère, Blanquette de Limoux, Corbières, Fitou, Quatourze, La Clape, Saint-Chinian, Faugères, Cabrières, Clairette du Languedoc, Coteaux du Languedoc, Montpeyroux, St-Saturnin, Pic Saint-Loup, St-Drézéry, St-Georges d'Orques, Coteaux de St-Christol, Coteaux de Vérargues, Coteaux de la Méjanelle, Picpoul de Pinet, Muscat de Frontignan, Muscat de Mireval, Muscat de Lunel, Costières de Nîmes, Clairette de Bellegarde, Maury, Côtes du Roussillon, Côtes du Roussillon Villages and Collioure, with Carcassonne, Béziers, Montpellier, Nîmes and Perpignan" loading="lazy"></a>
+<figcaption>Languedoc-Roussillon appellations. Map: Crushed Grape Chronicles. Click to enlarge.</figcaption>
 </figure>
 </details>
 
@@ -480,8 +491,26 @@ const norm=x=>fold(x).replace(/\s+/g,' ');
 // Each unit's searchable text: its heading, grapes/regions list and the map image labels (alt text)
 const units=d=>{const u=[[]]; for(const c of d.children){if(c.tagName==='SUMMARY'||c.tagName==='DETAILS')continue; if(c.matches('h3.submap'))u.push([]); u[u.length-1].push(c)}
   return u.filter(x=>x.length).map(els=>({els,t:els.map(e=>norm(e.textContent+' '+[...e.querySelectorAll('img')].map(i=>i.alt).join(' ')))}))};
+// Highlight matches in section names, map headings and grape/region lists (map image labels can't be highlighted)
+const clearMarks=()=>{const ps=new Set(); document.querySelectorAll('main mark.hl').forEach(m=>{ps.add(m.parentNode); m.replaceWith(m.textContent)}); ps.forEach(p=>p.normalize())};
+const highlight=terms=>{
+  document.querySelectorAll('main summary, main h3.submap, main .book').forEach(root=>{
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), nodes=[]; while(w.nextNode())nodes.push(w.currentNode);
+    nodes.forEach(n=>{
+      // Folded text with a map back to positions in the original (accents can change length)
+      let ft='', map=[]; [...n.data].forEach((c,i)=>{const f=fold(c); for(const _ of f){ft+=_; map.push(i)}});
+      const hits=[]; terms.forEach(t=>{let i=ft.indexOf(t); while(i>=0){hits.push([map[i],map[i+t.length-1]+1]); i=ft.indexOf(t,i+t.length)}});
+      if(!hits.length)return;
+      hits.sort((a,b)=>a[0]-b[0]); const merged=[]; hits.forEach(h=>{const l=merged[merged.length-1]; if(l&&h[0]<=l[1])l[1]=Math.max(l[1],h[1]); else merged.push([...h])});
+      const chars=[...n.data], frag=document.createDocumentFragment(); let pos=0;
+      merged.forEach(([s,e])=>{frag.append(chars.slice(pos,s).join('')); const m=document.createElement('mark'); m.className='hl'; m.textContent=chars.slice(s,e).join(''); frag.append(m); pos=e});
+      frag.append(chars.slice(pos).join('')); n.replaceWith(frag);
+    });
+  });
+};
 let saved=null; // open/closed state from before filtering, restored when the filter is cleared
 filter.addEventListener('input',()=>{
+  clearMarks();
   // Each comma-separated phrase must appear as typed within the section name or its book reference
   const terms=fold(filter.value).split(',').map(w=>w.trim().replace(/\s+/g,' ')).filter(Boolean);
   if(terms.length&&!saved)saved=all.map(d=>d.open);
@@ -506,6 +535,7 @@ filter.addEventListener('input',()=>{
     return own||below;
   };
   tops.forEach(d=>walk(d,false));
+  if(terms.length)highlight(terms);
   count.textContent=terms.length?`${hits} match${hits===1?'':'es'}`:'';
 });
 // Full-size viewer: opens in-page; close with ×, Escape, or a click on the map or backdrop
