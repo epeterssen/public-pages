@@ -34,6 +34,13 @@ details details>summary::before{font-size:.9rem;margin-top:8px}
 .tools{display:flex;align-items:center;gap:8px;margin:16px 0 0}
 .filter{font:inherit;font-size:.85rem;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px 10px;flex:1 1 160px;max-width:280px}
 .filter:focus{outline:none;border-color:var(--accent)}
+.fwrap{position:relative;display:flex;flex:1 1 160px;max-width:280px}
+.fwrap .filter{flex:1 1 auto;max-width:none;min-width:0;padding-right:30px}
+@media (hover:none) and (pointer:coarse){.filter::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}}
+@media not ((hover:none) and (pointer:coarse)){.fclear{display:none !important}.fwrap .filter{padding-right:10px}}
+.fclear{position:absolute;right:2px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);font:inherit;font-size:1.1rem;line-height:1;padding:4px 8px;cursor:pointer}
+.fclear:hover{color:var(--accent)}
+.filter:placeholder-shown+.fclear{display:none}
 .count{font-size:.8rem;color:var(--muted)}
 .book{margin:6px 0 0;display:flex;flex-direction:column;gap:2px}
 .book .grapes{font-weight:600;color:var(--accent);color:color-mix(in srgb,var(--fg) 50%,var(--accent))}
@@ -454,6 +461,13 @@ document.querySelectorAll('details>summary').forEach(s=>s.addEventListener('clic
   const open=!s.parentElement.open;
   document.querySelectorAll('details').forEach(d=>d.open=open);
 }));
+// Clear (×) button inside each filter box (iOS Safari doesn't show its own)
+document.querySelectorAll('input.filter').forEach(f=>{
+  const w=document.createElement('span'), b=document.createElement('button');
+  w.className='fwrap'; f.before(w); w.append(f, b);
+  b.type='button'; b.className='fclear'; b.setAttribute('aria-label','Clear filter'); b.textContent='×';
+  b.addEventListener('click',()=>{f.value=''; f.dispatchEvent(new Event('input')); f.focus();});
+});
 // Section filter: shows sections whose name matches (with everything inside them),
 // plus the parent sections on the way down, opened (ignores case and accents)
 const fold=x=>x.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
