@@ -257,7 +257,7 @@ document.querySelectorAll('table.sortable').forEach(t=>{
     tb.append(...rows);
   }));
 });
-// Open and scroll to the section named in the URL hash (e.g. country.html#by-country)
+// Open and scroll to the section named in the URL hash (e.g. variety.html#by-country)
 const openHash=()=>{const d=document.getElementById(location.hash.slice(1));if(d&&d.tagName==="DETAILS"){d.open=true;d.scrollIntoView();}};
 openHash(); addEventListener("hashchange",openHash);
 </script>
