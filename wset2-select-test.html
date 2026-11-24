@@ -272,7 +272,7 @@ const M={
   variety:{Q:QV,title:"Given Variety",tag:"Variety",ask:(n,c)=>`Which regions${c?" in "+c:""} is ${n} noted for?`,
     intro:"A grape is shown; select every region it is noted for. 1–4 of the 4 options are right. Tap countries to combine them."},
   region:{Q:QR,title:"Given Region",tag:"Region",ask:n=>`Which grapes is ${n} noted for?`,
-    intro:"A region is shown; select every grape it is noted for. 1–4 of the 4 options are right. Tap countries to combine them."},
+    intro:"Select every grape for which the region is noted (1–4 are possible)."},
 }[BY];
 const Q=M.Q;
 document.title=M.title; document.getElementById("title").textContent=M.title; document.getElementById("intro").textContent=M.intro;
