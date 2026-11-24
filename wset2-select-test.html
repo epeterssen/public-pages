@@ -293,14 +293,14 @@ function saveLocal(){try{localStorage.setItem(STORE,JSON.stringify(stars))}catch
 function refreshStar(){const s=$("star"); if(!s||!deck[i]) return; const on=!!stars[key(deck[i])]; s.setAttribute("aria-pressed",String(on)); s.textContent=on?"★":"☆"; s.title=on?"Remove from Remember":"Remember this question"}
 async function initStore(){
   let db=null; try{db=await claude.use("db")}catch(e){}
-  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();return}
+  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();starsIn();return}
   store=db.collection(STORE); mode="db";
   let t=setTimeout(()=>setStatus("Can't reach starred questions yet."),10000);
   store.onSnapshot(snap=>{
     const m={}; snap.docs.forEach(d=>{if(d.exists)m[d.id]=d.data()}); stars=m;
     if(!snap.metadata.fromCache){clearTimeout(t);setStatus("Starred questions are saved to your account.")}
-    chips(); refreshStar();
-  },e=>{clearTimeout(t);mode="local";loadLocal();setStatus("Saving stars in this browser only.");chips();refreshStar()});
+    chips(); refreshStar(); starsIn();
+  },e=>{clearTimeout(t);mode="local";loadLocal();setStatus("Saving stars in this browser only.");chips();refreshStar();starsIn()});
 }
 function toggleStar(q){
   const k=key(q), on=!stars[k];
@@ -352,6 +352,7 @@ function chips(){
   });
 }
 function start(list){
+  if(!list) savePrefs();
   deck=shuffle(list||parts(chap==="starred"?starDeck():selDeck()));
   i=0; right=0; answered=0; missed=[]; chips(); show();
 }
@@ -408,6 +409,11 @@ function end(){
   if(missed.length){const m=document.createElement("button");m.className="btn";m.id="redo-missed";m.textContent=`Retry ${missed.length} missed`;const list=missed.slice();m.onclick=()=>start(list);row.appendChild(m)}
   const r=document.createElement("button");r.className="btn ghost";r.id="restart";r.textContent="Start over";r.onclick=()=>start();row.appendChild(r);
 }
+// Remember the last chip settings in this browser
+const PREF="wset2-select-"+BY+"-prefs";
+function savePrefs(){try{localStorage.setItem(PREF,JSON.stringify({chap,sel:[...sel]}))}catch(e){}}
+function starsIn(){if(chap==="starred"&&!deck.length&&starDeck().length)start()}
+try{const p=JSON.parse(localStorage.getItem(PREF)||"null"); if(p){const ok=new Set(CS); chap=p.chap==="starred"?"starred":"sel"; sel=new Set((p.sel||[]).filter(x=>ok.has(x)))}}catch(e){}
 start();
 initStore();
 </script>
