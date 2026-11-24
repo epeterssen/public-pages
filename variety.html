@@ -74,6 +74,12 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 .sortable thead th::after{content:"";display:inline-block;width:1em;margin-left:4px}
 .sortable thead th[aria-sort="ascending"]::after{content:"▲"}
 .sortable thead th[aria-sort="descending"]::after{content:"▼"}
+/* Country chips (page-level): filter Variety by Region and Region by Variety; same look as the test chips */
+.cchips{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;font:500 .85rem var(--body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+tr.cx{display:none}
 </style>
 </head>
 <body>
@@ -81,6 +87,7 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 <a class="back" href="index.html">← WSET2 Study</a>
 
 <h1>Regions</h1>
+<div class="cchips" id="cchips" role="group" aria-label="Countries: filter Variety by Region and Region by Variety"></div>
 
 <details id="by-region">
 <summary><h2>Variety by Region</h2></summary>
@@ -617,6 +624,46 @@ document.querySelectorAll('table.sortable').forEach(t=>{
 // Open and scroll to the section named in the URL hash (e.g. variety.html#by-country)
 const openHash=()=>{const d=document.getElementById(location.hash.slice(1));if(d&&d.tagName==="DETAILS"){d.open=true;d.scrollIntoView();}};
 openHash(); addEventListener("hashchange",openHash);
+</script>
+<script>
+// Country chips: All/None plus one chip per country (tap to combine), like the select tests.
+// They hide rows (class "cx") in the tables listed in T, on top of each table's own filter box.
+// Kept out of the shared table script so that script stays identical across pages.
+(()=>{
+  const T=[["by-region",0],["by-variety",3]];   // [section id, Country column]
+  const tabs=T.map(([id,col])=>({tb:document.querySelector("#"+id+" tbody"),col,f:document.querySelector("#"+id+" input.filter"),count:document.querySelector("#"+id+" .tools .count")}));
+  const cOf=(r,col)=>r.cells[col].textContent.trim();
+  // Countries in Region by Variety order (the book's order), then any only in Variety by Region
+  const CS=[]; [tabs[1],tabs[0]].forEach(t=>{for(const r of t.tb.rows){const c=cOf(r,t.col); if(!CS.includes(c))CS.push(c)}});
+  let sel=new Set(CS);
+  const box=document.getElementById("cchips");
+  function apply(){
+    tabs.forEach(t=>{
+      for(const r of t.tb.rows)r.classList.toggle("cx",!sel.has(cOf(r,t.col)));
+      recount(t);
+    });
+    draw();
+  }
+  // Count rows left after both the chips and the filter box; runs after the shared filter's own count
+  function recount(t){
+    const rows=[...t.tb.rows], inC=rows.filter(r=>!r.classList.contains("cx")), shown=inC.filter(r=>!r.hidden).length;
+    const filtered=t.f&&t.f.value.trim()!=="", limited=sel.size<CS.length;
+    t.count.textContent=(filtered||limited)?shown+" of "+rows.length:"";
+  }
+  tabs.forEach(t=>t.f&&t.f.addEventListener("input",()=>recount(t)));
+  function draw(){
+    box.innerHTML="";
+    const full=sel.size===CS.length;
+    [["all",full?"None":"All"],...CS.map(c=>[c,c])].forEach(([v,l])=>{
+      const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=l;
+      b.setAttribute("aria-pressed",String(v!=="all"&&sel.has(v)));
+      b.title=v==="all"?(full?"Clear all countries":"Select all countries"):"Tap to add or remove "+v;
+      b.onclick=()=>{ if(v==="all")sel=full?new Set():new Set(CS); else sel.has(v)?sel.delete(v):sel.add(v); apply(); };
+      box.appendChild(b);
+    });
+  }
+  draw();
+})();
 </script>
 </body>
 </html>
