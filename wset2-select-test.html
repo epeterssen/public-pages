@@ -270,15 +270,15 @@ const QR=[
 const BY=new URLSearchParams(location.search).get("by")==="region"?"region":"variety";
 const M={
   variety:{Q:QV,title:"Given Variety",tag:"Variety",ask:(n,c)=>`Which regions${c?" in "+c:""} is ${n} noted for?`,
-    intro:"A grape is shown; select every region it is noted for. 1–4 of the 4 options are right."},
+    intro:"A grape is shown; select every region it is noted for. 1–4 of the 4 options are right. Tap countries to combine them."},
   region:{Q:QR,title:"Given Region",tag:"Region",ask:n=>`Which grapes is ${n} noted for?`,
-    intro:"A region is shown; select every grape it is noted for. 1–4 of the 4 options are right."},
+    intro:"A region is shown; select every grape it is noted for. 1–4 of the 4 options are right. Tap countries to combine them."},
 }[BY];
 const Q=M.Q;
 document.title=M.title; document.getElementById("title").textContent=M.title; document.getElementById("intro").textContent=M.intro;
 
 const $=id=>document.getElementById(id);
-let chap="all", deck=[], i=0, right=0, answered=0, missed=[];
+let chap="sel", sel=null, deck=[], i=0, right=0, answered=0, missed=[];
 // Starred ("Remember") questions, saved per mode
 const STORE="wset2-select-"+BY+"-starred";
 function key(q){let h=0;for(const c of BY+"|"+q.q)h=(h*31+c.charCodeAt(0))|0;return "q"+(h>>>0).toString(36)}
@@ -327,19 +327,32 @@ function build(q){
   return shuffle([...ok.map(t=>({t,ok:true})),...w.map(t=>({t,ok:false}))]);
 }
 
+// Countries with questions in this mode; all of them are selected to begin with
+const CS=CTRY.filter(ct=>ctryDeck(ct).length);
+sel=new Set(CS);
+// Selected countries combined: all of them = every question as asked under All; otherwise each country's questions
+function selDeck(){return sel.size===CS.length?Q:CS.filter(ct=>sel.has(ct)).flatMap(ctryDeck)}
 function chips(){
   const c=$("chips"); c.innerHTML="";
-  const n=starDeck().length;
-  // All, one chip per country, then Remember
-  [["all","All ("+partCount(Q)+")"],...CTRY.filter(ct=>ctryDeck(ct).length).map(ct=>[ct,ct+" ("+partCount(ctryDeck(ct))+")"]),["starred","★ Remember ("+n+")"]].forEach(([v,l])=>{
-    const b=document.createElement("button"); b.className="chip"+(v==="starred"?" miss":""); b.id="chip-"+v; b.textContent=l;
+  const n=starDeck().length, full=chap==="sel"&&sel.size===CS.length;
+  // All/None, one chip per country (tap to combine them), then Remember
+  [["all",full?"None":"All"],...CS.map(ct=>[ct,ct+" ("+partCount(ctryDeck(ct))+")"]),["starred","★ Remember ("+n+")"]].forEach(([v,l])=>{
+    const b=document.createElement("button"); b.className="chip"+(v==="starred"?" miss":""); b.id="chip-"+v.replace(/\s+/g,"-"); b.textContent=l;
     if(v==="starred"&&!n&&chap!=="starred") b.disabled=true;
-    b.setAttribute("aria-pressed",String(chap===v));
-    b.onclick=()=>{chap=v; start()}; c.appendChild(b);
+    const on=v==="starred"?chap==="starred":v==="all"?false:(chap==="sel"&&sel.has(v));
+    b.setAttribute("aria-pressed",String(on));
+    b.title=v==="all"?(full?"Clear all countries":"Select all countries"):v==="starred"?"Questions you starred":"Tap to add or remove "+v;
+    b.onclick=()=>{
+      if(v==="starred"){chap="starred"}
+      else if(v==="all"){sel=full?new Set():new Set(CS); chap="sel"}
+      else{if(chap!=="sel"){chap="sel";sel=new Set()} sel.has(v)?sel.delete(v):sel.add(v)}
+      start();
+    };
+    c.appendChild(b);
   });
 }
 function start(list){
-  deck=shuffle(list||parts(chap==="starred"?starDeck():chap==="all"?Q:ctryDeck(chap)));
+  deck=shuffle(list||parts(chap==="starred"?starDeck():selDeck()));
   i=0; right=0; answered=0; missed=[]; chips(); show();
 }
 function stats(){
@@ -350,7 +363,7 @@ function stats(){
 function show(){
   stats();
   const card=$("card");
-  if(!deck.length){card.className="card end";card.innerHTML=`<div class="tag">Nothing starred</div><p class="sub">Tap ☆ on any question to remember it.</p>`;return}
+  if(!deck.length){card.className="card end";card.innerHTML=chap==="starred"?`<div class="tag">Nothing starred</div><p class="sub">Tap ☆ on any question to remember it.</p>`:`<div class="tag">No countries selected</div><p class="sub">Tap a country, or All.</p>`;return}
   if(i>=deck.length) return end();
   const q=deck[i], opts=build(q);
   card.className="card";
