@@ -395,7 +395,7 @@ function submit(opts,box,q){
   });
   const v=$("card").querySelector(".verdict");
   v.textContent=ok?"Correct":"Incorrect"; v.className="verdict "+(ok?"g":"b");
-  const x=$("card").querySelector(".xnote"); x.textContent=q.x; x.hidden=false;
+  const x=$("card").querySelector(".xnote"); x.textContent=q.x; if(BY==="region"&&q.c) x.append(document.createElement("br"),`Country: ${q.c}.`); x.hidden=false;
   const nx=$("next"); nx.textContent=i===deck.length-1?"See results":"Next";
   nx.onclick=()=>{i++;show()}; nx.focus({preventScroll:true});
   stats();
