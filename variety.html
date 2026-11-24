@@ -75,11 +75,19 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 .sortable thead th[aria-sort="ascending"]::after{content:"▲"}
 .sortable thead th[aria-sort="descending"]::after{content:"▼"}
 /* Country chips (page-level): filter Variety by Region and Region by Variety; same look as the test chips */
-.cchips{display:flex;flex-wrap:wrap;gap:4px;margin:0}
-.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:2px 9px;font:500 .75rem var(--body);line-height:1.4;cursor:pointer}
+.cchips{display:flex;flex-wrap:nowrap;gap:4px;margin:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.cchips::-webkit-scrollbar{display:none}
+@media (pointer:fine){.cchips{cursor:grab}.cchips.drag,.cchips.drag .chip{cursor:grabbing;user-select:none}}
+/* One row that slides sideways; fades at an edge only while more chips are hidden that way */
+.cchips.more-r{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
+.cchips.more-l{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent)}
+.cchips.more-l.more-r{-webkit-mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:2px 9px;font:500 .75rem var(--body);line-height:1.4;cursor:pointer;flex:none;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 tr.cx{display:none}
+.gtools{margin:8px 0 0}
+.scount{font-family:var(--body);font-size:.85rem;color:var(--muted);font-weight:400}
 </style>
 </head>
 <body>
@@ -87,11 +95,11 @@ tr.cx{display:none}
 <a class="back" href="index.html">← WSET2 Study</a>
 
 <h1>Regions</h1>
-<div class="cchips" id="cchips" role="group" aria-label="Countries: filter Variety by Region and Region by Variety"></div>
+<div class="cchips" id="cchips" role="group" aria-label="Countries: filter every section on this page"></div>
+<div class="tools gtools" id="gtools"></div>
 
 <details id="by-region">
 <summary><h2>Variety by Region</h2></summary>
-<div class="tools"><button type="button" class="widen" data-key="grapesByRegionWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter grapes by region"><span class="count"></span></div>
 <div class="scroll">
 <table class="grid sortable">
 <thead><tr><th>Country</th><th>Region</th><th>Designation</th><th>Grapes</th></tr></thead>
@@ -216,7 +224,6 @@ tr.cx{display:none}
 
 <details id="by-variety">
 <summary><h2>Region by Variety</h2></summary>
-<div class="tools"><button type="button" class="widen" data-key="regionsWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter regions"><span class="count"></span></div>
 <div class="scroll">
 <table class="grid sortable">
 <thead><tr><th>Grape</th><th>Region</th><th>Location</th><th>Country</th></tr></thead>
@@ -405,32 +412,32 @@ tr.cx{display:none}
 <p class="note">Click a column heading to sort; click again to reverse, a third time to restore the original order.</p>
 </details>
 
-<details>
+<details id="significant">
 <summary><h2>Significant Varieties in Region</h2></summary>
-<div class="tools"><button type="button" class="reveal-all">Show all</button><button type="button" class="widen" data-key="varietiesWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter varieties"><span class="count"></span></div>
+<div class="tools"><button type="button" class="reveal-all">Show all</button></div>
 <div class="scroll">
 <table class="grid sortable quiz quiz-all">
-<thead><tr><th>Region</th><th>Most Planted Variety</th><th>Most Important Variety</th><th>Only Variety Allowed</th><th>Exclusive to</th></tr></thead>
+<thead><tr><th hidden>Country</th><th>Region</th><th>Most Planted Variety</th><th>Most Important Variety</th><th>Only Variety Allowed</th><th>Exclusive to</th></tr></thead>
 <tbody>
-<tr><th>Adelaide Hills</th><td>Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><th>Argentina</th><td>—</td><td>Malbec (black)</td><td>—</td><td>—</td></tr>
-<tr><th>Australia</th><td>Shiraz</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><th>Barolo DOCG</th><td>—</td><td>—</td><td>Nebbiolo</td><td>—</td></tr>
-<tr><th>Beaujolais</th><td>—</td><td>—</td><td>—</td><td>Gamay (almost)</td></tr>
-<tr><th>Bordeaux</th><td>Merlot</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><th>Bordeaux Right Bank</th><td>—</td><td>Merlot</td><td>—</td><td>—</td></tr>
-<tr><th>Chile</th><td>Cabernet Sauvignon</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><th>Germany</th><td>—</td><td>Riesling</td><td>—</td><td>—</td></tr>
-<tr><th>Hawke's Bay</th><td>Chardonnay (white)</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><th>Northern Rhône</th><td>—</td><td>—</td><td>Syrah</td><td>—</td></tr>
-<tr><th>Pouilly-Fumé AOC</th><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
-<tr><th>Sancerre AOC</th><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
-<tr><th>Sauternes</th><td>—</td><td>Semillon</td><td>—</td><td>—</td></tr>
-<tr><th>Soave</th><td>—</td><td>Garganega</td><td>—</td><td>—</td></tr>
-<tr><th>South Africa</th><td>Chenin Blanc (white)</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><th>Tokaj</th><td>Furmint</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><th>Valpolicella</th><td>—</td><td>Corvina</td><td>—</td><td>—</td></tr>
-<tr><th>Vouvray AOC</th><td>—</td><td>—</td><td>Chenin Blanc</td><td>—</td></tr>
+<tr><td hidden>Australia</td><th>Adelaide Hills</th><td>Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Argentina</td><th>Argentina</th><td>—</td><td>Malbec (black)</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Australia</td><th>Australia</th><td>Shiraz</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Italy</td><th>Barolo DOCG</th><td>—</td><td>—</td><td>Nebbiolo</td><td>—</td></tr>
+<tr><td hidden>France</td><th>Beaujolais</th><td>—</td><td>—</td><td>—</td><td>Gamay (almost)</td></tr>
+<tr><td hidden>France</td><th>Bordeaux</th><td>Merlot</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td hidden>France</td><th>Bordeaux Right Bank</th><td>—</td><td>Merlot</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Chile</td><th>Chile</th><td>Cabernet Sauvignon</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Germany</td><th>Germany</th><td>—</td><td>Riesling</td><td>—</td><td>—</td></tr>
+<tr><td hidden>New Zealand</td><th>Hawke's Bay</th><td>Chardonnay (white)</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td hidden>France</td><th>Northern Rhône</th><td>—</td><td>—</td><td>Syrah</td><td>—</td></tr>
+<tr><td hidden>France</td><th>Pouilly-Fumé AOC</th><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
+<tr><td hidden>France</td><th>Sancerre AOC</th><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
+<tr><td hidden>France</td><th>Sauternes</th><td>—</td><td>Semillon</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Italy</td><th>Soave</th><td>—</td><td>Garganega</td><td>—</td><td>—</td></tr>
+<tr><td hidden>South Africa</td><th>South Africa</th><td>Chenin Blanc (white)</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Hungary</td><th>Tokaj</th><td>Furmint</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td hidden>Italy</td><th>Valpolicella</th><td>—</td><td>Corvina</td><td>—</td><td>—</td></tr>
+<tr><td hidden>France</td><th>Vouvray AOC</th><td>—</td><td>—</td><td>Chenin Blanc</td><td>—</td></tr>
 </tbody>
 </table>
 </div>
@@ -439,7 +446,6 @@ tr.cx{display:none}
 
 <details id="by-country">
 <summary><h2>Regions by Country</h2></summary>
-<div class="tools"><button type="button" class="widen" data-key="countryWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter regions by country"><span class="count"></span></div>
 <div class="scroll">
 <table class="grid">
 <thead><tr><th>Country</th><th>Regions and Appellations</th></tr></thead>
@@ -464,69 +470,68 @@ tr.cx{display:none}
 
 <details id="climate">
 <summary><h2>Climate by Region</h2></summary>
-<div class="tools"><button type="button" class="widen" data-key="climateWide" aria-pressed="false">Widen table</button><input type="search" class="filter" placeholder="Filter…" aria-label="Filter climate by region"><span class="count"></span></div>
 <div class="scroll">
 <table class="grid sortable">
-<thead><tr><th>Region</th><th>Climate</th><th>Moderation</th></tr></thead>
+<thead><tr><th hidden>Country</th><th>Region</th><th>Climate</th><th>Moderation</th></tr></thead>
 <tbody>
-<tr><td>Champagne</td><td>Cool</td><td>—</td></tr>
-<tr><td>Burgundy – Chablis</td><td>Cool</td><td>—</td></tr>
-<tr><td>Burgundy – Chablis Premier/Grand Cru</td><td>Cool</td><td>Slopes (south/south-west-facing)</td></tr>
-<tr><td>Burgundy – Côte d'Or</td><td>Moderate</td><td>Slopes (south/south-east-facing)</td></tr>
-<tr><td>Burgundy – Beaujolais</td><td>Moderate</td><td>—</td></tr>
-<tr><td>Burgundy – Beaujolais Villages</td><td>Moderate</td><td>Slopes (sun exposure); Warm soils (well-drained)</td></tr>
-<tr><td>Bordeaux – Left Bank</td><td>Moderate, maritime; high rainfall</td><td>Ocean (Atlantic Ocean, rainfall); Gravel soils (drain fast, hold heat)</td></tr>
-<tr><td>Bordeaux – Right Bank</td><td>Moderate, maritime; high rainfall</td><td>Ocean (Atlantic Ocean, rainfall)</td></tr>
-<tr><td>Loire Valley – Central Vineyards</td><td>Cool</td><td>—</td></tr>
-<tr><td>Alsace</td><td>Dry, sunny (one of the driest in France); dry autumns</td><td>Mountain shelter (Vosges Mountains, from rain-bearing westerly winds); Slopes (east/south-east-facing foothills)</td></tr>
-<tr><td>Rhône – Northern Rhône</td><td>Moderate</td><td>Slopes (steep, above the Rhône River)</td></tr>
-<tr><td>Rhône – Southern Rhône</td><td>Warm</td><td>Latitude (southerly)</td></tr>
-<tr><td>Languedoc-Roussillon</td><td>Warm; steadier weather than Bordeaux</td><td>Altitude (some areas)</td></tr>
-<tr><td>Mosel</td><td>Cool</td><td>Latitude (northerly); River (Mosel River, reflected sunlight); Slopes (steep, south/south-west-facing); Stony soils</td></tr>
-<tr><td>Rheingau</td><td>Cool</td><td>Slopes (steep, south-facing, north bank of the River Rhine)</td></tr>
-<tr><td>Pfalz</td><td>Dry, sunny</td><td>Mountain shelter (<i>Haardt Mountains</i>, to the west)</td></tr>
-<tr><td>Northern Italy (Piemonte, Veneto)</td><td>Moderate</td><td>Mountain shelter (Alps, to the north); Slopes (Alpine foothills)</td></tr>
-<tr><td>Tuscany – Chianti</td><td>Warm</td><td>Altitude (Apennine Mountains foothills)</td></tr>
-<tr><td>Tuscany – Chianti Classico</td><td>Warm; long ripening season</td><td>Altitude (higher than Chianti)</td></tr>
-<tr><td>Tuscany – Montalcino</td><td>Warm, sunny</td><td>—</td></tr>
-<tr><td>Abruzzo</td><td>Warm</td><td>—</td></tr>
-<tr><td>Campania</td><td>—</td><td>Altitude (mountainous)</td></tr>
-<tr><td>Puglia</td><td>Warm</td><td>—</td></tr>
-<tr><td>Rías Baixas</td><td>Moderate; cooler, wetter and cloudier than most of Spain</td><td>Ocean (Atlantic Ocean)</td></tr>
-<tr><td>Rioja</td><td>Moderate</td><td>—</td></tr>
-<tr><td>Ribera del Duero</td><td>Warm days, cool nights</td><td>Altitude (high)</td></tr>
-<tr><td>Priorat</td><td>Warm, dry</td><td>—</td></tr>
-<tr><td>Catalunya</td><td>Warm</td><td>—</td></tr>
-<tr><td>California – Central Valley</td><td>Very warm/hot, dry; irrigated</td><td>Mountain barrier (<i>Coast Ranges</i>, block sea influence)</td></tr>
-<tr><td>California – Napa Valley</td><td>Warm, sunny, long growing season</td><td>—</td></tr>
-<tr><td>Napa Valley – Calistoga</td><td>Warmer than the rest of Napa Valley (far north)</td><td>—</td></tr>
-<tr><td>California – Los Carneros</td><td>Cool to moderate</td><td>Fog (San Pablo Bay, morning)</td></tr>
-<tr><td>California – Sonoma</td><td>Cool to moderate (western parts)</td><td>Sea breezes (Pacific Ocean)</td></tr>
-<tr><td>California – Santa Barbara County</td><td>Cool to moderate</td><td>Sea breezes (<i>Pacific Ocean</i>, from the west and south)</td></tr>
-<tr><td>Oregon</td><td>Moderate; cooler than California</td><td>Ocean (Pacific Ocean); Latitude (northerly)</td></tr>
-<tr><td>Chile – Casablanca Valley</td><td>Cool</td><td>Sea breezes (Pacific Ocean); Fog (Pacific Ocean, morning)</td></tr>
-<tr><td>Chile – Central Valley</td><td>Warm, dry</td><td>Altitude (Andes Mountains foothills to the Coastal Ranges)</td></tr>
-<tr><td>Mendoza</td><td>Warm</td><td>Altitude (high, <i>Andes Mountains</i>)</td></tr>
-<tr><td>Western Cape (inland)</td><td>Hot, dry</td><td>—</td></tr>
-<tr><td>Constantia</td><td>Cool</td><td>Sea breezes (Southern Ocean)</td></tr>
-<tr><td>Stellenbosch</td><td>Moderate to warm</td><td>Altitude (mountainous); Sea breezes (<i>False Bay</i>)</td></tr>
-<tr><td>Western Cape – Cape South Coast – Elgin</td><td>Coolest in South Africa</td><td>Altitude</td></tr>
-<tr><td>Walker Bay</td><td>Among the coolest in South Africa</td><td>Sea breezes (<i>Southern Ocean</i>, strong, from the south)</td></tr>
-<tr><td>South Eastern Australia</td><td>Warm inland; irrigated</td><td>—</td></tr>
-<tr><td>Hunter Valley</td><td>Warm; very hot summers</td><td>Cloud cover (summer); Sea breezes (<i>Tasman Sea</i>, summer)</td></tr>
-<tr><td>Barossa Valley</td><td>Warm</td><td>—</td></tr>
-<tr><td>McLaren Vale</td><td>Warm</td><td>—</td></tr>
-<tr><td>Eden Valley</td><td>Moderate</td><td>Altitude</td></tr>
-<tr><td>Clare Valley</td><td>Moderate</td><td>Altitude</td></tr>
-<tr><td>Adelaide Hills</td><td>Cool to moderate</td><td>Altitude</td></tr>
-<tr><td>Coonawarra</td><td>Moderate</td><td>Cloud cover; Sea breezes (<i>Southern Ocean</i>, from the south)</td></tr>
-<tr><td>Yarra Valley</td><td>Cool</td><td>Ocean currents (Southern Ocean); Sea breezes (Southern Ocean)</td></tr>
-<tr><td>Mornington Peninsula</td><td>Cool</td><td>Sea breezes (Southern Ocean)</td></tr>
-<tr><td>Margaret River</td><td>Warm; winter rainfall</td><td>Sea breezes (<i>Indian Ocean</i>)</td></tr>
-<tr><td>Marlborough</td><td>Cool, sunny; rainfall</td><td>Sea breezes</td></tr>
-<tr><td>Martinborough</td><td>Cool</td><td>—</td></tr>
-<tr><td>Hawke's Bay</td><td>Moderate; rainfall</td><td>—</td></tr>
-<tr><td>Central Otago</td><td>Sunny days, cool nights</td><td>Latitude (southerly); Mountain shelter (ring of mountains, from sea breezes and rain)</td></tr>
+<tr><td hidden>France</td><td>Champagne</td><td>Cool</td><td>—</td></tr>
+<tr><td hidden>France</td><td>Burgundy – Chablis</td><td>Cool</td><td>—</td></tr>
+<tr><td hidden>France</td><td>Burgundy – Chablis Premier/Grand Cru</td><td>Cool</td><td>Slopes (south/south-west-facing)</td></tr>
+<tr><td hidden>France</td><td>Burgundy – Côte d'Or</td><td>Moderate</td><td>Slopes (south/south-east-facing)</td></tr>
+<tr><td hidden>France</td><td>Burgundy – Beaujolais</td><td>Moderate</td><td>—</td></tr>
+<tr><td hidden>France</td><td>Burgundy – Beaujolais Villages</td><td>Moderate</td><td>Slopes (sun exposure); Warm soils (well-drained)</td></tr>
+<tr><td hidden>France</td><td>Bordeaux – Left Bank</td><td>Moderate, maritime; high rainfall</td><td>Ocean (Atlantic Ocean, rainfall); Gravel soils (drain fast, hold heat)</td></tr>
+<tr><td hidden>France</td><td>Bordeaux – Right Bank</td><td>Moderate, maritime; high rainfall</td><td>Ocean (Atlantic Ocean, rainfall)</td></tr>
+<tr><td hidden>France</td><td>Loire Valley – Central Vineyards</td><td>Cool</td><td>—</td></tr>
+<tr><td hidden>France</td><td>Alsace</td><td>Dry, sunny (one of the driest in France); dry autumns</td><td>Mountain shelter (Vosges Mountains, from rain-bearing westerly winds); Slopes (east/south-east-facing foothills)</td></tr>
+<tr><td hidden>France</td><td>Rhône – Northern Rhône</td><td>Moderate</td><td>Slopes (steep, above the Rhône River)</td></tr>
+<tr><td hidden>France</td><td>Rhône – Southern Rhône</td><td>Warm</td><td>Latitude (southerly)</td></tr>
+<tr><td hidden>France</td><td>Languedoc-Roussillon</td><td>Warm; steadier weather than Bordeaux</td><td>Altitude (some areas)</td></tr>
+<tr><td hidden>Germany</td><td>Mosel</td><td>Cool</td><td>Latitude (northerly); River (Mosel River, reflected sunlight); Slopes (steep, south/south-west-facing); Stony soils</td></tr>
+<tr><td hidden>Germany</td><td>Rheingau</td><td>Cool</td><td>Slopes (steep, south-facing, north bank of the River Rhine)</td></tr>
+<tr><td hidden>Germany</td><td>Pfalz</td><td>Dry, sunny</td><td>Mountain shelter (<i>Haardt Mountains</i>, to the west)</td></tr>
+<tr><td hidden>Italy</td><td>Northern Italy (Piemonte, Veneto)</td><td>Moderate</td><td>Mountain shelter (Alps, to the north); Slopes (Alpine foothills)</td></tr>
+<tr><td hidden>Italy</td><td>Tuscany – Chianti</td><td>Warm</td><td>Altitude (Apennine Mountains foothills)</td></tr>
+<tr><td hidden>Italy</td><td>Tuscany – Chianti Classico</td><td>Warm; long ripening season</td><td>Altitude (higher than Chianti)</td></tr>
+<tr><td hidden>Italy</td><td>Tuscany – Montalcino</td><td>Warm, sunny</td><td>—</td></tr>
+<tr><td hidden>Italy</td><td>Abruzzo</td><td>Warm</td><td>—</td></tr>
+<tr><td hidden>Italy</td><td>Campania</td><td>—</td><td>Altitude (mountainous)</td></tr>
+<tr><td hidden>Italy</td><td>Puglia</td><td>Warm</td><td>—</td></tr>
+<tr><td hidden>Spain</td><td>Rías Baixas</td><td>Moderate; cooler, wetter and cloudier than most of Spain</td><td>Ocean (Atlantic Ocean)</td></tr>
+<tr><td hidden>Spain</td><td>Rioja</td><td>Moderate</td><td>—</td></tr>
+<tr><td hidden>Spain</td><td>Ribera del Duero</td><td>Warm days, cool nights</td><td>Altitude (high)</td></tr>
+<tr><td hidden>Spain</td><td>Priorat</td><td>Warm, dry</td><td>—</td></tr>
+<tr><td hidden>Spain</td><td>Catalunya</td><td>Warm</td><td>—</td></tr>
+<tr><td hidden>USA</td><td>California – Central Valley</td><td>Very warm/hot, dry; irrigated</td><td>Mountain barrier (<i>Coast Ranges</i>, block sea influence)</td></tr>
+<tr><td hidden>USA</td><td>California – Napa Valley</td><td>Warm, sunny, long growing season</td><td>—</td></tr>
+<tr><td hidden>USA</td><td>Napa Valley – Calistoga</td><td>Warmer than the rest of Napa Valley (far north)</td><td>—</td></tr>
+<tr><td hidden>USA</td><td>California – Los Carneros</td><td>Cool to moderate</td><td>Fog (San Pablo Bay, morning)</td></tr>
+<tr><td hidden>USA</td><td>California – Sonoma</td><td>Cool to moderate (western parts)</td><td>Sea breezes (Pacific Ocean)</td></tr>
+<tr><td hidden>USA</td><td>California – Santa Barbara County</td><td>Cool to moderate</td><td>Sea breezes (<i>Pacific Ocean</i>, from the west and south)</td></tr>
+<tr><td hidden>USA</td><td>Oregon</td><td>Moderate; cooler than California</td><td>Ocean (Pacific Ocean); Latitude (northerly)</td></tr>
+<tr><td hidden>Chile</td><td>Chile – Casablanca Valley</td><td>Cool</td><td>Sea breezes (Pacific Ocean); Fog (Pacific Ocean, morning)</td></tr>
+<tr><td hidden>Chile</td><td>Chile – Central Valley</td><td>Warm, dry</td><td>Altitude (Andes Mountains foothills to the Coastal Ranges)</td></tr>
+<tr><td hidden>Argentina</td><td>Mendoza</td><td>Warm</td><td>Altitude (high, <i>Andes Mountains</i>)</td></tr>
+<tr><td hidden>South Africa</td><td>Western Cape (inland)</td><td>Hot, dry</td><td>—</td></tr>
+<tr><td hidden>South Africa</td><td>Constantia</td><td>Cool</td><td>Sea breezes (Southern Ocean)</td></tr>
+<tr><td hidden>South Africa</td><td>Stellenbosch</td><td>Moderate to warm</td><td>Altitude (mountainous); Sea breezes (<i>False Bay</i>)</td></tr>
+<tr><td hidden>South Africa</td><td>Western Cape – Cape South Coast – Elgin</td><td>Coolest in South Africa</td><td>Altitude</td></tr>
+<tr><td hidden>South Africa</td><td>Walker Bay</td><td>Among the coolest in South Africa</td><td>Sea breezes (<i>Southern Ocean</i>, strong, from the south)</td></tr>
+<tr><td hidden>Australia</td><td>South Eastern Australia</td><td>Warm inland; irrigated</td><td>—</td></tr>
+<tr><td hidden>Australia</td><td>Hunter Valley</td><td>Warm; very hot summers</td><td>Cloud cover (summer); Sea breezes (<i>Tasman Sea</i>, summer)</td></tr>
+<tr><td hidden>Australia</td><td>Barossa Valley</td><td>Warm</td><td>—</td></tr>
+<tr><td hidden>Australia</td><td>McLaren Vale</td><td>Warm</td><td>—</td></tr>
+<tr><td hidden>Australia</td><td>Eden Valley</td><td>Moderate</td><td>Altitude</td></tr>
+<tr><td hidden>Australia</td><td>Clare Valley</td><td>Moderate</td><td>Altitude</td></tr>
+<tr><td hidden>Australia</td><td>Adelaide Hills</td><td>Cool to moderate</td><td>Altitude</td></tr>
+<tr><td hidden>Australia</td><td>Coonawarra</td><td>Moderate</td><td>Cloud cover; Sea breezes (<i>Southern Ocean</i>, from the south)</td></tr>
+<tr><td hidden>Australia</td><td>Yarra Valley</td><td>Cool</td><td>Ocean currents (Southern Ocean); Sea breezes (Southern Ocean)</td></tr>
+<tr><td hidden>Australia</td><td>Mornington Peninsula</td><td>Cool</td><td>Sea breezes (Southern Ocean)</td></tr>
+<tr><td hidden>Australia</td><td>Margaret River</td><td>Warm; winter rainfall</td><td>Sea breezes (<i>Indian Ocean</i>)</td></tr>
+<tr><td hidden>New Zealand</td><td>Marlborough</td><td>Cool, sunny; rainfall</td><td>Sea breezes</td></tr>
+<tr><td hidden>New Zealand</td><td>Martinborough</td><td>Cool</td><td>—</td></tr>
+<tr><td hidden>New Zealand</td><td>Hawke's Bay</td><td>Moderate; rainfall</td><td>—</td></tr>
+<tr><td hidden>New Zealand</td><td>Central Otago</td><td>Sunny days, cool nights</td><td>Latitude (southerly); Mountain shelter (ring of mountains, from sea breezes and rain)</td></tr>
 </tbody>
 </table>
 </div>
@@ -626,43 +631,95 @@ const openHash=()=>{const d=document.getElementById(location.hash.slice(1));if(d
 openHash(); addEventListener("hashchange",openHash);
 </script>
 <script>
-// Country chips: All/None plus one chip per country (tap to combine), like the select tests.
-// They hide rows (class "cx") in the tables listed in T, on top of each table's own filter box.
-// Kept out of the shared table script so that script stays identical across pages.
+// Page-level controls for the Regions page: country chips, one filter box and one Widen button, all
+// applying to every section listed in T. Kept out of the shared table script so that script stays
+// identical across pages; it runs after it and reuses its fold() and highlight() helpers.
 (()=>{
-  const T=[["by-region",0],["by-variety",3]];   // [section id, Country column]
-  const tabs=T.map(([id,col])=>({tb:document.querySelector("#"+id+" tbody"),col,f:document.querySelector("#"+id+" input.filter"),count:document.querySelector("#"+id+" .tools .count")}));
+  const T=[["by-region",0],["by-variety",3],["significant",0],["by-country",0],["climate",0]];   // [section id, Country column]; Significant Varieties and Climate use a hidden first column
+  const tabs=T.map(([id,col])=>{const d=document.getElementById(id); return {d,tb:d.querySelector("tbody"),col,box:d.querySelector(".scroll"),h:d.querySelector("summary h2")}});
   const cOf=(r,col)=>r.cells[col].textContent.trim();
-  // Countries in Region by Variety order (the book's order), then any only in Variety by Region
-  const CS=[]; [tabs[1],tabs[0]].forEach(t=>{for(const r of t.tb.rows){const c=cOf(r,t.col); if(!CS.includes(c))CS.push(c)}});
-  let sel=new Set(CS);
-  const box=document.getElementById("cchips");
+  const norm=x=>fold(x).replace(/\s+/g," ");
+  // Cells with several lines (<br>): wrap each line so the filter can hide lines on their own
+  tabs.forEach(t=>{t.lines=new Map(); for(const r of t.tb.rows)for(const c of r.cells){
+    if(!c.querySelector("br"))continue;
+    c.innerHTML=c.innerHTML.split(/<br\s*\/?>/i).map(h=>`<span class="ln">${h}</span>`).join("");
+    t.lines.set(c,[...c.querySelectorAll(":scope>.ln")]);
+  }});
+  const text=(t,c)=>t.lines.has(c)?t.lines.get(c).map(l=>norm(l.textContent)).join(" "):norm(c.textContent);
+  // Count shown after each section heading, e.g. "· 4 of 58"
+  tabs.forEach(t=>{t.cnt=document.createElement("span"); t.cnt.className="scount"; t.h.after(t.cnt)});
+
+  // Countries in Region by Variety order (the book's order), then any found only in other sections
+  const CS=[]; [tabs[1],...tabs.filter((t,i)=>i!==1)].forEach(t=>{for(const r of t.tb.rows){const c=cOf(r,t.col); if(!CS.includes(c))CS.push(c)}});
+  let sel=new Set(CS), terms=[], openBefore=null;
+
+  // Controls row under the chips: filter box (with × on touch screens), total count, Widen button
+  const bar=document.getElementById("gtools");
+  const f=document.createElement("input"); f.type="search"; f.className="filter"; f.placeholder="Filter all tables…"; f.setAttribute("aria-label","Filter every table on this page");
+  const fw=document.createElement("span"), fx=document.createElement("button"); fw.className="fwrap"; fx.type="button"; fx.className="fclear"; fx.setAttribute("aria-label","Clear filter"); fx.textContent="×";
+  fw.append(f,fx); fx.onclick=()=>{f.value=""; f.dispatchEvent(new Event("input")); f.focus()};
+  const total=document.createElement("span"); total.className="count";
+  const wb=document.createElement("button"); wb.type="button"; wb.className="widen"; wb.setAttribute("aria-pressed","false");
+  bar.append(fw,total,wb);
+
+  // Wide/narrow for every table at once (remembered per browser)
+  const setWide=w=>{tabs.forEach(t=>t.box.classList.toggle("wide",w)); wb.setAttribute("aria-pressed",w); wb.textContent=w?"Narrow tables":"Widen tables"};
+  let wide=false; try{wide=localStorage.getItem("regionsPageWide")==="1"}catch(e){}
+  setWide(wide);
+  wb.onclick=()=>{wide=!wide; setWide(wide); try{localStorage.setItem("regionsPageWide",wide?"1":"0")}catch(e){}};
+
+  // Apply chips + filter to every table, update counts, open sections with matches while filtering
   function apply(){
+    let shownAll=0, rowsAll=0;
     tabs.forEach(t=>{
-      for(const r of t.tb.rows)r.classList.toggle("cx",!sel.has(cOf(r,t.col)));
-      recount(t);
+      clearMarks(t.tb);
+      let shown=0;
+      for(const r of t.tb.rows){
+        r.classList.toggle("cx",!sel.has(cOf(r,t.col)));
+        // Each comma-separated phrase must appear within a single cell
+        const ok=terms.every(w=>[...r.cells].some(c=>text(t,c).includes(w))); r.hidden=!ok;
+        for(const c of r.cells){const ls=t.lines.get(c); if(!ls)continue; const hit=ls.map(l=>terms.some(w=>norm(l.textContent).includes(w))); const any=hit.some(Boolean); ls.forEach((l,i)=>l.hidden=any&&!hit[i])}
+        if(ok&&!r.classList.contains("cx"))shown++;
+      }
+      if(terms.length)highlight([...t.tb.rows].filter(r=>!r.hidden&&!r.classList.contains("cx")).flatMap(r=>[...r.cells]),terms);
+      const n=t.tb.rows.length; shownAll+=shown; rowsAll+=n;
+      t.cnt.textContent=(terms.length||sel.size<CS.length)?" · "+shown+" of "+n:"";
+      t.shown=shown;
     });
-    draw();
+    total.textContent=(terms.length||sel.size<CS.length)?shownAll+" of "+rowsAll+" rows":"";
+    // While a filter is typed: open sections with matches, close the rest; clearing restores what was open
+    if(terms.length){
+      if(!openBefore)openBefore=tabs.map(t=>t.d.open);
+      tabs.forEach(t=>t.d.open=t.shown>0);
+    }else if(openBefore){tabs.forEach((t,i)=>t.d.open=openBefore[i]); openBefore=null}
   }
-  // Count rows left after both the chips and the filter box; runs after the shared filter's own count
-  function recount(t){
-    const rows=[...t.tb.rows], inC=rows.filter(r=>!r.classList.contains("cx")), shown=inC.filter(r=>!r.hidden).length;
-    const filtered=t.f&&t.f.value.trim()!=="", limited=sel.size<CS.length;
-    t.count.textContent=(filtered||limited)?shown+" of "+rows.length:"";
-  }
-  tabs.forEach(t=>t.f&&t.f.addEventListener("input",()=>recount(t)));
+  f.addEventListener("input",()=>{terms=fold(f.value).split(",").map(w=>w.trim().replace(/\s+/g," ")).filter(Boolean); apply()});
+
+  // Country chips: All/None plus one chip per country (tap to combine), like the select tests
+  const box=document.getElementById("cchips");
   function draw(){
-    box.innerHTML="";
+    const x=box.scrollLeft; box.innerHTML="";
     const full=sel.size===CS.length;
     [["all",full?"None":"All"],...CS.map(c=>[c,c])].forEach(([v,l])=>{
       const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=l;
       b.setAttribute("aria-pressed",String(v!=="all"&&sel.has(v)));
       b.title=v==="all"?(full?"Clear all countries":"Select all countries"):"Tap to add or remove "+v;
-      b.onclick=()=>{ if(v==="all")sel=full?new Set():new Set(CS); else sel.has(v)?sel.delete(v):sel.add(v); apply(); };
+      b.onclick=()=>{ if(v==="all")sel=full?new Set():new Set(CS); else sel.has(v)?sel.delete(v):sel.add(v); apply(); draw(); };
       box.appendChild(b);
     });
+    box.scrollLeft=x; if(box.dataset.ready)edges();   // keep the slider where it was
   }
-  draw();
+  // Slider: fade the edge that has more chips beyond it; a vertical mouse wheel scrolls the row sideways
+  const edges=()=>{box.classList.toggle("more-l",box.scrollLeft>2);box.classList.toggle("more-r",box.scrollLeft+box.clientWidth<box.scrollWidth-2)};
+  box.addEventListener("scroll",edges,{passive:true}); addEventListener("resize",edges);
+  box.addEventListener("wheel",e=>{if(box.scrollWidth<=box.clientWidth||Math.abs(e.deltaX)>Math.abs(e.deltaY))return; e.preventDefault(); box.scrollLeft+=e.deltaY},{passive:false});
+  // Mouse: press and drag the row sideways; a drag is not a tap on a chip
+  let down=null, moved=false;
+  box.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0||box.scrollWidth<=box.clientWidth)return; down={x:e.clientX,l:box.scrollLeft}; moved=false});
+  addEventListener("pointermove",e=>{if(!down)return; const dx=e.clientX-down.x; if(!moved&&Math.abs(dx)<5)return; moved=true; box.classList.add("drag"); box.scrollLeft=down.l-dx});
+  addEventListener("pointerup",()=>{down=null; box.classList.remove("drag")});
+  box.addEventListener("click",e=>{if(moved){e.stopPropagation(); e.preventDefault(); moved=false}},true);
+  draw(); box.dataset.ready="1"; edges();
 })();
 </script>
 </body>
