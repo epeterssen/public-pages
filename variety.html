@@ -86,7 +86,21 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 tr.cx{display:none}
-.gtools{margin:8px 0 0}
+/* Tabs replace sections: one table at a time, always open, no section heading (the tab names it) */
+.tsec>summary{display:none}
+/* Table tabs: underlined text tabs on a baseline, not pill chips */
+.ttabs{gap:0;border-bottom:1px solid var(--line);align-self:stretch;align-items:flex-end}
+.ttabs .tab{flex:none;white-space:nowrap;border:0;border-bottom:2px solid transparent;background:none;border-radius:0;margin-bottom:-1px;padding:5px 10px 4px;font:500 .8rem var(--body);color:var(--muted);cursor:pointer}
+.ttabs .tab:hover{color:var(--fg)}
+.ttabs .tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.ttabs .tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.gtools{margin:8px 0;flex-wrap:nowrap;gap:6px}
+.gtools .ttabs{flex:1 1 auto;min-width:0}
+.gtools .fwrap{flex:0 0 150px;max-width:none;min-width:0}
+.gtools .fwrap .filter{width:100%}
+.gtools .wicon{order:0;margin-left:0;flex:none;font-size:1rem;line-height:1;padding:3px 8px}
+.gtools .wicon[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+@media (max-width:480px){.gtools .fwrap{flex-basis:96px}}
 .scount{font-family:var(--body);font-size:.85rem;color:var(--muted);font-weight:400}
 </style>
 </head>
@@ -631,14 +645,18 @@ const openHash=()=>{const d=document.getElementById(location.hash.slice(1));if(d
 openHash(); addEventListener("hashchange",openHash);
 </script>
 <script>
-// Page-level controls for the Regions page: country chips, one filter box and one Widen button, all
-// applying to every section listed in T. Kept out of the shared table script so that script stays
-// identical across pages; it runs after it and reuses its fold() and highlight() helpers.
+// Page-level controls for the Regions page, all applying to every section listed in T:
+//   row 1: country chips (All/None + one per country, tap to combine)
+//   row 2: table tabs (one table at a time), one filter box, one Widen button (⇔)
+// The tabs replace the sections: only the chosen table shows, open, with no section heading.
+// Both chip rows and the tabs are one-line sliders. Kept out of the shared table script so that
+// script stays identical across pages; it runs after it and reuses its fold(), clearMarks() and highlight().
 (()=>{
-  const T=[["by-region",0],["by-variety",3],["significant",0],["by-country",0],["climate",0]];   // [section id, Country column]; Significant Varieties and Climate use a hidden first column
-  const tabs=T.map(([id,col])=>{const d=document.getElementById(id); return {d,tb:d.querySelector("tbody"),col,box:d.querySelector(".scroll"),h:d.querySelector("summary h2")}});
+  const T=[["by-region",0,"Variety by Region"],["by-variety",3,"Region by Variety"],["significant",0,"Significant"],["by-country",0,"By Country"],["climate",0,"Climate"]];   // [section id, Country column, tab label]; Significant Varieties and Climate use a hidden first column
+  const tabs=T.map(([id,col,label])=>{const d=document.getElementById(id); return {id,d,tb:d.querySelector("tbody"),col,label,box:d.querySelector(".scroll"),h:d.querySelector("summary h2")}});
   const cOf=(r,col)=>r.cells[col].textContent.trim();
   const norm=x=>fold(x).replace(/\s+/g," ");
+  const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
   // Cells with several lines (<br>): wrap each line so the filter can hide lines on their own
   tabs.forEach(t=>{t.lines=new Map(); for(const r of t.tb.rows)for(const c of r.cells){
     if(!c.querySelector("br"))continue;
@@ -651,26 +669,31 @@ openHash(); addEventListener("hashchange",openHash);
 
   // Countries in Region by Variety order (the book's order), then any found only in other sections
   const CS=[]; [tabs[1],...tabs.filter((t,i)=>i!==1)].forEach(t=>{for(const r of t.tb.rows){const c=cOf(r,t.col); if(!CS.includes(c))CS.push(c)}});
-  let sel=new Set(CS), terms=[], openBefore=null;
+  let sel=new Set(CS), terms=[];
+  // Which table is showing (a section id). Remembered per browser; first visit shows Variety by Region;
+  // a #section link (e.g. variety.html#climate) shows that table.
+  const hashView=()=>{const id=location.hash.slice(1); return tabs.some(t=>t.id===id)?id:null};
+  let view=hashView()||store.get("regionsTab")||tabs[0].id; if(!tabs.some(t=>t.id===view))view=tabs[0].id;
+  // Sections are always open and can't be collapsed (clicks on their headings, including Alt-click, do nothing)
+  tabs.forEach(t=>{t.d.classList.add("tsec"); t.d.open=true;
+    t.d.querySelector("summary").addEventListener("click",e=>{e.preventDefault(); e.stopImmediatePropagation()},true)});
 
-  // Controls row under the chips: filter box (with × on touch screens), total count, Widen button
+  // Row 2: tabs slider, filter box (with × on touch screens), Widen icon
   const bar=document.getElementById("gtools");
-  const f=document.createElement("input"); f.type="search"; f.className="filter"; f.placeholder="Filter all tables…"; f.setAttribute("aria-label","Filter every table on this page");
+  const tabBox=document.createElement("div"); tabBox.className="cchips ttabs"; tabBox.setAttribute("role","tablist"); tabBox.setAttribute("aria-label","Tables");
+  const f=document.createElement("input"); f.type="search"; f.className="filter"; f.placeholder="Filter…"; f.setAttribute("aria-label","Filter every table on this page");
   const fw=document.createElement("span"), fx=document.createElement("button"); fw.className="fwrap"; fx.type="button"; fx.className="fclear"; fx.setAttribute("aria-label","Clear filter"); fx.textContent="×";
   fw.append(f,fx); fx.onclick=()=>{f.value=""; f.dispatchEvent(new Event("input")); f.focus()};
-  const total=document.createElement("span"); total.className="count";
-  const wb=document.createElement("button"); wb.type="button"; wb.className="widen"; wb.setAttribute("aria-pressed","false");
-  bar.append(fw,total,wb);
+  const wb=document.createElement("button"); wb.type="button"; wb.className="widen wicon"; wb.textContent="⇔";
+  bar.append(tabBox,fw,wb);
 
   // Wide/narrow for every table at once (remembered per browser)
-  const setWide=w=>{tabs.forEach(t=>t.box.classList.toggle("wide",w)); wb.setAttribute("aria-pressed",w); wb.textContent=w?"Narrow tables":"Widen tables"};
-  let wide=false; try{wide=localStorage.getItem("regionsPageWide")==="1"}catch(e){}
-  setWide(wide);
-  wb.onclick=()=>{wide=!wide; setWide(wide); try{localStorage.setItem("regionsPageWide",wide?"1":"0")}catch(e){}};
+  const setWide=w=>{tabs.forEach(t=>t.box.classList.toggle("wide",w)); wb.setAttribute("aria-pressed",w); wb.title=w?"Narrow tables":"Widen tables"; wb.setAttribute("aria-label",wb.title)};
+  let wide=store.get("regionsPageWide")==="1"; setWide(wide);
+  wb.onclick=()=>{wide=!wide; setWide(wide); store.set("regionsPageWide",wide?"1":"0")};
 
-  // Apply chips + filter to every table, update counts, open sections with matches while filtering
+  // Apply chips + filter to every table, update counts; on All, open sections with matches while filtering
   function apply(){
-    let shownAll=0, rowsAll=0;
     tabs.forEach(t=>{
       clearMarks(t.tb);
       let shown=0;
@@ -682,44 +705,66 @@ openHash(); addEventListener("hashchange",openHash);
         if(ok&&!r.classList.contains("cx"))shown++;
       }
       if(terms.length)highlight([...t.tb.rows].filter(r=>!r.hidden&&!r.classList.contains("cx")).flatMap(r=>[...r.cells]),terms);
-      const n=t.tb.rows.length; shownAll+=shown; rowsAll+=n;
-      t.cnt.textContent=(terms.length||sel.size<CS.length)?" · "+shown+" of "+n:"";
-      t.shown=shown;
+      t.limited=terms.length>0||sel.size<CS.length; t.shown=shown;
+      t.cnt.textContent=t.limited?" · "+shown+" of "+t.tb.rows.length:"";
     });
-    total.textContent=(terms.length||sel.size<CS.length)?shownAll+" of "+rowsAll+" rows":"";
-    // While a filter is typed: open sections with matches, close the rest; clearing restores what was open
-    if(terms.length){
-      if(!openBefore)openBefore=tabs.map(t=>t.d.open);
-      tabs.forEach(t=>t.d.open=t.shown>0);
-    }else if(openBefore){tabs.forEach((t,i)=>t.d.open=openBefore[i]); openBefore=null}
+    show();
   }
   f.addEventListener("input",()=>{terms=fold(f.value).split(",").map(w=>w.trim().replace(/\s+/g," ")).filter(Boolean); apply()});
 
+  // Show All (collapsible sections) or one table (only that section, open)
+  function show(){
+    tabs.forEach(t=>{
+      t.d.open=true;
+      t.d.hidden=t.id!==view;
+    });
+    drawTabs();
+  }
+  addEventListener("hashchange",()=>{const v=hashView(); if(v){view=v; show()}});
+
+  // One-line slider behaviour shared by the chip row and the tab row
+  function slider(el){
+    const edges=()=>{el.classList.toggle("more-l",el.scrollLeft>2);el.classList.toggle("more-r",el.scrollLeft+el.clientWidth<el.scrollWidth-2)};
+    el.addEventListener("scroll",edges,{passive:true}); addEventListener("resize",edges);
+    // A vertical mouse wheel scrolls the row sideways
+    el.addEventListener("wheel",e=>{if(el.scrollWidth<=el.clientWidth||Math.abs(e.deltaX)>Math.abs(e.deltaY))return; e.preventDefault(); el.scrollLeft+=e.deltaY},{passive:false});
+    // Mouse: press and drag the row sideways; a drag is not a tap
+    let down=null, moved=false;
+    el.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0||el.scrollWidth<=el.clientWidth)return; down={x:e.clientX,l:el.scrollLeft}; moved=false});
+    addEventListener("pointermove",e=>{if(!down)return; const dx=e.clientX-down.x; if(!moved&&Math.abs(dx)<5)return; moved=true; el.classList.add("drag"); el.scrollLeft=down.l-dx});
+    addEventListener("pointerup",()=>{down=null; el.classList.remove("drag")});
+    el.addEventListener("click",e=>{if(moved){e.stopPropagation(); e.preventDefault(); moved=false}},true);
+    return edges;
+  }
+  // Redraw a slider's buttons without losing its scroll position
+  const redraw=(el,edges,items)=>{const x=el.scrollLeft; el.innerHTML=""; items.forEach(b=>el.appendChild(b)); el.scrollLeft=x; edges()};
+
   // Country chips: All/None plus one chip per country (tap to combine), like the select tests
-  const box=document.getElementById("cchips");
+  const box=document.getElementById("cchips"), chipEdges=slider(box);
   function draw(){
-    const x=box.scrollLeft; box.innerHTML="";
     const full=sel.size===CS.length;
-    [["all",full?"None":"All"],...CS.map(c=>[c,c])].forEach(([v,l])=>{
+    redraw(box,chipEdges,[["all",full?"None":"All"],...CS.map(c=>[c,c])].map(([v,l])=>{
       const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=l;
       b.setAttribute("aria-pressed",String(v!=="all"&&sel.has(v)));
       b.title=v==="all"?(full?"Clear all countries":"Select all countries"):"Tap to add or remove "+v;
       b.onclick=()=>{ if(v==="all")sel=full?new Set():new Set(CS); else sel.has(v)?sel.delete(v):sel.add(v); apply(); draw(); };
-      box.appendChild(b);
-    });
-    box.scrollLeft=x; if(box.dataset.ready)edges();   // keep the slider where it was
+      return b;
+    }));
   }
-  // Slider: fade the edge that has more chips beyond it; a vertical mouse wheel scrolls the row sideways
-  const edges=()=>{box.classList.toggle("more-l",box.scrollLeft>2);box.classList.toggle("more-r",box.scrollLeft+box.clientWidth<box.scrollWidth-2)};
-  box.addEventListener("scroll",edges,{passive:true}); addEventListener("resize",edges);
-  box.addEventListener("wheel",e=>{if(box.scrollWidth<=box.clientWidth||Math.abs(e.deltaX)>Math.abs(e.deltaY))return; e.preventDefault(); box.scrollLeft+=e.deltaY},{passive:false});
-  // Mouse: press and drag the row sideways; a drag is not a tap on a chip
-  let down=null, moved=false;
-  box.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0||box.scrollWidth<=box.clientWidth)return; down={x:e.clientX,l:box.scrollLeft}; moved=false});
-  addEventListener("pointermove",e=>{if(!down)return; const dx=e.clientX-down.x; if(!moved&&Math.abs(dx)<5)return; moved=true; box.classList.add("drag"); box.scrollLeft=down.l-dx});
-  addEventListener("pointerup",()=>{down=null; box.classList.remove("drag")});
-  box.addEventListener("click",e=>{if(moved){e.stopPropagation(); e.preventDefault(); moved=false}},true);
-  draw(); box.dataset.ready="1"; edges();
+  // Table tabs: one per table; a tab shows its match count while the chips or filter limit anything
+  const tabEdges=slider(tabBox);
+  function drawTabs(){
+    redraw(tabBox,tabEdges,tabs.map(t=>[t.id,t.label+(t.limited?" ("+t.shown+")":"")]).map(([v,l])=>{
+      const b=document.createElement("button"); b.type="button"; b.className="tab"; b.textContent=l;
+      b.setAttribute("role","tab"); b.setAttribute("aria-selected",String(view===v));
+      b.onclick=()=>{ if(view===v)return; view=v; store.set("regionsTab",v); show(); };
+      return b;
+    }));
+  }
+  draw(); apply();
+  // Bring the selected tab into view if it starts off-screen
+  const on=tabBox.querySelector('[aria-selected="true"]'); if(on)tabBox.scrollLeft=Math.max(0,on.offsetLeft-tabBox.offsetLeft-24);
+  tabEdges();
 })();
 </script>
 </body>
