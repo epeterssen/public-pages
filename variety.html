@@ -85,6 +85,9 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:2px 9px;font:500 .75rem var(--body);line-height:1.4;cursor:pointer;flex:none;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.reveal-all{line-height:1;padding:3px 8px}
+.reveal-all::before{content:"";display:block;width:16px;height:16px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") center/contain no-repeat}
+.reveal-all[data-open="1"]::before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E")}
 tr.cx{display:none}
 /* Tabs replace sections: one table at a time, always open, no section heading (the tab names it) */
 .tsec>summary{display:none}
@@ -99,6 +102,7 @@ tr.cx{display:none}
 .gtools .fwrap{flex:0 0 150px;max-width:none;min-width:0}
 .gtools .fwrap .filter{width:100%}
 .gtools .wicon{order:0;margin-left:0;flex:none;font-size:1rem;line-height:1;padding:3px 8px}
+.gtools .reveal-all{order:0;margin-left:0;flex:none}
 .gtools .wicon[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 @media (max-width:480px){.gtools .fwrap{flex-basis:96px}}
 .scount{font-family:var(--body);font-size:.85rem;color:var(--muted);font-weight:400}
@@ -428,10 +432,10 @@ tr.cx{display:none}
 
 <details id="significant">
 <summary><h2>Significant Varieties in Region</h2></summary>
-<div class="tools"><button type="button" class="reveal-all">Hide all</button></div>
+<div class="tools"><button type="button" class="reveal-all" title="Hide all" aria-label="Hide all"></button></div>
 <div class="scroll">
 <table class="grid sortable quiz quiz-all">
-<thead><tr><th hidden>Country</th><th>Region</th><th>Similar</th><th>Other Varieties</th><th>Most Planted Variety</th><th>Most Important Variety</th><th>Only Variety Allowed</th><th>Exclusive to</th></tr></thead>
+<thead><tr><th hidden>Country</th><th>Region</th><th>Similar</th><th>+ Varieties</th><th>Most Planted Variety</th><th>Most Important Variety</th><th>Only Variety Allowed</th><th>Exclusive to</th></tr></thead>
 <tbody>
 <tr class="shown"><td hidden>Australia</td><th title="Australia">Adelaide Hills</th><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Argentina</td><th title="Argentina">Argentina</th><td>—</td><td>—</td><td>—</td><td>Malbec (black)</td><td>—</td><td>—</td></tr>
@@ -439,25 +443,35 @@ tr.cx{display:none}
 <tr class="shown"><td hidden>Italy</td><th title="Italy">Barolo DOCG</th><td>—</td><td>—</td><td>—</td><td>—</td><td>Nebbiolo</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Beaujolais</th><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Gamay (almost)</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Bordeaux</th><td>—</td><td>—</td><td>Merlot</td><td>—</td><td>—</td><td>—</td></tr>
-<tr class="shown"><td hidden>France</td><th title="France">Bordeaux Right Bank</th><td>—</td><td>—</td><td>—</td><td>Merlot</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Bourgogne AOC</th><td title="Pinot Noir, Chardonnay">Burgundy</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>USA</td><th title="USA">California</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Chardonnay, Zinfandel</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Chile</td><th title="Chile">Casablanca Valley</th><td title="Pinot Noir, Chardonnay">Burgundy+</td><td>Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Spain</td><th title="Spain">Cava</th><td title="Pinot Noir, Chardonnay">Burgundy+</td><td>Local Spanish varieties</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>Chile</td><th title="Chile">Central Valley (Chile)</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Carmenère, Chardonnay, Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Champagne AOC</th><td title="Pinot Noir, Chardonnay">Burgundy+</td><td>Meunier</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Chile</td><th title="Chile">Chile</th><td>—</td><td>—</td><td>Cabernet Sauvignon</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Germany</td><th title="Germany">Germany</th><td>—</td><td>—</td><td>—</td><td>Riesling</td><td>—</td><td>—</td></tr>
-<tr class="shown"><td hidden>New Zealand</td><th title="New Zealand">Hawke's Bay</th><td>—</td><td>—</td><td>Chardonnay (white)</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>France</td><th title="France">Graves AOC</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Sauvignon Blanc, Sémillon</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>France</td><th title="France">Haut-Médoc AOC</th><td title="Cabernet Sauvignon, Merlot">Bordeaux</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>New Zealand</td><th title="New Zealand">Hawke's Bay</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Chardonnay</td><td>Chardonnay (white)</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>USA</td><th title="USA">Los Carneros</th><td title="Pinot Noir, Chardonnay">Burgundy</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>Australia</td><th title="Australia">Margaret River</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Chardonnay, Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>France</td><th title="France">Margaux AOC</th><td title="Cabernet Sauvignon, Merlot">Bordeaux</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>New Zealand</td><th title="New Zealand">Marlborough</th><td title="Pinot Noir, Chardonnay">Burgundy+</td><td>Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>USA</td><th title="USA">Napa Valley</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Chardonnay, Sauvignon Blanc</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Northern Rhône</th><td>—</td><td>—</td><td>—</td><td>—</td><td>Syrah</td><td>—</td></tr>
 <tr class="shown"><td hidden>USA</td><th title="USA">Oregon</th><td title="Pinot Noir, Chardonnay">Burgundy</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>France</td><th title="France">Pauillac AOC</th><td title="Cabernet Sauvignon, Merlot">Bordeaux</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>France</td><th title="France">Pays d'Oc IGP</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Chardonnay, Sauvignon Blanc, Syrah</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>France</td><th title="France">Pessac-Léognan AOC</th><td title="Cabernet Sauvignon, Merlot">Bordeaux+</td><td>Sauvignon Blanc, Sémillon</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Pouilly-Fumé AOC</th><td>—</td><td>—</td><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Sancerre AOC</th><td>—</td><td>—</td><td>—</td><td>—</td><td>Sauvignon Blanc</td><td>—</td></tr>
 <tr class="shown"><td hidden>USA</td><th title="USA">Santa Barbara County</th><td title="Pinot Noir, Chardonnay">Burgundy</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Sauternes</th><td>—</td><td>—</td><td>—</td><td>Semillon</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Italy</td><th title="Italy">Soave</th><td>—</td><td>—</td><td>—</td><td>Garganega</td><td>—</td><td>—</td></tr>
-<tr class="shown"><td hidden>USA</td><th title="USA">Sonoma</th><td title="Pinot Noir, Chardonnay">Burgundy+</td><td>Cabernet Sauvignon, Merlot</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>USA</td><th title="USA">Sonoma</th><td><span title="Pinot Noir, Chardonnay">Burgundy</span>, <span title="Cabernet Sauvignon, Merlot">Bordeaux</span></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>South Africa</td><th title="South Africa">South Africa</th><td>—</td><td>—</td><td>Chenin Blanc (white)</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="shown"><td hidden>South Africa</td><th title="South Africa">Stellenbosch</th><td title="Cabernet Sauvignon, Merlot">Bordeaux</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Hungary</td><th title="Hungary">Tokaj</th><td>—</td><td>—</td><td>Furmint</td><td>—</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>Italy</td><th title="Italy">Valpolicella</th><td>—</td><td>—</td><td>—</td><td>Corvina</td><td>—</td><td>—</td></tr>
 <tr class="shown"><td hidden>France</td><th title="France">Vouvray AOC</th><td>—</td><td>—</td><td>—</td><td>—</td><td>Chenin Blanc</td><td>—</td></tr>
@@ -681,6 +695,8 @@ openHash(); addEventListener("hashchange",openHash);
   // Countries in Region by Variety order (the book's order), then any found only in other sections
   const CS=[]; [tabs[1],...tabs.filter((t,i)=>i!==1)].forEach(t=>{for(const r of t.tb.rows){const c=cOf(r,t.col); if(!CS.includes(c))CS.push(c)}});
   let sel=new Set(CS), terms=[];
+  // Remember the chosen countries in this browser
+  try{const p=JSON.parse(store.get("regionsCountries")||"null"); if(Array.isArray(p))sel=new Set(p.filter(c=>CS.includes(c)));}catch(e){}
   // Which table is showing (a section id). Remembered per browser; first visit shows Variety by Region;
   // a #section link (e.g. variety.html#climate) shows that table.
   const hashView=()=>{const id=location.hash.slice(1); return tabs.some(t=>t.id===id)?id:null};
@@ -758,7 +774,7 @@ openHash(); addEventListener("hashchange",openHash);
       const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=l;
       b.setAttribute("aria-pressed",String(v!=="all"&&sel.has(v)));
       b.title=v==="all"?(full?"Clear all countries":"Select all countries"):"Tap to add or remove "+v;
-      b.onclick=()=>{ if(v==="all")sel=full?new Set():new Set(CS); else sel.has(v)?sel.delete(v):sel.add(v); apply(); draw(); };
+      b.onclick=()=>{ if(v==="all")sel=full?new Set():new Set(CS); else sel.has(v)?sel.delete(v):sel.add(v); store.set("regionsCountries",JSON.stringify([...sel])); apply(); draw(); };
       return b;
     }));
   }
@@ -777,6 +793,17 @@ openHash(); addEventListener("hashchange",openHash);
   const on=tabBox.querySelector('[aria-selected="true"]'); if(on)tabBox.scrollLeft=Math.max(0,on.offsetLeft-tabBox.offsetLeft-24);
   tabEdges();
 })();
+// Show all / Hide all as an eye icon only, no text: open eye to show, crossed-out eye to hide.
+// The shared script toggles by the button's text, so swap in a copy (no shared listeners) with its own toggle.
+// The copy sits in the page-level row (#gtools) just before ⇔, and shows only while its table's tab is open.
+document.querySelectorAll('.reveal-all').forEach(old=>{
+  const tools=old.closest('.tools'), d=tools.closest('details'), tb=tools.nextElementSibling.querySelector('tbody'), rows=()=>[...tb.rows], b=old.cloneNode(false);
+  const bar=document.getElementById('gtools'); bar.insertBefore(b,bar.querySelector('.wicon')); tools.remove();
+  const vis=()=>{b.hidden=d.hidden}; new MutationObserver(vis).observe(d,{attributes:true,attributeFilter:['hidden']}); vis();
+  const upd=()=>{const all=rows().every(r=>r.classList.contains('shown')), v=all?'1':'0'; if(b.dataset.open!==v)b.dataset.open=v; const l=all?'Hide all':'Show all'; if(b.title!==l){b.title=l; b.setAttribute('aria-label',l)}};
+  b.addEventListener('click',()=>{const show=b.dataset.open!=='1'; rows().forEach(r=>r.classList.toggle('shown',show)); upd()});
+  new MutationObserver(upd).observe(tb,{attributes:true,attributeFilter:['class'],subtree:true}); upd();
+});
 </script>
 </body>
 </html>
