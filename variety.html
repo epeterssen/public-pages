@@ -77,6 +77,9 @@ thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:va
 /* Country chips (page-level): filter Variety by Region and Region by Variety; same look as the test chips */
 .cchips{display:flex;flex-wrap:nowrap;gap:4px;margin:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
 .cchips::-webkit-scrollbar{display:none}
+/* Tables still scroll sideways, but without a visible scrollbar (this page only) */
+.scroll{scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
 @media (pointer:fine){.cchips{cursor:grab}.cchips.drag,.cchips.drag .chip{cursor:grabbing;user-select:none}}
 /* One row that slides sideways; fades at an edge only while more chips are hidden that way */
 .cchips.more-r{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
@@ -97,10 +100,12 @@ tr.cx{display:none}
 .ttabs .tab:hover{color:var(--fg)}
 .ttabs .tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
 .ttabs .tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-.gtools{margin:8px 0;flex-wrap:nowrap;gap:6px}
+.gtools{margin:8px 0 0;flex-wrap:nowrap;gap:6px}
 .gtools .ttabs{flex:1 1 auto;min-width:0}
 .gtools .fwrap{flex:0 0 150px;max-width:none;min-width:0}
-.gtools .fwrap .filter{width:100%}
+.gtools .fwrap .filter{width:100%;height:24px;box-sizing:border-box;padding-top:0;padding-bottom:0}
+/* Filter box and icon buttons: same 24px height, bottoms 4px above the table (the tabs touch it) */
+.gtools>.fwrap,.gtools>.reveal-all,.gtools>.wicon{align-self:flex-end;margin-bottom:4px}
 .gtools .wicon{order:0;margin-left:0;flex:none;font-size:1rem;line-height:1;padding:3px 8px}
 .gtools .reveal-all{order:0;margin-left:0;flex:none}
 .gtools .wicon[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
