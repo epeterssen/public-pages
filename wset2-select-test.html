@@ -54,6 +54,8 @@ h1{font-family:var(--display);font-weight:400;font-size:1.9rem;line-height:1.1;m
 .fill{height:100%;background:var(--accent);width:0;transition:width .25s}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:-6px 0 -10px}
+.card,.top{min-width:0}
+.top .tag{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
 .q{font-family:var(--display);font-size:1.3rem;line-height:1.3;margin:0;text-wrap:pretty}
 .hint{color:var(--muted);font-size:.85rem;margin:-8px 0 0}
@@ -398,7 +400,9 @@ function show(){
   const q=deck[i], opts=build(q);
   card.className="card";
   card.innerHTML=`<div class="top"><div class="tag"></div><button class="star" id="star" aria-pressed="false" aria-label="Remember">☆</button></div><p class="q"></p><p class="hint">Select all that apply.</p><div class="opts"></div><p class="xnote" hidden></p><div class="foot"><span class="verdict" aria-live="polite"></span><button class="btn" id="next" disabled>Submit</button></div>`;
-  card.querySelector(".tag").textContent=M.tag;
+  // Tag lists the selected chips (not the question's own country, which would hint at the answer); cut off with … if long
+  const tc=chap==="starred"?"★":sel.size===CS.length?"All":CS.filter(ct=>sel.has(ct)).join(", "), tg=card.querySelector(".tag");
+  tg.textContent=M.tag+" · "+tc; tg.title=tg.textContent;
   card.querySelector(".q").textContent=M.ask(q.q,q.ct);
   $("star").onclick=()=>toggleStar(q); refreshStar();
   const box=card.querySelector(".opts"), nx=$("next");
