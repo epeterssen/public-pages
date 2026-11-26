@@ -57,6 +57,7 @@ h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0;text-wra
 .btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
 .end{text-align:center;gap:10px;align-items:center}
 .status{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.status:empty{display:none}
 .chip.miss{border-color:var(--star);color:var(--star)}
 .chip.miss[aria-pressed="true"]{background:var(--star);border-color:var(--star);color:var(--surface)}
 .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -124,7 +125,7 @@ function saveLocal(){try{localStorage.setItem("wset2-temps-starred",JSON.stringi
 function refreshStar(){const s=$("star"); if(!s||!deck[i]) return; const on=!!stars[key(deck[i])]; s.setAttribute("aria-pressed",String(on)); s.textContent=on?"★":"☆"; s.title=on?"Remove from Remember":"Remember this question"}
 async function initStore(){
   let db=null; try{db=await claude.use("db")}catch(e){}
-  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();starsIn();return}
+  if(!db){mode="local";loadLocal();setStatus("");chips();refreshStar();starsIn();return}
   store=db.collection("starred"); mode="db";
   let t=setTimeout(()=>setStatus("Can't reach starred questions yet."),10000);
   store.onSnapshot(snap=>{

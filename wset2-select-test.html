@@ -71,6 +71,7 @@ h1{font-family:var(--display);font-weight:400;font-size:1.9rem;margin:0;text-wra
 .end{text-align:center;gap:10px;align-items:center}
 .end .btn{margin-left:0}
 .status{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.status:empty{display:none}
 .star{border:none;background:transparent;color:var(--muted);font-size:1.5rem;line-height:1;padding:4px 6px;cursor:pointer;border-radius:8px}
 .star[aria-pressed="true"]{color:var(--star)}
 .star:hover{color:var(--star)}
@@ -272,7 +273,7 @@ const M={
   variety:{Q:QV,title:"Given Variety",tag:"Variety",ask:(n,c)=>`Which regions${c?" in "+c:""} is ${n} noted for?`,
     intro:"A grape is shown; select every region it is noted for. 1–4 of the 4 options are right. Tap countries to combine them."},
   region:{Q:QR,title:"Given Region",tag:"Region",ask:n=>`Which grapes is ${n} noted for?`,
-    intro:"Select every grape for which the region is noted (1–4 are possible)."},
+    intro:"Select every grape for the given region."},
 }[BY];
 const Q=M.Q;
 document.title=M.title; document.getElementById("title").textContent=M.title; document.getElementById("intro").textContent=M.intro;
@@ -293,7 +294,7 @@ function saveLocal(){try{localStorage.setItem(STORE,JSON.stringify(stars))}catch
 function refreshStar(){const s=$("star"); if(!s||!deck[i]) return; const on=!!stars[key(deck[i])]; s.setAttribute("aria-pressed",String(on)); s.textContent=on?"★":"☆"; s.title=on?"Remove from Remember":"Remember this question"}
 async function initStore(){
   let db=null; try{db=await claude.use("db")}catch(e){}
-  if(!db){mode="local";loadLocal();setStatus("Starred questions are saved in this browser.");chips();refreshStar();starsIn();return}
+  if(!db){mode="local";loadLocal();setStatus("");chips();refreshStar();starsIn();return}
   store=db.collection(STORE); mode="db";
   let t=setTimeout(()=>setStatus("Can't reach starred questions yet."),10000);
   store.onSnapshot(snap=>{
