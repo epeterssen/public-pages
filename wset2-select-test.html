@@ -31,6 +31,18 @@ h1{font-family:var(--display);font-weight:400;font-size:1.9rem;line-height:1.1;m
 .back{color:var(--accent);text-decoration:none;font-size:.9rem;align-self:flex-start;margin-bottom:-12px}
 .sub{color:var(--muted);margin:0;font-size:.9rem;line-height:1.38}
 .chips{display:flex;flex-wrap:wrap;gap:4px}
+/* Country chips and ★ at the end: one row that slides sideways */
+.chiprow{display:flex;align-items:center;gap:4px;min-width:0}
+/* Phones: less space above and below the chip row */
+@media (max-width:600px){.chiprow{margin:-8px 0}}
+.cchips{flex:1 1 auto;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.cchips::-webkit-scrollbar{display:none}
+.cchips .chip{flex:none;white-space:nowrap}
+@media (pointer:fine){.cchips{cursor:grab}.cchips.drag,.cchips.drag .chip{cursor:grabbing;user-select:none}}
+/* Fade an edge only while more chips are hidden that way */
+.cchips.more-r{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
+.cchips.more-l{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent)}
+.cchips.more-l.more-r{-webkit-mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:2px 9px;font:500 .75rem var(--body);line-height:1.4;cursor:pointer;text-decoration:none}
 .chip:disabled{opacity:.45;cursor:default}
 .chip[aria-pressed="true"],.chip[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
@@ -90,7 +102,7 @@ h1{font-family:var(--display);font-weight:400;font-size:1.9rem;line-height:1.1;m
     <p class="sub" id="intro"></p>
     <p class="status" id="status">Loading starred questions…</p>
   </header>
-  <div class="chips" id="chips" role="group" aria-label="Questions"></div>
+  <div class="chiprow"><div class="chips cchips" id="chips" role="group" aria-label="Countries"></div></div>
   <div>
     <div class="bar"><span id="pos">Question 1 of 0</span><span>Score <b id="score">0/0 (0%)</b></span></div>
     <div class="track"><div class="fill" id="fill"></div></div>
@@ -333,11 +345,26 @@ const CS=CTRY.filter(ct=>ctryDeck(ct).length);
 sel=new Set(CS);
 // Selected countries combined: all of them = every question as asked under All; otherwise each country's questions
 function selDeck(){return sel.size===CS.length?Q:CS.filter(ct=>sel.has(ct)).flatMap(ctryDeck)}
+// One-line slider for the country chips (same behaviour as the Regions page chips)
+function slider(el){
+  const edges=()=>{el.classList.toggle("more-l",el.scrollLeft>2);el.classList.toggle("more-r",el.scrollLeft+el.clientWidth<el.scrollWidth-2)};
+  el.addEventListener("scroll",edges,{passive:true}); addEventListener("resize",edges);
+  // A vertical mouse wheel scrolls the row sideways
+  el.addEventListener("wheel",e=>{if(el.scrollWidth<=el.clientWidth||Math.abs(e.deltaX)>Math.abs(e.deltaY))return; e.preventDefault(); el.scrollLeft+=e.deltaY},{passive:false});
+  // Mouse: press and drag the row sideways; a drag is not a tap
+  let down=null, moved=false;
+  el.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0||el.scrollWidth<=el.clientWidth)return; down={x:e.clientX,l:el.scrollLeft}; moved=false});
+  addEventListener("pointermove",e=>{if(!down)return; const dx=e.clientX-down.x; if(!moved&&Math.abs(dx)<5)return; moved=true; el.classList.add("drag"); el.scrollLeft=down.l-dx});
+  addEventListener("pointerup",()=>{down=null; el.classList.remove("drag")});
+  el.addEventListener("click",e=>{if(moved){e.stopPropagation(); e.preventDefault(); moved=false}},true);
+  return edges;
+}
+const chipEdges=slider($("chips"));
 function chips(){
-  const c=$("chips"); c.innerHTML="";
+  const c=$("chips"), x=c.scrollLeft; c.innerHTML="";
   const n=starDeck().length, full=chap==="sel"&&sel.size===CS.length;
   // All/None, one chip per country (tap to combine them), then Remember
-  [["all",full?"None":"All"],...CS.map(ct=>[ct,ct+" ("+partCount(ctryDeck(ct))+")"]),["starred","★ Remember ("+n+")"]].forEach(([v,l])=>{
+  [["all",full?"None":"All"],...CS.map(ct=>[ct,ct+" ("+partCount(ctryDeck(ct))+")"]),["starred","★ ("+n+")"]].forEach(([v,l])=>{
     const b=document.createElement("button"); b.className="chip"+(v==="starred"?" miss":""); b.id="chip-"+v.replace(/\s+/g,"-"); b.textContent=l;
     if(v==="starred"&&!n&&chap!=="starred") b.disabled=true;
     const on=v==="starred"?chap==="starred":v==="all"?false:(chap==="sel"&&sel.has(v));
@@ -351,6 +378,7 @@ function chips(){
     };
     c.appendChild(b);
   });
+  c.scrollLeft=x; chipEdges();
 }
 function start(list){
   if(!list) savePrefs();
