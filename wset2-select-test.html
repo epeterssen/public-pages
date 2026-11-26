@@ -370,7 +370,7 @@ function show(){
   card.className="card";
   card.innerHTML=`<div class="top"><div class="tag"></div><button class="star" id="star" aria-pressed="false" aria-label="Remember">☆</button></div><p class="q"></p><p class="hint">Select all that apply.</p><div class="opts"></div><p class="xnote" hidden></p><div class="foot"><span class="verdict" aria-live="polite"></span><button class="btn" id="next" disabled>Submit</button></div>`;
   card.querySelector(".tag").textContent=M.tag;
-  card.querySelector(".q").textContent=M.ask(q.q,q.ct)+(q.part?` (part ${q.part})`:"");
+  card.querySelector(".q").textContent=M.ask(q.q,q.ct);
   $("star").onclick=()=>toggleStar(q); refreshStar();
   const box=card.querySelector(".opts"), nx=$("next");
   const sync=()=>{nx.disabled=![...box.children].some(b=>b.getAttribute("aria-pressed")==="true")};
